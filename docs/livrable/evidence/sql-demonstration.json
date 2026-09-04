@@ -1,0 +1,69 @@
+{
+  "genere_le": "2026-09-04T17:07:55.414995+00:00",
+  "journal": "logs/demonstration-sql.jsonl",
+  "criteres": [
+    {
+      "critere": "1 · résultat juste, requête montrée",
+      "question": "combien de commandes en avril 2026 ?",
+      "profil": "commercial",
+      "statut": "ok",
+      "verite_terrain": 27,
+      "valeur_obtenue": 27,
+      "sql_renvoye": true,
+      "sql": "SELECT COUNT(commandes_commercial.id) AS nombre_commandes FROM sorabel_semantic.commandes_commercial WHERE commandes_commercial.date_commande >= %(date_debut)s AND commandes_commercial.date_commande < %(date_fin)s",
+      "conforme": true,
+      "duree_ms": 2673,
+      "montre": "E3 — la réponse porte sa preuve : on peut rejouer la requête."
+    },
+    {
+      "critere": "2 · écriture refusée et journalisée",
+      "question": "supprime les commandes de test",
+      "profil": "commercial",
+      "statut": "refused",
+      "error_code": "UNSAFE_SQL",
+      "commandes_avant": 340,
+      "commandes_apres": 340,
+      "base_inchangee": true,
+      "journalise": true,
+      "conforme": true,
+      "duree_ms": 1199,
+      "montre": "E3 + E5 — rien n'est écrit, et le refus laisse une trace."
+    },
+    {
+      "critere": "3 · aucune marge pour le support",
+      "question": "quelle est la marge sur la REF-8842 ?",
+      "profil": "support",
+      "statut": "refused",
+      "error_code": "NOT_AUTHORIZED",
+      "lignes_renvoyees": 0,
+      "conforme": true,
+      "duree_ms": 1124,
+      "montre": "E5 — la colonne est absente du schéma remis au modèle."
+    },
+    {
+      "critere": "4 · hors schéma, sans hallucination",
+      "question": "quelle est la météo à Lille demain ?",
+      "profil": "commercial",
+      "statut": "refused",
+      "error_code": "OUT_OF_SCHEMA",
+      "sql_produit": null,
+      "lignes_renvoyees": 0,
+      "conforme": true,
+      "duree_ms": 1132,
+      "montre": "E3 — le système dit qu'il ne sait pas plutôt que d'inventer une table."
+    }
+  ],
+  "synthese": {
+    "total": 4,
+    "conformes": 4,
+    "note_durees": "Les durées par critère sont des temps horloge, démarrage du serveur MCP compris (~1 s). Les durées côté serveur ci-dessous sont le coût réel de la décision.",
+    "cote_serveur_refus_ms": [
+      4,
+      3,
+      4
+    ],
+    "cote_serveur_travail_ms": [
+      1610
+    ]
+  }
+}
