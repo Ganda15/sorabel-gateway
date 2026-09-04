@@ -96,6 +96,7 @@ versionnées dans `evidence/` servent à rendre la remise lisible et auditable.
 
 - le générateur SQL déterministe est celui démontré ; l’adaptateur OpenAI-compatible doit être
   évalué avant activation ;
-- l’embedding dense local reproductible et `IdentityReranker` constituent le chemin vérifié ;
+- l’embedding dense local reproductible et le `LexicalReranker` — actif — constituent le
+  chemin verifie ;
 - le filtrage de `tools/list` par profil est fait (2026-09-04) ; **Keycloak reste à industrialiser** ;
 - le profil du prototype MCP est fourni par `SORABEL_PROFILE`, puis chaque appel est réautorisé.

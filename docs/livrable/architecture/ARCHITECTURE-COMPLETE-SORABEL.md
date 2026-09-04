@@ -67,7 +67,7 @@ Preuve : [`mcp_server/server.py`](../../../mcp_server/server.py).
 
 Le corpus PDF, HTML et Markdown est normalisé, versionné puis découpé en chunks avec
 métadonnées. La démonstration utilise ensuite l’index local reproductible, une recherche dense
-locale, BM25, une fusion RRF et `IdentityReranker`. Le service répond avec des citations ou renvoie
+locale, BM25, une fusion RRF et un reranking lexical deterministe (`LexicalReranker`). Le service répond avec des citations ou renvoie
 `hors_corpus` lorsque la preuve est insuffisante.
 
 `ChromaVectorStore` existe et possède ses tests d’intégration, mais il ne constitue pas le chemin

@@ -11,7 +11,7 @@ Point d'accès unique aux données de **Sorabel**, distributeur B2B de matériel
 - Text-to-SQL protégé par analyse préalable, validation AST, allowlists, limites, timeouts et transaction `READ ONLY`
 - Quatre tools SQL sur un service commun : `ask_database`, `get_schema`, `check_stock`, `order_status`
 - Serveur MCP stdio exposant les huit tools, avec matrice `support`/`commercial`/`developer` et journalisation versionnée
-- Gain réellement mesuré : Recall@1 `0,727` dense → `0,818` hybride (`+9,1 points`)
+- Gain réellement mesuré : Recall@1 `0,727` dense → `0,864` hybride (`+13,6 points`), reranking lexical actif
 - Client MCP de test jouable avec les deux profils (`scripts/mcp_client.py`)
 - Interface Web unifiée : RAG et Text-to-SQL pour Support/Commercial, recherche et schéma pour Developer/IDE
 - Évaluation SQL automatisée : 24 cas métier, écriture, accès sensible, hors schéma et ambiguïté

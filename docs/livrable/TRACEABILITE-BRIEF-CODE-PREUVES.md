@@ -71,7 +71,8 @@ Ajoutés le 2026-09-04, hors suite fournie (celle-ci n’a pas été modifiée) 
 
 - le moteur dense vérifié est le fallback local déterministe ; l’adaptateur Sentence Transformer
   existe mais le gain publié ne lui est pas attribué ;
-- le reranker vérifié est `IdentityReranker`; un Cross Encoder est une extension ;
+- le reranker verifie et **actif** est `LexicalReranker` (deterministe, +4,5 points) ;
+  un Cross Encoder existe en extension, mesure sans gain ;
 - Keycloak et un véritable token multi-clients ne sont pas intégrés ;
 - le profil MCP de démonstration vient de `SORABEL_PROFILE` ;
 - le catalogue MCP est filtré par profil **et** chaque appel est réautorisé — les deux barrières

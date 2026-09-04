@@ -32,9 +32,10 @@ PREUVE = ROOT / "docs/livrable/evidence/comparaison-briques-rag.json"
 ESSAIS = 3
 
 CONFIGURATIONS = (
-    ("local", "identity", "Défaut livré — index déterministe."),
-    ("chroma", "identity", "Chroma, exigé par le brief. Index HNSW approximatif."),
-    ("chroma", "cross_encoder", "Chroma + reranking cross-encoder."),
+    ("local", "identity", "Sans reranking — la référence, pour mesurer ce qu'il apporte."),
+    ("local", "lexical", "DÉFAUT LIVRÉ — index déterministe + reranking lexical."),
+    ("chroma", "lexical", "Chroma, exigé par le brief. Index HNSW approximatif."),
+    ("local", "cross_encoder", "Reranking par cross-encoder — le plus fin, le plus lent."),
 )
 
 

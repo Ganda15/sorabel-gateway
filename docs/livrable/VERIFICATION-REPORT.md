@@ -12,7 +12,7 @@ Date de vérification : 2026-09-03 (seconde passe, après corrections).
 | présentation principale | 13 slides, matrice des 8 tools, assets présents, aucune note intégrée |
 | périmètre GitHub | uniquement code et éléments officiels du livrable |
 | ingestion | 400 fichiers, 391 documents, 9 doublons, 315 familles, 520 chunks, 0 erreur |
-| évaluation RAG | Recall@1 0,727 → 0,818, gain +9,1 points |
+| évaluation RAG | Recall@1 0,727 → 0,864, gain **+13,6 points** · `reference_exacte` **1,000** |
 | évaluation SQL | 27/27 cas · exactitude métier 14/14 vérifiée sur vérité terrain |
 | tests d’acceptance | 12 réussis |
 | intégration interface Web | 15 réussis |

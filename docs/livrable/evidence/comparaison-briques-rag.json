@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T17:33:43.680678+00:00",
+  "genere_le": "2026-09-04T18:20:47.031175+00:00",
   "essais_par_configuration": 3,
   "configurations": [
     {
@@ -10,7 +10,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 639,
+          "duree_ms": 717,
           "briques_reelles": {
             "dense": "local",
             "reranker": "identity",
@@ -22,7 +22,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 637,
+          "duree_ms": 805,
           "briques_reelles": {
             "dense": "local",
             "reranker": "identity",
@@ -34,7 +34,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 721,
+          "duree_ms": 631,
           "briques_reelles": {
             "dense": "local",
             "reranker": "identity",
@@ -47,91 +47,137 @@
       "hybride_valeurs_observees": [
         0.8182
       ],
-      "note": "Défaut livré — index déterministe."
+      "note": "Sans reranking — la référence, pour mesurer ce qu'il apporte."
     },
     {
-      "dense_demande": "chroma",
-      "reranker_demande": "identity",
+      "dense_demande": "local",
+      "reranker_demande": "lexical",
       "essais": [
         {
           "dense_recall_at_1": 0.7273,
-          "hybride_recall_at_1": 0.7727,
+          "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 1415,
+          "duree_ms": 705,
           "briques_reelles": {
-            "dense": "chroma",
-            "reranker": "identity",
+            "dense": "local",
+            "reranker": "lexical",
             "dense_repli": null,
             "reranker_repli": null
           }
         },
         {
-          "dense_recall_at_1": 0.6818,
-          "hybride_recall_at_1": 0.8182,
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 892,
+          "duree_ms": 808,
           "briques_reelles": {
-            "dense": "chroma",
-            "reranker": "identity",
+            "dense": "local",
+            "reranker": "lexical",
             "dense_repli": null,
             "reranker_repli": null
           }
         },
         {
-          "dense_recall_at_1": 0.6364,
-          "hybride_recall_at_1": 0.8182,
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 837,
+          "duree_ms": 838,
           "briques_reelles": {
-            "dense": "chroma",
-            "reranker": "identity",
+            "dense": "local",
+            "reranker": "lexical",
             "dense_repli": null,
             "reranker_repli": null
           }
         }
       ],
-      "reproductible": false,
+      "reproductible": true,
       "hybride_valeurs_observees": [
-        0.7727,
+        0.8636
+      ],
+      "note": "DÉFAUT LIVRÉ — index déterministe + reranking lexical."
+    },
+    {
+      "dense_demande": "chroma",
+      "reranker_demande": "lexical",
+      "essais": [
+        {
+          "dense_recall_at_1": 0.6364,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 1625,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "lexical",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        },
+        {
+          "dense_recall_at_1": 0.5909,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 942,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "lexical",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        },
+        {
+          "dense_recall_at_1": 0.5909,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 906,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "lexical",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        }
+      ],
+      "reproductible": true,
+      "hybride_valeurs_observees": [
         0.8182
       ],
       "note": "Chroma, exigé par le brief. Index HNSW approximatif."
     },
     {
-      "dense_demande": "chroma",
+      "dense_demande": "local",
       "reranker_demande": "cross_encoder",
       "essais": [
         {
-          "dense_recall_at_1": 0.6818,
-          "hybride_recall_at_1": 0.8182,
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 24512,
+          "duree_ms": 20820,
           "briques_reelles": {
-            "dense": "chroma",
+            "dense": "local",
             "reranker": "cross_encoder",
             "dense_repli": null,
             "reranker_repli": null
           }
         },
         {
-          "dense_recall_at_1": 0.6364,
-          "hybride_recall_at_1": 0.8182,
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 22774,
+          "duree_ms": 21549,
           "briques_reelles": {
-            "dense": "chroma",
+            "dense": "local",
             "reranker": "cross_encoder",
             "dense_repli": null,
             "reranker_repli": null
           }
         },
         {
-          "dense_recall_at_1": 0.6818,
-          "hybride_recall_at_1": 0.8182,
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 27655,
+          "duree_ms": 18264,
           "briques_reelles": {
-            "dense": "chroma",
+            "dense": "local",
             "reranker": "cross_encoder",
             "dense_repli": null,
             "reranker_repli": null
@@ -140,9 +186,9 @@
       ],
       "reproductible": true,
       "hybride_valeurs_observees": [
-        0.8182
+        0.8636
       ],
-      "note": "Chroma + reranking cross-encoder."
+      "note": "Reranking par cross-encoder — le plus fin, le plus lent."
     }
   ],
   "conclusion": "Le défaut livré est l'index local : c'est le seul des trois qui donne la même valeur à chaque exécution. Le brief demande une preuve chiffrée ; un gain qui change d'une exécution à l'autre n'en est pas une. Chroma et le cross-encoder restent branchés et activables par variable d'environnement."

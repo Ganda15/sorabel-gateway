@@ -8,9 +8,9 @@
   },
   "hybrid": {
     "total": 22,
-    "correct": 18,
-    "reciprocal_rank_sum": 19.0,
+    "correct": 19,
+    "reciprocal_rank_sum": 19.5,
     "exact_total": 8,
-    "exact_correct": 7
+    "exact_correct": 8
   }
 }

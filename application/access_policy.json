@@ -20,7 +20,8 @@
     "developer": {
       "libelle": "Développeur / IDE",
       "usage": "Inspecte le corpus et le schéma pour intégrer la gateway. N'obtient aucune réponse finale et n'exécute aucune requête de données.",
-      "role_postgres": null
+      "role_postgres": "sorabel_schema_reader",
+      "note_role_postgres": "Rôle volontairement SANS AUCUN privilège : la migration 003 lui révoque tout, et un contrôle vérifie qu'il n'a pas SELECT sur clients_commercial. C'est l'expression au niveau base de « developer lit le schéma, ne lit aucune ligne ». Un rôle vide et testé vaut mieux qu'un profil sans contrepartie côté base."
     }
   },
   "collections": {

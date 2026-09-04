@@ -110,8 +110,14 @@ def _construire_dense(chunks: Sequence[DocumentChunk], demande: str) -> tuple[De
 
 
 def _construire_reranker(demande: str) -> tuple[Reranker, str, str | None]:
-    if demande != "cross_encoder":
+    if demande == "identity":
         return IdentityReranker(), "identity", None
+    if demande == "lexical":
+        from retrieval.rerank import LexicalReranker
+
+        return LexicalReranker(), "lexical", None
+    if demande != "cross_encoder":
+        return IdentityReranker(), "identity", f"reranker inconnu : {demande}"
     # On teste la DISPONIBILITE du paquet sans l'importer : importer
     # sentence_transformers charge torch, mesure 72 s sur cette machine, et le
     # service est construit a chaque session. find_spec est instantane.
@@ -132,7 +138,7 @@ def construire(
 ) -> tuple[DenseIndex, Reranker, Choix]:
     """Renvoie l'index dense, le reranker, et le compte rendu de ce qui tourne."""
     demande_dense = (dense_backend or os.environ.get("SORABEL_DENSE_BACKEND", "local")).lower()
-    demande_rerank = (reranker or os.environ.get("SORABEL_RERANKER", "identity")).lower()
+    demande_rerank = (reranker or os.environ.get("SORABEL_RERANKER", "lexical")).lower()
 
     index, nom_dense, repli_dense = _construire_dense(chunks, demande_dense)
     classeur, nom_rerank, repli_rerank = _construire_reranker(demande_rerank)

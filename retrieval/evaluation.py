@@ -68,5 +68,5 @@ Mesure produite automatiquement sur `eval/questions_rag.jsonl`.
 - Gain relatif Recall@1 : **{relative:.1f} %**
 - Questions évaluées : **{hybrid.total}**
 
-Le corpus est interrogé avec le profil `support`; les notes internes sont donc exclues. Le reranker configuré dans ce prototype est déterministe (`IdentityReranker`). Un cross-encoder local peut être activé ultérieurement sans modifier le contrat du service.
+Le corpus est interrogé avec le profil `support` : les notes internes sont donc exclues. La chaîne mesurée est dense + BM25, fusion RRF, puis **reranking lexical** — `LexicalReranker`, déterministe et sans réseau. Un cross-encoder est disponible (`SORABEL_RERANKER=cross_encoder`) : mesuré, il donne le **même** Recall@1 pour **26 fois** le temps, et il n'apporte donc rien sur ce corpus. Voir `docs/livrable/evidence/comparaison-briques-rag.json`.
 """

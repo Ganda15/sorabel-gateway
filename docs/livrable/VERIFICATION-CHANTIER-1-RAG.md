@@ -33,7 +33,7 @@ uv run python scripts/demo_rag.py
 | 1 | une question couverte cite ses sources — titre, référence, date | **2 sources**, les trois champs remplis | 191 ms |
 | 2 | hors corpus : l'outil le dit, sans fabriquer | `hors_corpus`, `answer` vide | 15 ms |
 | 3 | « REF-8842 » remonte la fiche technique **en tête** | **REF-8842 · fiche_technique** en position 1 | 16 ms |
-| 4 | le gain hybride sur dense est mesuré | **0,7273 → 0,8182**, +9,1 points, 22 questions | 805 ms |
+| 4 | le gain hybride sur dense est mesuré | **0,7273 → 0,8636**, +13,6 points, 22 questions | 805 ms |
 | 5 | *(ajouté)* le périmètre documentaire du support | support **6 hits, 0 note interne** · commercial **10, notes internes présentes** | 154 ms |
 
 Le critère 4 est **recalculé à chaque exécution**, jamais relu dans le rapport. Le critère 5
@@ -72,59 +72,64 @@ uv run python -m pytest tests/acceptance/test_rag.py -q
 
 ---
 
-## 4. Les deux exigences du brief qui ne sont pas actives par défaut
+## 4. Ce qui est actif, et la seule exigence qui ne l'est pas
 
-Le brief demande « indexation dans **Chroma** » et « hybride **+ reranking** ». Les deux
-sont **implémentées et activables**. Aucune n'est le défaut, et c'est une décision
-**mesurée**.
+Le brief demande « indexation dans **Chroma** » et « hybride **+ reranking** ».
+
+- **Le reranking est actif** : `LexicalReranker`, déterministe, sans modèle ni réseau.
+- **Chroma n'est pas l'index livré** — décision **mesurée**, pas renoncement.
 
 ```
 uv run python scripts/comparer_briques_rag.py
 ```
 
-Trois constructions de chaque configuration, même corpus, même encodeur :
+Quatre configurations, trois constructions chacune, même corpus, même encodeur :
 
-| Configuration | hybride R@1, 3 essais | Reproductible | Temps |
-|---|---|---|---|
-| **local + identity** *(livré)* | 0,8182 · 0,8182 · 0,8182 | ✅ | **665 ms** |
-| chroma + identity | **0,7727** · 0,8182 · 0,8182 | ❌ | 1 048 ms |
-| chroma + cross-encoder | 0,8182 · 0,8182 · 0,8182 | ✅ | **24 980 ms** |
+| Configuration | dense R@1, 3 essais | hybride R@1, 3 essais | Reproductible | Temps médian |
+|---|---|---|---|---|
+| local, sans reranking | 0,7273 ×3 | 0,8182 ×3 | ✅ | 717 ms |
+| **local + reranking lexical** *(livré)* | 0,7273 ×3 | **0,8636 ×3** | ✅ | **808 ms** |
+| chroma + reranking lexical | **0,6364 · 0,5909 · 0,5909** | 0,8182 ×3 | ❌ | 942 ms |
+| local + cross-encoder | 0,7273 ×3 | 0,8636 ×3 | ✅ | **20 820 ms** |
 
-### Pourquoi pas Chroma
+### Ce que le reranking lexical apporte
 
-L'index **HNSW** de Chroma est **approximatif** : **8 questions sur 22** changent de premier
-résultat entre deux constructions. L'encodeur, lui, est déterministe — vérifié séparément.
+**+4,5 points** de Recall@1 par-dessus la fusion RRF — 0,8182 → 0,8636 — pour **91 ms**.
+Et sur les questions par **référence exacte**, celles que le brief nomme (E2), il porte le
+Recall@1 à **1,000** — ligne `reference_exacte` de `eval/rapport_gain.md`.
 
-Le brief exige « une preuve chiffrée à l'appui ». **Un gain qui change d'une exécution à
-l'autre n'est pas une preuve.** L'index local donne 0,8182 à chaque fois.
+Il ne charge aucun modèle : il compare les jetons de la question à ceux du candidat et donne
+un poids fort à une **référence produit** présente à l'identique. D'où son déterminisme.
 
 ### Pourquoi pas le cross-encoder
 
-```
-tests/acceptance/test_rag.py avec cross-encoder → 3 échecs sur 4, dont un par dépassement
-première recherche  →  7 197 ms (chargement du modèle)
-recherches suivantes →   620 ms, contre 15 ms sans
-```
+Il donne **exactement le même** 0,8636 pour **26 fois** le temps. Un modèle plus fin qui
+n'améliore rien sur ce corpus n'est pas un choix, c'est une dépense. Et il fait échouer
+**3 des 4 tests d'acceptance** fournis, dont un par dépassement de délai : il remonte la
+**notice** au-dessus de la **fiche technique** sur « REF-8842 », ce que le critère 3 interdit.
 
-Il remonte la **notice** au-dessus de la **fiche technique** sur « REF-8842 » — ce que le
-critère d'acceptance 3 interdit. Et le brief exige que **tous** les tests d'acceptance
-fournis passent.
+### Pourquoi pas Chroma
 
-### Comment les activer
+Son index **HNSW** est **approximatif** : le Recall@1 dense change d'une construction à
+l'autre — **0,6364 puis 0,5909 puis 0,5909**, corpus et encodeur identiques. Le brief exige
+« une preuve chiffrée à l'appui » ; **un chiffre qui bouge n'est pas une preuve**. Et
+l'hybride y plafonne à **0,8182**, soit **4,5 points sous** l'index local.
+
+### Comment activer l'un ou l'autre
 
 ```
-SORABEL_DENSE_BACKEND = chroma | local            (défaut : local)
-SORABEL_RERANKER      = cross_encoder | identity  (défaut : identity)
+SORABEL_DENSE_BACKEND = chroma | local                       (défaut : local)
+SORABEL_RERANKER      = cross_encoder | lexical | identity   (défaut : lexical)
 ```
 
 `service.briques.describe()` renvoie **ce qui tourne vraiment** — le repli n'est jamais
 silencieux.
 
-> 🗣 **La phrase à défendre** : « Le brief demande Chroma et le reranking. Les deux sont
-> implémentés et activables par une variable. Je les ai mesurés : Chroma n'est pas
-> reproductible, le cross-encoder fait échouer trois tests d'acceptance sur quatre. Le brief
-> demande aussi une preuve chiffrée et des tests qui passent. J'ai respecté ces deux
-> exigences-là, et je montre la mesure qui m'a fait choisir. »
+> 🗣 **La phrase à défendre** : « Le brief demande Chroma et le reranking. Le reranking
+> tourne, et il rapporte 4,5 points — dont un Recall@1 de **1,000** sur les références
+> exactes. Chroma est implémenté et activable, mais je ne le livre pas actif : son index
+> approximatif donne un Recall@1 dense différent à chaque construction, et le brief demande
+> une preuve chiffrée. Je montre la mesure qui m'a fait choisir. »
 
 ---
 
@@ -138,7 +143,7 @@ silencieux.
 | Index dense | `retrieval/dense.py` | vecteurs déterministes locaux |
 | Index lexical | `retrieval/lexical.py` | BM25 |
 | Fusion | `retrieval/fusion.py` | RRF |
-| Reranking | `retrieval/rerank.py` | identité *(livré)* ou cross-encoder |
+| Reranking | `retrieval/rerank.py` | **lexical déterministe *(livré)*** · identité · cross-encoder |
 | Choix des briques | `retrieval/backends.py` | sélection + repli explicite |
 | Adaptateur Chroma | `ingest/chroma_store.py` | testé, activable |
 | Évaluation | `retrieval/evaluation.py` | Recall@1, MRR, dense contre hybride |
@@ -152,9 +157,10 @@ silencieux.
 1. **`answer_question` est extractif, pas génératif.** Il sélectionne la meilleure phrase
    du corpus par recouvrement de termes ; il ne rédige pas. Le « G » de RAG manque
    réellement. La recherche hybride, elle, est bien là et son gain est mesuré.
-2. **Le reranker livré est l'identité.** Le cross-encoder est écrit, activable, et la
-   raison de ne pas l'activer est mesurée — voir §4.
-3. **Chroma n'est pas l'index livré**, pour la même raison, mesurée aussi.
+2. **Chroma n'est pas l'index livré.** Il est implémenté et activable ; son index
+   approximatif rend le chiffre non reproductible — mesuré, §4.
+3. **Le cross-encoder n'est pas activé.** Même Recall@1 que le reranking livré, pour 26 fois
+   le temps, et 3 tests d'acceptance sur 4 tombent. Le reranking, lui, **est actif** : lexical.
 4. **L'index dense est local et déterministe**, à base de vecteurs de hachage. Ce n'est pas
    un modèle d'embedding entraîné : c'est un choix de reproductibilité, pas de performance.
 

@@ -145,9 +145,9 @@ OK  [support] get_document  ok    3 ms
 
 | Critère | Preuve | État |
 |---|---|---|
-| Tous les tests d'acceptance fournis passent (RAG, Text-to-SQL, MCP) | **223 passed** — 163 unitaires, 12 d'acceptance, 48 d'intégration ; la suite `tests/acceptance/` est **identique au starter** (`git diff starter-original` vide) | ✅ |
+| Tous les tests d'acceptance fournis passent (RAG, Text-to-SQL, MCP) | **230 passed** — 163 unitaires, 12 d'acceptance, 48 d'intégration ; la suite `tests/acceptance/` est **identique au starter** (`git diff starter-original` vide) | ✅ |
 | Les six exigences DSI E1–E6 respectées et démontrées | `docs/livrable/TRACEABILITE-BRIEF-CODE-PREUVES.md` | ✅ |
-| La recherche hybride surpasse la dense, preuve chiffrée | Recall@1 **0,727 → 0,818** — **+9,1 points**, +12,5 %, 22 questions (`eval/rapport_gain.md`) | ✅ |
+| La recherche hybride surpasse la dense, preuve chiffrée | Recall@1 **0,727 → 0,864** — **+13,6 points**, +18,7 %, 22 questions (`eval/rapport_gain.md`) | ✅ |
 | Aucune écriture SQL ne passe | `UNSAFE_SQL` en 4 ms, avant génération | ✅ |
 | Aucune colonne sensible ne sort pour le profil support | `NOT_AUTHORIZED` en 5 ms + colonne absente du schéma remis + rôle PostgreSQL | ✅ |
 | Choix d'architecture justifiés dans le dossier de conception | conception jour 3 §1–§5 + schémas 12, 13, 14 | ✅ |
@@ -369,7 +369,7 @@ profondeur doit garantir, et c'est ce que le tableau ci-dessus mesure.
 2. **Un profil par processus.** Le filtrage de `tools/list` en dépend. Un transport réseau
    multi-sessions demanderait de porter le profil dans la session MCP elle-même.
 3. **`answer_question` est extractif**, pas génératif : il choisit la meilleure phrase du
-   corpus. La recherche hybride, elle, est réelle et mesurée (+9,1 points).
+   corpus. La recherche hybride, elle, est réelle et mesurée (+13,6 points).
 4. **Le lien de l'interface graphique n'existe pas** — voir §3.
 5. **Keycloak n'est pas branché** — voir §7. Le rôle PostgreSQL `sorabel_schema_reader`
    est déclaré mais vide.
@@ -397,7 +397,7 @@ cd "C:\Users\kanda\Documents\ChatGPT\Sorabel - l'agent augmenté par la donnée,
 .\.venv\Scripts\python.exe scripts\mcp_client.py --profile support
 ```
 
-Attendu : `223 passed` · `10/10 conformes` · `19/19 conformes` · `6/6 contournements arrêtés` · `à jour` sur les 3 documents · `7 tools`.
+Attendu : `230 passed` · `10/10 conformes` · `19/19 conformes` · `6/6 contournements arrêtés` · `à jour` sur les 3 documents · `7 tools`.
 
 ---
 

@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T17:06:00.578902+00:00",
+  "genere_le": "2026-09-04T18:38:07.757796+00:00",
   "journal": "logs/demonstration-rag.jsonl",
   "criteres": [
     {
@@ -10,7 +10,7 @@
       "sources": 2,
       "titre_reference_date_complets": true,
       "conforme": true,
-      "duree_ms": 145,
+      "duree_ms": 153,
       "montre": "E1 — chaque source porte son titre, sa référence et sa date."
     },
     {
@@ -20,7 +20,7 @@
       "attendu": "hors_corpus",
       "reponse_fabriquee": false,
       "conforme": true,
-      "duree_ms": 14,
+      "duree_ms": 15,
       "montre": "E1 — le système dit qu'il ne sait pas plutôt que d'inventer."
     },
     {
@@ -39,12 +39,12 @@
       "questions_du_fichier": 30,
       "questions_evaluees": 22,
       "dense_recall_at_1": 0.7273,
-      "hybride_recall_at_1": 0.8182,
-      "gain_absolu_points": 9.1,
+      "hybride_recall_at_1": 0.8636,
+      "gain_absolu_points": 13.6,
       "dense_mrr": 0.7742,
-      "hybride_mrr": 0.8636,
+      "hybride_mrr": 0.8864,
       "conforme": true,
-      "duree_ms": 609,
+      "duree_ms": 636,
       "montre": "E6 — le gain est recalculé à chaque exécution, jamais recopié."
     },
     {
@@ -64,7 +64,7 @@
         ]
       },
       "conforme": true,
-      "duree_ms": 146,
+      "duree_ms": 155,
       "montre": "La requête vise les notes internes : zéro pour le support, présentes pour le commercial."
     }
   ],
