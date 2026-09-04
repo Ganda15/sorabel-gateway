@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T18:57:09.897355+00:00",
+  "genere_le": "2026-09-04T19:19:37.518884+00:00",
   "listes_de_mots_cles": {
     "fichier": "sql/analyzer.py",
     "verbes_ecriture": [
@@ -103,7 +103,7 @@
       "error_code": "UNSUPPORTED_QUESTION",
       "barriere": "2 · schéma filtré — la colonne n'existe pas pour ce profil",
       "sql_produit": null,
-      "duree_ms": 797,
+      "duree_ms": 947,
       "aucune_donnee_sortie": true,
       "montre": "Synonyme absent de la liste — que reste-t-il pour arrêter la question ?"
     },
@@ -115,7 +115,7 @@
       "error_code": "UNSUPPORTED_QUESTION",
       "barriere": "2 · schéma filtré — la colonne n'existe pas pour ce profil",
       "sql_produit": null,
-      "duree_ms": 910,
+      "duree_ms": 1093,
       "aucune_donnee_sortie": true,
       "montre": "Périphrase entière, aucun mot de la liste."
     },
@@ -127,7 +127,7 @@
       "error_code": "UNSUPPORTED_QUESTION",
       "barriere": "2 · schéma filtré — la colonne n'existe pas pour ce profil",
       "sql_produit": null,
-      "duree_ms": 951,
+      "duree_ms": 1253,
       "aucune_donnee_sortie": true,
       "montre": "Le nom brut de la colonne interdite, sans aucun mot-clé métier."
     },
@@ -139,7 +139,7 @@
       "error_code": "UNSUPPORTED_QUESTION",
       "barriere": "2 · schéma filtré — la colonne n'existe pas pour ce profil",
       "sql_produit": null,
-      "duree_ms": 1138,
+      "duree_ms": 922,
       "aucune_donnee_sortie": true,
       "montre": "La définition de la marge, écrite sans le mot."
     },

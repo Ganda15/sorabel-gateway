@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T18:56:56.126208+00:00",
+  "genere_le": "2026-09-04T19:19:22.325200+00:00",
   "policy_version": "policy-v1",
   "journal": "logs/demonstration-mcp.jsonl",
   "lignes": [
@@ -38,7 +38,7 @@
       "conforme": true,
       "error_code": "NOT_AUTHORIZED",
       "message": "get_schema is not authorized for the support profile.",
-      "duree_ms": 7,
+      "duree_ms": 10,
       "montre": "Critère 2 — un tool hors matrice est refusé, proprement et par écrit."
     },
     {
@@ -53,7 +53,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 141,
+      "duree_ms": 154,
       "montre": "Critère 3 — chercher sans générer : la première brique du RAG, seule."
     },
     {
@@ -98,7 +98,7 @@
       "conforme": true,
       "error_code": "UNSAFE_SQL",
       "message": "Cette demande implique une écriture et a été refusée.",
-      "duree_ms": 2,
+      "duree_ms": 3,
       "montre": "E4 — aucune écriture ne passe, et le refus est daté au journal."
     },
     {
@@ -113,7 +113,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 86,
+      "duree_ms": 114,
       "montre": "Un tool figé : requête écrite d'avance, seul le paramètre varie."
     },
     {
@@ -153,7 +153,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 7,
+      "duree_ms": 9,
       "montre": "Le même tool, un autre profil : c'est la matrice qui décide, pas le code du tool."
     },
     {
@@ -168,7 +168,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 1459,
+      "duree_ms": 1863,
       "montre": "La même donnée, autorisée au commercial : le périmètre suit le profil."
     }
   ],

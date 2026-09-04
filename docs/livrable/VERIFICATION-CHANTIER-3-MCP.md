@@ -114,11 +114,32 @@ OK  [support] get_document  ok    3 ms
 
 ### « Sur une session de démonstration, le journal contient tous les appels »
 
+<!-- APPELS-MCP:debut -->
+```
+uv run python scripts/demo_mcp.py
+```
+
 ```
 10/10 conformes — 5 autorisés, 3 refusés, 8 lignes de journal
 ```
 
-8 `tools/call`, 8 lignes. ✅
+| Profil | Appel | Ce que ça montre | Conforme | Durée |
+|---|---|---|:---:|---:|
+| `support` | `tools/list` | Critère 1 — le catalogue annoncé est celui de la matrice. | ✅ | — |
+| `support` | `tools/call` | Critère 2 — un tool hors matrice est refusé, proprement et par écrit. | ✅ | 10 ms |
+| `support` | `tools/call` | Critère 3 — chercher sans générer : la première brique du RAG, seule. | ✅ | 154 ms |
+| `support` | `tools/call` | Critère 3 — lire le document trouvé : la seconde brique, enchaînée à la main. | ✅ | 2 ms |
+| `support` | `tools/call` | E5 — aucune colonne sensible ne sort pour le support. | ✅ | 2 ms |
+| `support` | `tools/call` | E4 — aucune écriture ne passe, et le refus est daté au journal. | ✅ | 3 ms |
+| `support` | `tools/call` | Un tool figé : requête écrite d'avance, seul le paramètre varie. | ✅ | 114 ms |
+| `commercial` | `tools/list` | Critère 1 — le catalogue annoncé est celui de la matrice. | ✅ | — |
+| `commercial` | `tools/call` | Le même tool, un autre profil : c'est la matrice qui décide, pas le code du tool. | ✅ | 9 ms |
+| `commercial` | `tools/call` | La même donnée, autorisée au commercial : le périmètre suit le profil. | ✅ | 1863 ms |
+
+**8 `tools/call` pendant la démonstration → 8 lignes de journal.** Tous journalisés : oui. Politique appliquée : `policy-v1`.
+
+> Tableau **généré** par `scripts/generer_tableaux_criteres.py` depuis `docs/livrable/evidence/mcp-demonstration.json` — valeurs, verdicts et durées repris du fichier de preuve sans réécriture. **Ne pas modifier à la main** : `--verifier` le signalerait. Après avoir rejoué la démonstration, relancer le générateur : les durées changent d'une exécution à l'autre, c'est normal et ce n'est pas une dérive.
+<!-- APPELS-MCP:fin -->
 
 ---
 
@@ -389,6 +410,7 @@ cd "C:\Users\kanda\Documents\ChatGPT\Sorabel - l'agent augmenté par la donnée,
 ```
 ```
 .\.venv\Scripts\python.exe scripts\generer_docs_matrice.py --verifier
+.\.venv\Scripts\python.exe scripts\generer_tableaux_criteres.py --verifier
 ```
 ```
 .\.venv\Scripts\python.exe scripts\verifier_defense_profondeur.py

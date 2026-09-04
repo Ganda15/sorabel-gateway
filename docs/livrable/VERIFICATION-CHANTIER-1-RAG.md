@@ -18,8 +18,9 @@
 
 ---
 
-## 2. Les quatre critères d'acceptance
+## 2. Les critères d'acceptance
 
+<!-- CRITERES-RAG:debut -->
 ```
 uv run python scripts/demo_rag.py
 ```
@@ -28,13 +29,16 @@ uv run python scripts/demo_rag.py
 5/5 conformes
 ```
 
-| # | Critère du brief | Mesuré | Durée |
-|---|---|---|---|
-| 1 | une question couverte cite ses sources — titre, référence, date | **2 sources**, les trois champs remplis | 191 ms |
-| 2 | hors corpus : l'outil le dit, sans fabriquer | `hors_corpus`, `answer` vide | 15 ms |
-| 3 | « REF-8842 » remonte la fiche technique **en tête** | **REF-8842 · fiche_technique** en position 1 | 16 ms |
-| 4 | le gain hybride sur dense est mesuré | **0,7273 → 0,8636**, +13,6 points, 22 questions | 805 ms |
-| 5 | *(ajouté)* le périmètre documentaire du support | support **6 hits, 0 note interne** · commercial **10, notes internes présentes** | 154 ms |
+| # | Critère | Ce que ça montre | Mesuré | Conforme | Durée |
+|---|---|---|---|:---:|---:|
+| 1 | réponse sourcée | E1 — chaque source porte son titre, sa référence et sa date. | statut `ok` · sources **2** · titre reference date complets **oui** | ✅ | 165 ms |
+| 2 | hors corpus sans fabrication | E1 — le système dit qu'il ne sait pas plutôt que d'inventer. | statut `hors_corpus` · reponse fabriquee **non** | ✅ | 19 ms |
+| 3 | REF-8842 en tête | E2 — une référence exacte n'est pas noyée par la similarité. | statut `ok` · reference en tete `REF-8842` · type en tete `fiche_technique` | ✅ | 15 ms |
+| 4 | hybride > dense, mesuré | E6 — le gain est recalculé à chaque exécution, jamais recopié. | questions du fichier **30** · questions evaluees **22** · dense recall at 1 **0,7273** · hybride recall at 1 **0,8636** · gain absolu points **13,6** · dense mrr **0,7742** · hybride mrr **0,8864** | ✅ | 722 ms |
+| 5 | périmètre documentaire du support | La requête vise les notes internes : zéro pour le support, présentes pour le commercial. | mesure par `service direct — le contrat search_docs n'expose pas la collection` · support hits **6**, collections `fiches_techniques` · commercial hits **10**, collections `notes_internes` | ✅ | 231 ms |
+
+> Tableau **généré** par `scripts/generer_tableaux_criteres.py` depuis `docs/livrable/evidence/rag-demonstration.json` — valeurs, verdicts et durées repris du fichier de preuve sans réécriture. **Ne pas modifier à la main** : `--verifier` le signalerait. Après avoir rejoué la démonstration, relancer le générateur : les durées changent d'une exécution à l'autre, c'est normal et ce n'est pas une dérive.
+<!-- CRITERES-RAG:fin -->
 
 Le critère 4 est **recalculé à chaque exécution**, jamais relu dans le rapport. Le critère 5
 ne figure pas au brief mais un jury le demandera : il porte **deux** conditions, sinon un
@@ -197,6 +201,9 @@ uv run python scripts/comparer_briques_rag.py
 ```
 ```
 uv run python scripts/generer_tableau_briques.py --verifier
+```
+```
+uv run python scripts/generer_tableaux_criteres.py --verifier
 ```
 ```
 uv run python scripts/evaluate_rag.py
