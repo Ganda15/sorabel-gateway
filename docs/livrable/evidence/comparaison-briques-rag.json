@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T18:20:47.031175+00:00",
+  "genere_le": "2026-09-04T18:52:28.264623+00:00",
   "essais_par_configuration": 3,
   "configurations": [
     {
@@ -10,7 +10,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 717,
+          "duree_ms": 643,
           "briques_reelles": {
             "dense": "local",
             "reranker": "identity",
@@ -22,7 +22,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 805,
+          "duree_ms": 647,
           "briques_reelles": {
             "dense": "local",
             "reranker": "identity",
@@ -34,7 +34,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 631,
+          "duree_ms": 684,
           "briques_reelles": {
             "dense": "local",
             "reranker": "identity",
@@ -57,7 +57,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 705,
+          "duree_ms": 762,
           "briques_reelles": {
             "dense": "local",
             "reranker": "lexical",
@@ -69,7 +69,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 808,
+          "duree_ms": 658,
           "briques_reelles": {
             "dense": "local",
             "reranker": "lexical",
@@ -81,7 +81,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 838,
+          "duree_ms": 654,
           "briques_reelles": {
             "dense": "local",
             "reranker": "lexical",
@@ -104,7 +104,7 @@
           "dense_recall_at_1": 0.6364,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 1625,
+          "duree_ms": 1560,
           "briques_reelles": {
             "dense": "chroma",
             "reranker": "lexical",
@@ -113,10 +113,10 @@
           }
         },
         {
-          "dense_recall_at_1": 0.5909,
+          "dense_recall_at_1": 0.6818,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 942,
+          "duree_ms": 1029,
           "briques_reelles": {
             "dense": "chroma",
             "reranker": "lexical",
@@ -125,10 +125,10 @@
           }
         },
         {
-          "dense_recall_at_1": 0.5909,
+          "dense_recall_at_1": 0.6364,
           "hybride_recall_at_1": 0.8182,
           "questions_evaluees": 22,
-          "duree_ms": 906,
+          "duree_ms": 903,
           "briques_reelles": {
             "dense": "chroma",
             "reranker": "lexical",
@@ -151,7 +151,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 20820,
+          "duree_ms": 23640,
           "briques_reelles": {
             "dense": "local",
             "reranker": "cross_encoder",
@@ -163,7 +163,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 21549,
+          "duree_ms": 18490,
           "briques_reelles": {
             "dense": "local",
             "reranker": "cross_encoder",
@@ -175,7 +175,7 @@
           "dense_recall_at_1": 0.7273,
           "hybride_recall_at_1": 0.8636,
           "questions_evaluees": 22,
-          "duree_ms": 18264,
+          "duree_ms": 17909,
           "briques_reelles": {
             "dense": "local",
             "reranker": "cross_encoder",
@@ -191,5 +191,5 @@
       "note": "Reranking par cross-encoder — le plus fin, le plus lent."
     }
   ],
-  "conclusion": "Le défaut livré est l'index local : c'est le seul des trois qui donne la même valeur à chaque exécution. Le brief demande une preuve chiffrée ; un gain qui change d'une exécution à l'autre n'en est pas une. Chroma et le cross-encoder restent branchés et activables par variable d'environnement."
+  "conclusion": "Meilleur Recall@1 hybride : 0.8636, atteint par 2 configuration(s) : local + lexical, local + cross_encoder. La configuration livree est local + lexical : a egalite de score, c'est la plus rapide (658 ms contre 18490 ms). Les 4 configurations donnent la meme valeur aux 3 essais : aucune n'est ecartee pour irreproductibilite. Ecartees : local + identity (0.8182, 647 ms) ; chroma + lexical (0.8182, 1029 ms) ; local + cross_encoder (0.8636, 18490 ms). Toutes restent activables par SORABEL_DENSE_BACKEND et SORABEL_RERANKER. A noter : la couche dense de chroma + lexical varie ([0.6364, 0.6818]) alors que son resultat final ne varie pas. Le reranking absorbe cette instabilite, il ne la supprime pas."
 }

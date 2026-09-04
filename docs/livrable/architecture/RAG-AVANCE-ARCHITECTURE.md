@@ -100,4 +100,4 @@ dupliquée selon le client.
 Le chemin verifie utilise l’embedder local deterministe et le `LexicalReranker`, qui est
 actif et vaut **+4,5 points** de Recall@1. Les adaptateurs Sentence Transformer et Cross
 Encoder existent comme extensions ; le Cross Encoder a ete mesure et rend exactement le
-meme Recall@1 pour 26 fois le temps, donc aucun gain ne lui est attribue.
+meme Recall@1 pour des dizaines de fois le temps, donc aucun gain ne lui est attribue.

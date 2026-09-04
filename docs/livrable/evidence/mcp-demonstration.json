@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T18:38:20.517639+00:00",
+  "genere_le": "2026-09-04T18:56:56.126208+00:00",
   "policy_version": "policy-v1",
   "journal": "logs/demonstration-mcp.jsonl",
   "lignes": [
@@ -38,7 +38,7 @@
       "conforme": true,
       "error_code": "NOT_AUTHORIZED",
       "message": "get_schema is not authorized for the support profile.",
-      "duree_ms": 8,
+      "duree_ms": 7,
       "montre": "Critère 2 — un tool hors matrice est refusé, proprement et par écrit."
     },
     {
@@ -53,7 +53,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 138,
+      "duree_ms": 141,
       "montre": "Critère 3 — chercher sans générer : la première brique du RAG, seule."
     },
     {
@@ -68,7 +68,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 4,
+      "duree_ms": 2,
       "montre": "Critère 3 — lire le document trouvé : la seconde brique, enchaînée à la main."
     },
     {
@@ -83,7 +83,7 @@
       "conforme": true,
       "error_code": "NOT_AUTHORIZED",
       "message": "Cette information n’est pas accessible avec le profil authentifié.",
-      "duree_ms": 3,
+      "duree_ms": 2,
       "montre": "E5 — aucune colonne sensible ne sort pour le support."
     },
     {
@@ -113,7 +113,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 101,
+      "duree_ms": 86,
       "montre": "Un tool figé : requête écrite d'avance, seul le paramètre varie."
     },
     {
@@ -153,7 +153,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 8,
+      "duree_ms": 7,
       "montre": "Le même tool, un autre profil : c'est la matrice qui décide, pas le code du tool."
     },
     {
@@ -168,7 +168,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 2308,
+      "duree_ms": 1459,
       "montre": "La même donnée, autorisée au commercial : le périmètre suit le profil."
     }
   ],

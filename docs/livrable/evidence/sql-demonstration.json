@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T18:38:14.783178+00:00",
+  "genere_le": "2026-09-04T18:56:51.198437+00:00",
   "journal": "logs/demonstration-sql.jsonl",
   "criteres": [
     {
@@ -12,7 +12,7 @@
       "sql_renvoye": true,
       "sql": "SELECT COUNT(commandes_commercial.id) AS nombre_commandes FROM sorabel_semantic.commandes_commercial WHERE commandes_commercial.date_commande >= %(date_debut)s AND commandes_commercial.date_commande < %(date_fin)s",
       "conforme": true,
-      "duree_ms": 2601,
+      "duree_ms": 2831,
       "montre": "E3 — la réponse porte sa preuve : on peut rejouer la requête."
     },
     {
@@ -26,7 +26,7 @@
       "base_inchangee": true,
       "journalise": true,
       "conforme": true,
-      "duree_ms": 1265,
+      "duree_ms": 1309,
       "montre": "E3 + E5 — rien n'est écrit, et le refus laisse une trace."
     },
     {
@@ -37,7 +37,7 @@
       "error_code": "NOT_AUTHORIZED",
       "lignes_renvoyees": 0,
       "conforme": true,
-      "duree_ms": 1104,
+      "duree_ms": 1330,
       "montre": "E5 — la colonne est absente du schéma remis au modèle."
     },
     {
@@ -49,7 +49,7 @@
       "sql_produit": null,
       "lignes_renvoyees": 0,
       "conforme": true,
-      "duree_ms": 1103,
+      "duree_ms": 1074,
       "montre": "E3 — le système dit qu'il ne sait pas plutôt que d'inventer une table."
     }
   ],
@@ -63,7 +63,7 @@
       4
     ],
     "cote_serveur_travail_ms": [
-      1464
+      1649
     ]
   }
 }

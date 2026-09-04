@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T18:38:07.757796+00:00",
+  "genere_le": "2026-09-04T18:56:43.907373+00:00",
   "journal": "logs/demonstration-rag.jsonl",
   "criteres": [
     {
@@ -10,7 +10,7 @@
       "sources": 2,
       "titre_reference_date_complets": true,
       "conforme": true,
-      "duree_ms": 153,
+      "duree_ms": 154,
       "montre": "E1 — chaque source porte son titre, sa référence et sa date."
     },
     {
@@ -44,7 +44,7 @@
       "dense_mrr": 0.7742,
       "hybride_mrr": 0.8864,
       "conforme": true,
-      "duree_ms": 636,
+      "duree_ms": 629,
       "montre": "E6 — le gain est recalculé à chaque exécution, jamais recopié."
     },
     {
@@ -64,7 +64,7 @@
         ]
       },
       "conforme": true,
-      "duree_ms": 155,
+      "duree_ms": 139,
       "montre": "La requête vise les notes internes : zéro pour le support, présentes pour le commercial."
     }
   ],

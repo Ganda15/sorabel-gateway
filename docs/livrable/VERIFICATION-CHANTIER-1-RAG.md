@@ -85,16 +85,23 @@ uv run python scripts/comparer_briques_rag.py
 
 Quatre configurations, trois constructions chacune, même corpus, même encodeur :
 
+<!-- TABLEAU-BRIQUES:debut -->
 | Configuration | dense R@1, 3 essais | hybride R@1, 3 essais | Reproductible | Temps médian |
 |---|---|---|---|---|
-| local, sans reranking | 0,7273 ×3 | 0,8182 ×3 | ✅ | 717 ms |
-| **local + reranking lexical** *(livré)* | 0,7273 ×3 | **0,8636 ×3** | ✅ | **808 ms** |
-| chroma + reranking lexical | **0,6364 · 0,5909 · 0,5909** | 0,8182 ×3 | ❌ | 942 ms |
-| local + cross-encoder | 0,7273 ×3 | 0,8636 ×3 | ✅ | **20 820 ms** |
+| local, sans reranking | 0,7273 ×3 | 0,8182 ×3 | ✅ | 647 ms |
+| **local + reranking lexical** *(livré)* | 0,7273 ×3 | 0,8636 ×3 | ✅ | 658 ms |
+| chroma + reranking lexical | **0,6364 · 0,6818 · 0,6364** | 0,8182 ×3 | ✅ | 1 029 ms |
+| local + cross-encoder | 0,7273 ×3 | 0,8636 ×3 | ✅ | 18 490 ms |
+
+> Généré par `scripts/generer_tableau_briques.py` depuis `docs/livrable/evidence/comparaison-briques-rag.json`. **Ne pas modifier a la main** : `--verifier` le signalerait. La colonne *Reproductible* reprend le champ `reproductible` du fichier de preuve, calculé sur les valeurs **hybrides**.
+<!-- TABLEAU-BRIQUES:fin -->
 
 ### Ce que le reranking lexical apporte
 
-**+4,5 points** de Recall@1 par-dessus la fusion RRF — 0,8182 → 0,8636 — pour **91 ms**.
+**+4,5 points** de Recall@1 par-dessus la fusion RRF — 0,8182 → 0,8636 — pour un surcoût
+qui **ne sort pas du bruit de mesure** : les deux lignes du tableau ci-dessus sont à une
+dizaine de millisecondes l'une de l'autre, soit moins que l'écart entre deux exécutions
+d'une même configuration.
 Et sur les questions par **référence exacte**, celles que le brief nomme (E2), il porte le
 Recall@1 à **1,000** — ligne `reference_exacte` de `eval/rapport_gain.md`.
 
@@ -103,17 +110,28 @@ un poids fort à une **référence produit** présente à l'identique. D'où son
 
 ### Pourquoi pas le cross-encoder
 
-Il donne **exactement le même** 0,8636 pour **26 fois** le temps. Un modèle plus fin qui
+Il donne **exactement le même** 0,8636 pour un temps **des dizaines de fois** supérieur —
+le tableau ci-dessus porte la mesure du jour. Un modèle plus fin qui
 n'améliore rien sur ce corpus n'est pas un choix, c'est une dépense. Et il fait échouer
 **3 des 4 tests d'acceptance** fournis, dont un par dépassement de délai : il remonte la
 **notice** au-dessus de la **fiche technique** sur « REF-8842 », ce que le critère 3 interdit.
 
 ### Pourquoi pas Chroma
 
-Son index **HNSW** est **approximatif** : le Recall@1 dense change d'une construction à
-l'autre — **0,6364 puis 0,5909 puis 0,5909**, corpus et encodeur identiques. Le brief exige
-« une preuve chiffrée à l'appui » ; **un chiffre qui bouge n'est pas une preuve**. Et
-l'hybride y plafonne à **0,8182**, soit **4,5 points sous** l'index local.
+**Parce qu'elle rend 4,5 points de moins** : 0,8182 contre 0,8636, sur le même corpus et
+le même encodeur. C'est la seule raison qui tienne, et elle suffit.
+
+> ⚠️ **Ce n'est plus l'argument que j'avais.** Avant le reranking lexical, l'hybride de
+> Chroma bougeait vraiment d'une construction à l'autre — 0,7727 puis 0,8182 puis 0,8182 —
+> et je refusais Chroma pour « non reproductible ». **Le reranking lexical l'a stabilisée** :
+> elle donne désormais 0,8182 aux trois essais, et le fichier de preuve la marque
+> `reproductible: true` comme les trois autres. L'argument a changé parce que la mesure a
+> changé.
+
+Ce qui reste vrai de l'index **HNSW**, c'est qu'il est **approximatif** : sa couche dense,
+elle, bouge toujours — **0,6364 puis 0,5909 puis 0,5909**. Le reranking absorbe cette
+instabilité au niveau du résultat final, il ne la supprime pas. C'est une fragilité de plus
+sous une brique déjà moins bonne, pas la raison principale du choix.
 
 ### Comment activer l'un ou l'autre
 
@@ -159,8 +177,8 @@ silencieux.
    réellement. La recherche hybride, elle, est bien là et son gain est mesuré.
 2. **Chroma n'est pas l'index livré.** Il est implémenté et activable ; son index
    approximatif rend le chiffre non reproductible — mesuré, §4.
-3. **Le cross-encoder n'est pas activé.** Même Recall@1 que le reranking livré, pour 26 fois
-   le temps, et 3 tests d'acceptance sur 4 tombent. Le reranking, lui, **est actif** : lexical.
+3. **Le cross-encoder n'est pas activé.** Même Recall@1 que le reranking livré, pour des
+   dizaines de fois le temps, et 3 tests d'acceptance sur 4 tombent. Le reranking, lui, **est actif** : lexical.
 4. **L'index dense est local et déterministe**, à base de vecteurs de hachage. Ce n'est pas
    un modèle d'embedding entraîné : c'est un choix de reproductibilité, pas de performance.
 
@@ -176,6 +194,9 @@ uv run python scripts/demo_rag.py
 ```
 ```
 uv run python scripts/comparer_briques_rag.py
+```
+```
+uv run python scripts/generer_tableau_briques.py --verifier
 ```
 ```
 uv run python scripts/evaluate_rag.py
