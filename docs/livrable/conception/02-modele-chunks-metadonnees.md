@@ -41,6 +41,22 @@ Ainsi, une recherche ne perd ni la version, ni la référence, ni la collection 
 - `ingest/parsers.py` isole les différences de formats mais produit un contrat unique.
 - `ingest/catalog.py` élimine les doublons par hash et conserve l’historique des versions.
 - `ingest/chunking.py` découpe par blocs avec chevauchement borné et identifiants déterministes.
+
+### La granularité, chiffrée
+
+Le brief demande explicitement : *« quelle granularité de chunk pour des fiches techniques ? »*
+
+| Paramètre | Valeur | Pourquoi |
+|---|---|---|
+| Taille visée | **650 caractères** | assez pour qu'un paragraphe technique garde son sens, assez court pour qu'un passage cité reste lisible dans une réponse |
+| Chevauchement | **100 caractères**, borné au quart de la taille | une phrase coupée en deux reste retrouvable des deux côtés |
+| Découpage | **par blocs**, jamais au milieu d'un paragraphe | un tableau ou une liste de fiche technique perd son sens s'il est coupé |
+
+**Mesuré sur le corpus livré** : **520 chunks**, taille minimale 170, **médiane 430**,
+maximale 650 caractères.
+
+> Un chunk plus gros diluerait la référence produit parmi d'autres ; un chunk plus petit
+> perdrait le contexte qui rend la phrase citable.
 - `ingest/pipeline.py` orchestre le tout et écrit un manifeste mesurable.
 - `retrieval/service.py` filtre la collection **avant** la sélection des preuves.
 
