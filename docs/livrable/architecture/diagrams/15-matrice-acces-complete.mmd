@@ -50,8 +50,8 @@ flowchart TB
     direction TB
     F1["1 · catalogue annoncé<br/>mcp_server/server.py:62<br/>ProfiledMCP.list_tools()<br/>le tool interdit n'est pas annoncé"]
     F2["2 · appel<br/>mcp_server/server.py:108 · governed()<br/>application/gateway.py:57 · _authorize()<br/>NOT_AUTHORIZED, même si non annoncé"]
-    F3["3 · avant le service<br/>retrieval/service.py:20 — collections filtrées<br/>AVANT le classement, pas après<br/>sql/catalog.py:22 — for_profile()"]
-    F4["4 · structure de la requête<br/>sql/analyzer.py:96 — mot sensible refusé<br/>sql/validator.py:166 — AST, table et colonne<br/>contrôlées contre le contexte du profil"]
+    F3["3 · avant le service<br/>retrieval/service.py:19 — collections filtrées<br/>AVANT le classement, pas après<br/>sql/catalog.py:22 — for_profile()"]
+    F4["4 · structure de la requête<br/>sql/analyzer.py:76 — mot sensible refusé<br/>sql/validator.py:166 — AST, table et colonne<br/>contrôlées contre le contexte du profil"]
     F5["5 · la base elle-même<br/>rôles sorabel_support_login / _commercial_login<br/>GRANT SELECT sur leurs seules vues<br/>default_transaction_read_only = on<br/><b>ne dépend pas de mon code</b>"]
   end
 
