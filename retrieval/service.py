@@ -6,11 +6,10 @@ from pathlib import Path
 from application import policy
 from ingest.models import CanonicalDocument, DocumentChunk
 from ingest.pipeline import ingest_corpus, load_index
-from retrieval.dense import LocalDenseIndex
+from retrieval import backends
 from retrieval.fusion import reciprocal_rank_fusion
 from retrieval.lexical import BM25Index
 from retrieval.models import AnswerResult, CitationSource, SearchHit
-from retrieval.rerank import IdentityReranker
 from retrieval.tokenization import tokenize
 
 
@@ -21,12 +20,21 @@ COLLECTIONS_BY_PROFILE = policy.collections_by_profile()
 
 
 class RagService:
-    def __init__(self, documents: list[CanonicalDocument], chunks: list[DocumentChunk]):
+    def __init__(
+        self,
+        documents: list[CanonicalDocument],
+        chunks: list[DocumentChunk],
+        dense_backend: str | None = None,
+        reranker: str | None = None,
+    ):
         self.documents = documents
         self.chunks = chunks
-        self.dense = LocalDenseIndex(chunks)
+        # L'index dense et le reranker sont choisis par retrieval/backends.py :
+        # Chroma et cross-encoder par defaut, briques locales en repli explicite.
+        self.dense, self.reranker, self.briques = backends.construire(
+            chunks, dense_backend, reranker
+        )
         self.lexical = BM25Index(chunks)
-        self.reranker = IdentityReranker()
 
     @staticmethod
     def _allowed(profile: str) -> set[str]:
@@ -127,8 +135,19 @@ class RagService:
         return AnswerResult(status="ok", answer=" ".join(dict.fromkeys(sentences)), sources=sources)
 
 
-def build_local_service(corpus_root: Path, index_root: Path) -> RagService:
+def build_local_service(
+    corpus_root: Path,
+    index_root: Path,
+    dense_backend: str | None = None,
+    reranker: str | None = None,
+) -> RagService:
+    """Construit le service documentaire.
+
+    `dense_backend` et `reranker` permettent de forcer un chemin pour comparer
+    les deux — c'est ainsi que le gain de Chroma et du reranking est mesure,
+    plutot qu'affirme.
+    """
     if not (index_root / "manifest.json").exists():
         ingest_corpus(corpus_root, index_root)
     documents, chunks = load_index(index_root)
-    return RagService(documents, chunks)
+    return RagService(documents, chunks, dense_backend, reranker)

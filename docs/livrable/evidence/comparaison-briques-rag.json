@@ -1,0 +1,149 @@
+{
+  "genere_le": "2026-09-04T17:33:43.680678+00:00",
+  "essais_par_configuration": 3,
+  "configurations": [
+    {
+      "dense_demande": "local",
+      "reranker_demande": "identity",
+      "essais": [
+        {
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 639,
+          "briques_reelles": {
+            "dense": "local",
+            "reranker": "identity",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        },
+        {
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 637,
+          "briques_reelles": {
+            "dense": "local",
+            "reranker": "identity",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        },
+        {
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 721,
+          "briques_reelles": {
+            "dense": "local",
+            "reranker": "identity",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        }
+      ],
+      "reproductible": true,
+      "hybride_valeurs_observees": [
+        0.8182
+      ],
+      "note": "Défaut livré — index déterministe."
+    },
+    {
+      "dense_demande": "chroma",
+      "reranker_demande": "identity",
+      "essais": [
+        {
+          "dense_recall_at_1": 0.7273,
+          "hybride_recall_at_1": 0.7727,
+          "questions_evaluees": 22,
+          "duree_ms": 1415,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "identity",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        },
+        {
+          "dense_recall_at_1": 0.6818,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 892,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "identity",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        },
+        {
+          "dense_recall_at_1": 0.6364,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 837,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "identity",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        }
+      ],
+      "reproductible": false,
+      "hybride_valeurs_observees": [
+        0.7727,
+        0.8182
+      ],
+      "note": "Chroma, exigé par le brief. Index HNSW approximatif."
+    },
+    {
+      "dense_demande": "chroma",
+      "reranker_demande": "cross_encoder",
+      "essais": [
+        {
+          "dense_recall_at_1": 0.6818,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 24512,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "cross_encoder",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        },
+        {
+          "dense_recall_at_1": 0.6364,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 22774,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "cross_encoder",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        },
+        {
+          "dense_recall_at_1": 0.6818,
+          "hybride_recall_at_1": 0.8182,
+          "questions_evaluees": 22,
+          "duree_ms": 27655,
+          "briques_reelles": {
+            "dense": "chroma",
+            "reranker": "cross_encoder",
+            "dense_repli": null,
+            "reranker_repli": null
+          }
+        }
+      ],
+      "reproductible": true,
+      "hybride_valeurs_observees": [
+        0.8182
+      ],
+      "note": "Chroma + reranking cross-encoder."
+    }
+  ],
+  "conclusion": "Le défaut livré est l'index local : c'est le seul des trois qui donne la même valeur à chaque exécution. Le brief demande une preuve chiffrée ; un gain qui change d'une exécution à l'autre n'en est pas une. Chroma et le cross-encoder restent branchés et activables par variable d'environnement."
+}
