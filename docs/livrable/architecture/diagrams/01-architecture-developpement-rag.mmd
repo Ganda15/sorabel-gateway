@@ -1,0 +1,63 @@
+flowchart LR
+    subgraph SOURCE["Corpus Sorabel"]
+        PDF["PDF techniques"]
+        HTML["Procédures HTML"]
+        MD["Notes Markdown"]
+    end
+
+    subgraph INGEST["Service d'ingestion"]
+        PARSE["Parsing par format"]
+        CANON["Documents canoniques<br/>texte + métadonnées"]
+        VERS["Familles · versions<br/>doublons · document principal"]
+        CHUNK["Chunks cohérents<br/>référence · version · date"]
+        MANIFEST["Manifeste d'ingestion<br/>comptages + erreurs"]
+    end
+
+    subgraph INDEX["Index de recherche"]
+        VECTOR[("Chroma<br/>index dense")]
+        LEXICAL[("BM25<br/>index lexical")]
+    end
+
+    subgraph RETRIEVAL["Service RAG avancé"]
+        DENSE["Recherche dense<br/>sens naturel"]
+        BM25["Recherche BM25<br/>références exactes"]
+        RRF["Fusion RRF"]
+        RERANK["Reranking local<br/>optionnel"]
+        EVIDENCE{"Preuve autorisée<br/>et suffisante ?"}
+        ANSWER["Réponse extractive<br/>+ citations"]
+        REFUSE["hors_corpus<br/>aucune invention"]
+    end
+
+    subgraph CONSUMERS["Points d'accès successifs"]
+        CLI["1 · Terminal<br/>première preuve"]
+        UI["2 · Interface minimale"]
+        MCP["4 · Gateway MCP<br/>intégration finale"]
+    end
+
+    PDF --> PARSE
+    HTML --> PARSE
+    MD --> PARSE
+    PARSE --> CANON --> VERS --> CHUNK
+    VERS --> MANIFEST
+    CHUNK --> VECTOR
+    CHUNK --> LEXICAL
+    VECTOR --> DENSE --> RRF
+    LEXICAL --> BM25 --> RRF
+    RRF --> RERANK --> EVIDENCE
+    EVIDENCE -->|oui| ANSWER
+    EVIDENCE -->|non| REFUSE
+    ANSWER --> CLI
+    REFUSE --> CLI
+    CLI -. même service .-> UI
+    UI -. même service .-> MCP
+
+    classDef source fill:#eef8f6,stroke:#008f83,color:#163840
+    classDef process fill:#ffffff,stroke:#008f83,color:#163840
+    classDef decision fill:#fff4d6,stroke:#e7a91f,color:#163840
+    classDef refusal fill:#fdecea,stroke:#c8493f,color:#163840
+    classDef consumer fill:#e3f5ef,stroke:#008f83,color:#163840
+    class PDF,HTML,MD source
+    class PARSE,CANON,VERS,CHUNK,MANIFEST,DENSE,BM25,RRF,RERANK,ANSWER process
+    class EVIDENCE decision
+    class REFUSE refusal
+    class CLI,UI,MCP consumer

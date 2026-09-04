@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sorabel · Développement Text-to-SQL PostgreSQL</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <strong>SORABEL · TEXT-TO-SQL</strong>
+      <span>Développement et preuves · <span id="counter"></span></span>
+    </header>
+    <main>
+      <section class="slide active dark">
+        <p class="eyebrow">DÉVELOPPEMENT · CHANTIER TEXT-TO-SQL</p>
+        <h1>Interroger PostgreSQL en langage naturel, sans abandonner le contrôle</h1>
+        <p class="lead">Quatre tools SQL · catalogue sémantique filtré · validation AST · exécution READ ONLY · résultats explicables</p>
+        <div class="banner">Implémenté → testé → démontré dans Sorabel Assistant</div>
+      </section>
+
+      <section class="slide">
+        <p class="eyebrow">POSITION DANS SORABEL</p>
+        <h2>Text-to-SQL reste un service distinct derrière la Gateway</h2>
+        <div class="architecture">
+          <article><b>Utilisateur</b><span>question + profil authentifié</span></article><i>→</i>
+          <article class="gateway"><b>Gateway</b><span>valide l’appel et transmet le périmètre</span></article><i>→</i>
+          <article class="sql"><b>Service Text-to-SQL</b><span>analyse · génère · valide · exécute · filtre</span></article><i>→</i>
+          <article class="accent"><b>Réponse</b><span>résultat + SQL + paramètres + versions</span></article>
+        </div>
+        <p class="takeaway">Le RAG est l’autre service de la Gateway ; il traite les documents. Ici, le périmètre présenté est uniquement SQL.</p>
+      </section>
+
+      <section class="slide">
+        <p class="eyebrow">SCHÉMA CENTRAL · ARCHITECTURE TEXT-TO-SQL</p>
+        <h2 class="diagram-title">Quatre tools, un SqlService commun</h2>
+        <div class="textsql-architecture" role="img" aria-label="Architecture Text-to-SQL centrée sur SqlService"></div>
+        <div class="diagram-legend" aria-label="Légende des couleurs du schéma">
+          <span><i class="swatch swatch-green" aria-hidden="true"></i>Service SQL central</span>
+          <span><i class="swatch swatch-yellow" aria-hidden="true"></i>Entrée et accès</span>
+          <span><i class="swatch swatch-orange" aria-hidden="true"></i>Tools SQL</span>
+          <span><i class="swatch swatch-light-blue" aria-hidden="true"></i>Routes</span>
+          <span><i class="swatch swatch-blue" aria-hidden="true"></i>Source sémantique</span>
+          <span><i class="swatch swatch-purple" aria-hidden="true"></i>Contrôles et réponse</span>
+        </div>
+        <p class="diagram-caption">Lecture du centre vers l’extérieur : entrée → tools → routes → source → contrôles → réponse</p>
+      </section>
+
+      <section class="slide">
+        <p class="eyebrow">SCHÉMA CENTRAL · ASK_DATABASE</p>
+        <h2 class="diagram-title">De la question au résultat, sans confiance implicite</h2>
+        <div class="askdb-sequence" role="img" aria-label="Diagramme de séquence ask_database"></div>
+        <div class="diagram-legend compact" aria-label="Légende du diagramme de séquence">
+          <span><i class="swatch swatch-green" aria-hidden="true"></i>Composant</span>
+          <span><i class="swatch swatch-yellow" aria-hidden="true"></i>Règle ou contexte</span>
+          <span><i class="swatch swatch-orange" aria-hidden="true"></i>Alternative</span>
+          <span><b class="line-sample solid" aria-hidden="true"></b>Appel</span>
+          <span><b class="line-sample dashed" aria-hidden="true"></b>Retour</span>
+        </div>
+        <p class="diagram-caption">Un refus s’arrête avant PostgreSQL · une demande autorisée passe par AST, allowlists et READ ONLY</p>
+      </section>
+
+      <section class="slide">
+        <p class="eyebrow">SOURCE SÉMANTIQUE ET TOOLS</p>
+        <h2>Préparer les données, puis choisir la bonne route</h2>
+        <div class="columns">
+          <div>
+            <h3>Source PostgreSQL fiable</h3>
+            <p><code>sorabel.db</code> → import et réconciliation des cinq tables</p>
+            <p>Schéma privé → vues autorisées par profil</p>
+            <p>Catalogue versionné → vues, colonnes, relations et KPI</p>
+          </div>
+          <div>
+            <h3>Quatre tools SQL</h3>
+            <p><code>get_schema</code> : retourne le catalogue visible</p>
+            <p><code>ask_database</code> : analyse variable protégée</p>
+            <p><code>check_stock</code> et <code>order_status</code> : SQL figé paramétré</p>
+          </div>
+        </div>
+        <p class="takeaway">Le générateur reçoit un schéma métier commenté et filtré, jamais le schéma brut.</p>
+      </section>
+
+      <section class="slide">
+        <p class="eyebrow">CODE · RESPONSABILITÉS SÉPARÉES</p>
+        <h2>Chaque module porte une décision vérifiable</h2>
+        <div class="grid six">
+          <article><b>Catalogue</b><span>contexte visible par profil</span><code>sql/catalog.py</code></article>
+          <article><b>Analyzer</b><span>écriture · sensible · ambigu · hors schéma</span><code>sql/analyzer.py</code></article>
+          <article><b>Generator</b><span>proposition SQL + paramètres</span><code>sql/generator.py</code></article>
+          <article><b>Validator</b><span>AST · allowlists · fonctions · LIMIT</span><code>sql/validator.py</code></article>
+          <article><b>Executor</b><span>rôle PostgreSQL · READ ONLY · timeouts</span><code>sql/executors.py</code></article>
+          <article class="accent"><b>SqlService</b><span>orchestration des quatre tools</span><code>sql/service.py</code></article>
+        </div>
+        <p class="takeaway">Le générateur propose ; le validateur et PostgreSQL décident si la requête peut être exécutée.</p>
+      </section>
+
+      <section class="slide">
+        <p class="eyebrow">SÉCURITÉ · DÉFENSE EN PROFONDEUR</p>
+        <h2>Aucune écriture, aucune colonne sensible pour Support</h2>
+        <div class="flow">
+          <article><b>1</b><span>catalogue filtré selon le profil</span></article><i>→</i>
+          <article><b>2</b><span>analyse avant génération</span></article><i>→</i>
+          <article><b>3</b><span>validation AST et allowlists</span></article><i>→</i>
+          <article><b>4</b><span>GRANT SELECT et transaction READ ONLY</span></article><i>→</i>
+          <article class="accent"><b>5</b><span>contrôle des colonnes de sortie</span></article>
+        </div>
+        <p class="takeaway"><code>prix_achat_ht</code>, <code>marge_pct</code> et <code>marge_ht</code> sont invisibles et refusés pour Support.</p>
+      </section>
+
+      <section class="slide">
+        <p class="eyebrow">TESTS ET PREUVES · E3 ET E5</p>
+        <h2>Les exigences du brief sont devenues des tests</h2>
+        <div class="grid six errors">
+          <article><b>Question autorisée</b><span>nombre correct + SQL renvoyé</span></article>
+          <article><b>Écriture</b><span>UNSAFE_SQL + aucune modification</span></article>
+          <article><b>Donnée sensible</b><span>NOT_AUTHORIZED pour Support</span></article>
+          <article><b>Hors schéma</b><span>OUT_OF_SCHEMA sans SQL halluciné</span></article>
+          <article><b>Ambiguïté</b><span>clarification au lieu d’inventer</span></article>
+          <article class="accent"><b>24/24</b><span>cas SQL réussis dans l’évaluation</span></article>
+        </div>
+        <p class="code-row"><code>tests/acceptance/test_sql.py</code><code>eval/rapport_sql.md</code><code>docs/livrable/evidence/</code></p>
+      </section>
+
+      <section class="slide">
+        <p class="eyebrow">DÉMONSTRATION · SORABEL ASSISTANT</p>
+        <h2>Montrer un succès, deux protections et les tools figés</h2>
+        <ol class="demo">
+          <li><code>Combien de commandes en avril ?</code><span>Commercial → résultat + SQL</span></li>
+          <li><code>Quelle est la marge de REF-8842 ?</code><span>Support → NOT_AUTHORIZED</span></li>
+          <li><code>Supprime les commandes de test.</code><span>Commercial → UNSAFE_SQL</span></li>
+          <li><code>Quelle est la météo à Lille demain ?</code><span>Commercial → OUT_OF_SCHEMA</span></li>
+          <li><code>Quel est le stock de REF-8842 ?</code><span><code>check_stock</code> → requête figée</span></li>
+          <li><code>Quel est le statut de CMD-2026-0042 ?</code><span><code>order_status</code> → NOT_FOUND sans invention</span></li>
+        </ol>
+        <p class="takeaway"><code>http://127.0.0.1:8780/</code> utilise le même SqlService que les tests.</p>
+      </section>
+
+      <section class="slide dark">
+        <p class="eyebrow">CONCLUSION · CHANTIER TEXT-TO-SQL</p>
+        <h2>Le résultat est utile, contrôlé et explicable</h2>
+        <div class="columns status">
+          <div><h3>Implémenté</h3><p><code>get_schema</code> · <code>ask_database</code> · <code>check_stock</code> · <code>order_status</code> · PostgreSQL · AST · READ ONLY · erreurs typées</p></div>
+          <div><h3>Prouvé</h3><p>requête renvoyée · écritures refusées · données sensibles protégées · hors schéma refusé · 24/24 cas SQL</p></div>
+        </div>
+        <div class="banner">Le langage naturel propose une intention ; les règles techniques gardent le contrôle.</div>
+      </section>
+    </main>
+    <footer><button id="prev">← Précédent</button><div id="dots"></div><button id="next">Suivant →</button></footer>
+  </body>
+</html>

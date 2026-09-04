@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-09-02T09:51:00.939966+00:00",
+  "corpus_root": "data/corpus",
+  "files_seen": 400,
+  "documents_indexed": 391,
+  "duplicates_skipped": 9,
+  "families": 315,
+  "chunks_created": 520,
+  "errors": []
+}

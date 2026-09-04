@@ -1,0 +1,63 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Segoe UI, Arial, sans-serif",
+    "primaryColor": "#e7f6f2",
+    "primaryTextColor": "#17383f",
+    "primaryBorderColor": "#008f83",
+    "lineColor": "#31565d",
+    "secondaryColor": "#fff7df",
+    "tertiaryColor": "#fff0e8",
+    "actorBkg": "#e7f6f2",
+    "actorBorder": "#008f83",
+    "noteBkgColor": "#fff7df",
+    "noteBorderColor": "#d9a21b"
+  },
+  "sequence": {"useMaxWidth": true, "wrap": true, "width": 190, "boxMargin": 12}
+}}%%
+sequenceDiagram
+    autonumber
+    participant C as Hôte MCP<br/>scripts/mcp_client.py
+    participant S as ProfiledMCP<br/>mcp_server/server.py
+    participant P as Politique<br/>access_policy.json
+    participant G as governed()<br/>ligne 108
+    participant J as Journal<br/>application/audit.py
+    participant V as Service SQL<br/>sql/service.py
+
+    Note over C,V: Le même tool, get_schema, appelé par deux profils différents
+
+    rect rgb(255, 240, 232)
+    Note over C,S: SESSION 1 — SORABEL_PROFILE=support
+    C->>S: initialize + tools/list
+    S->>P: tools_by_profile()["support"]
+    P-->>S: 7 tools, get_schema absent
+    S-->>C: catalogue de 7 tools
+    Note right of C: BARRIÈRE 1 — un agent honnête<br/>ne peut même pas proposer get_schema
+
+    C->>S: tools/call get_schema
+    Note right of S: le tool reste enregistré,<br/>donc l'appel arrive jusqu'au code
+    S->>G: governed("get_schema", ...)
+    G->>P: "get_schema" dans les tools du support ?
+    P-->>G: non
+    G->>J: refused · NOT_AUTHORIZED · profil support
+    G-->>C: status refused, error_code NOT_AUTHORIZED, 8 ms
+    Note right of C: BARRIÈRE 2 — enveloppe métier typée,<br/>pas une erreur de protocole,<br/>donc traçable
+    end
+
+    rect rgb(231, 246, 242)
+    Note over C,V: SESSION 2 — SORABEL_PROFILE=commercial
+    C->>S: initialize + tools/list
+    S->>P: tools_by_profile()["commercial"]
+    P-->>S: 8 tools
+    S-->>C: catalogue de 8 tools
+    C->>S: tools/call get_schema
+    S->>G: governed("get_schema", ...)
+    G->>P: autorisé ?
+    P-->>G: oui
+    G->>V: get_schema("commercial")
+    V-->>G: vues, colonnes, KPI du profil commercial
+    G->>J: ok · durée · 4 versions
+    G-->>C: status ok, 9 ms
+    end
+
+    Note over C,J: Le journal porte les deux issues.<br/>C'est la matrice qui décide, pas le code du tool.

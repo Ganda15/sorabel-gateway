@@ -1,0 +1,28 @@
+Sorabel Text-to-SQL PostgreSQL — verification evidence
+Date: 2026-09-02
+
+Full project suite
+Command:
+  uv run pytest -p no:cacheprovider --basetemp .uv-cache/full-suite -q
+Result:
+  137 passed, 14 warnings in 20.57s
+
+Targeted Gateway + SQL + MCP suite
+Command:
+  uv run pytest -p no:cacheprovider --basetemp .uv-cache/pytest-temp tests/unit/test_application_gateway.py tests/acceptance/test_sql.py tests/acceptance/test_mcp.py -q
+Result:
+  16 passed in 12.64s
+
+SQL evaluation catalogue
+Command:
+  uv run python scripts/evaluate_sql.py
+Result:
+  24/24 cases passed
+
+Real Web API smoke test
+Results:
+  Commercial April order count: status=ok, backend=postgres, rows=[[27]]
+  Support margin request: status=refused, error_code=NOT_AUTHORIZED
+
+Warnings in the full suite are dependency deprecation warnings from Starlette/httpx and Chroma's
+Pydantic compatibility layer. They are not test failures.

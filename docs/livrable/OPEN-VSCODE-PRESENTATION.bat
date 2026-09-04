@@ -1,0 +1,3 @@
+@echo off
+cd /d "%~dp0\..\.."
+code -r "docs\livrable\presentation-text-to-sql\README.md" "docs\livrable\presentation-text-to-sql\01-schema-global.md" "docs\livrable\architecture\diagrams\09-architecture-text-to-sql-centree-service.svg" "docs\livrable\architecture\diagrams\10-chemin-exact-ask-database.svg" "docs\livrable\presentation-text-to-sql\02-explication-code.md" "docs\livrable\presentation-text-to-sql\03-demo-sorabel-assistant.md" "sql\semantic_catalog.json" "tests\acceptance\test_sql.py" "tests\acceptance\test_mcp.py" "eval\rapport_sql.md" -g "application\gateway.py:31" -g "sql\catalog.py:1" -g "sql\analyzer.py:1" -g "sql\generator.py:1" -g "sql\validator.py:1" -g "sql\executors.py:1" -g "sql\service.py:1" -g "mcp_server\server.py:24"

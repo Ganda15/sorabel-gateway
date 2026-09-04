@@ -1,10 +1,25 @@
-.PHONY: install up down seed test fmt lint serve client journal
+.PHONY: install up down seed ingest setup-postgres evaluate evaluate-sql web test fmt lint serve client journal
 
 install:
 	uv sync
 
 seed:
 	uv run python scripts/seed.py
+
+ingest:
+	uv run python scripts/ingest_corpus.py
+
+evaluate:
+	uv run python scripts/evaluate_rag.py
+
+setup-postgres:
+	uv run python scripts/setup_postgres.py
+
+evaluate-sql:
+	uv run python scripts/evaluate_sql.py
+
+web:
+	uv run uvicorn web_app.server:app --host 127.0.0.1 --port 8780
 
 up:
 	docker compose up -d

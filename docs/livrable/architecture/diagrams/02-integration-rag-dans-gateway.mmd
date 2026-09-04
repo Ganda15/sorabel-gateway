@@ -1,0 +1,26 @@
+flowchart LR
+    USERS["Support · Commercial · Developer/IDE"]
+
+    subgraph ACCESS["Points d’accès"]
+        CLI["CLI RAG"]
+        WEB["Interface Web"]
+        MCP["Serveur MCP<br/>4 tools RAG"]
+    end
+
+    GATEWAY["ApplicationGateway<br/>profil · tool · contrat"]
+    SERVICE["RagService commun<br/>scope · hybrid retrieval · preuve"]
+    CORPUS[("Corpus autorisé<br/>PDF · HTML · Markdown")]
+    OUTPUT["Réponse citée<br/>ou hors_corpus"]
+    AUDIT[("Audit MCP")]
+
+    USERS --> CLI
+    USERS --> WEB
+    USERS --> MCP
+    CLI --> GATEWAY
+    WEB --> GATEWAY
+    MCP --> GATEWAY
+    GATEWAY --> SERVICE --> CORPUS
+    CORPUS --> SERVICE --> OUTPUT
+    OUTPUT --> CLI
+    OUTPUT --> WEB
+    OUTPUT --> MCP --> AUDIT

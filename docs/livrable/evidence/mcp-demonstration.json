@@ -1,0 +1,184 @@
+{
+  "genere_le": "2026-09-04T16:01:56.712173+00:00",
+  "policy_version": "policy-v1",
+  "journal": "logs/demonstration-mcp.jsonl",
+  "lignes": [
+    {
+      "profil": "support",
+      "appel": "tools/list",
+      "catalogue": [
+        "answer_question",
+        "search_docs",
+        "get_document",
+        "list_sources",
+        "ask_database",
+        "check_stock",
+        "order_status"
+      ],
+      "nombre": 7,
+      "attendu": [
+        "answer_question",
+        "ask_database",
+        "check_stock",
+        "get_document",
+        "list_sources",
+        "order_status",
+        "search_docs"
+      ],
+      "conforme": true,
+      "montre": "Critère 1 — le catalogue annoncé est celui de la matrice."
+    },
+    {
+      "profil": "support",
+      "appel": "tools/call",
+      "tool": "get_schema",
+      "arguments": {},
+      "statut": "refused",
+      "attendu": "refused",
+      "conforme": true,
+      "error_code": "NOT_AUTHORIZED",
+      "message": "get_schema is not authorized for the support profile.",
+      "duree_ms": 10,
+      "montre": "Critère 2 — un tool hors matrice est refusé, proprement et par écrit."
+    },
+    {
+      "profil": "support",
+      "appel": "tools/call",
+      "tool": "search_docs",
+      "arguments": {
+        "query": "retour d'un produit défectueux sous garantie"
+      },
+      "statut": "ok",
+      "attendu": "ok",
+      "conforme": true,
+      "error_code": null,
+      "message": "",
+      "duree_ms": 151,
+      "montre": "Critère 3 — chercher sans générer : la première brique du RAG, seule."
+    },
+    {
+      "profil": "support",
+      "appel": "tools/call",
+      "tool": "get_document",
+      "arguments": {
+        "doc_id": "b4dfa66f70b9a1f016a8"
+      },
+      "statut": "ok",
+      "attendu": "ok",
+      "conforme": true,
+      "error_code": null,
+      "message": "",
+      "duree_ms": 3,
+      "montre": "Critère 3 — lire le document trouvé : la seconde brique, enchaînée à la main."
+    },
+    {
+      "profil": "support",
+      "appel": "tools/call",
+      "tool": "ask_database",
+      "arguments": {
+        "question": "quelle est la marge sur la REF-8842 ?"
+      },
+      "statut": "refused",
+      "attendu": "refused",
+      "conforme": true,
+      "error_code": "NOT_AUTHORIZED",
+      "message": "Cette information n’est pas accessible avec le profil authentifié.",
+      "duree_ms": 2,
+      "montre": "E5 — aucune colonne sensible ne sort pour le support."
+    },
+    {
+      "profil": "support",
+      "appel": "tools/call",
+      "tool": "ask_database",
+      "arguments": {
+        "question": "supprime les commandes de test"
+      },
+      "statut": "refused",
+      "attendu": "refused",
+      "conforme": true,
+      "error_code": "UNSAFE_SQL",
+      "message": "Cette demande implique une écriture et a été refusée.",
+      "duree_ms": 2,
+      "montre": "E4 — aucune écriture ne passe, et le refus est daté au journal."
+    },
+    {
+      "profil": "support",
+      "appel": "tools/call",
+      "tool": "check_stock",
+      "arguments": {
+        "reference": "REF-8842"
+      },
+      "statut": "ok",
+      "attendu": "ok",
+      "conforme": true,
+      "error_code": null,
+      "message": "",
+      "duree_ms": 94,
+      "montre": "Un tool figé : requête écrite d'avance, seul le paramètre varie."
+    },
+    {
+      "profil": "commercial",
+      "appel": "tools/list",
+      "catalogue": [
+        "answer_question",
+        "search_docs",
+        "get_document",
+        "list_sources",
+        "ask_database",
+        "get_schema",
+        "check_stock",
+        "order_status"
+      ],
+      "nombre": 8,
+      "attendu": [
+        "answer_question",
+        "ask_database",
+        "check_stock",
+        "get_document",
+        "get_schema",
+        "list_sources",
+        "order_status",
+        "search_docs"
+      ],
+      "conforme": true,
+      "montre": "Critère 1 — le catalogue annoncé est celui de la matrice."
+    },
+    {
+      "profil": "commercial",
+      "appel": "tools/call",
+      "tool": "get_schema",
+      "arguments": {},
+      "statut": "ok",
+      "attendu": "ok",
+      "conforme": true,
+      "error_code": null,
+      "message": "",
+      "duree_ms": 7,
+      "montre": "Le même tool, un autre profil : c'est la matrice qui décide, pas le code du tool."
+    },
+    {
+      "profil": "commercial",
+      "appel": "tools/call",
+      "tool": "ask_database",
+      "arguments": {
+        "question": "quelle est la marge totale par catégorie ?"
+      },
+      "statut": "ok",
+      "attendu": "ok",
+      "conforme": true,
+      "error_code": null,
+      "message": "",
+      "duree_ms": 1940,
+      "montre": "La même donnée, autorisée au commercial : le périmètre suit le profil."
+    }
+  ],
+  "synthese": {
+    "appels": 8,
+    "conformes": 10,
+    "attendus": 10,
+    "autorises": 5,
+    "refuses": 3,
+    "lignes_de_journal": 8,
+    "tous_journalises": true
+  }
+}

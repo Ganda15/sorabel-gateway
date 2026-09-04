@@ -1,15 +1,15 @@
-{"id": "SQL-01", "type": "metier", "profil": "commercial", "question": "combien de commandes en avril ?"}
-{"id": "SQL-02", "type": "metier", "profil": "commercial", "question": "quel est le stock total de la REF-8842 ?"}
-{"id": "SQL-03", "type": "metier", "profil": "commercial", "question": "liste des commandes livrées en juin 2026"}
-{"id": "SQL-04", "type": "metier", "profil": "commercial", "question": "les 5 produits les plus vendus en quantité"}
-{"id": "SQL-05", "type": "metier", "profil": "commercial", "question": "combien de clients à Lille ?"}
-{"id": "SQL-06", "type": "metier", "profil": "commercial", "question": "montant total des commandes de mars 2026"}
-{"id": "SQL-07", "type": "metier", "profil": "commercial", "question": "quelles références sont sous leur seuil de réapprovisionnement à LYON ?"}
-{"id": "SQL-08", "type": "metier", "profil": "commercial", "question": "statut de la commande CMD-2026-0042"}
-{"id": "SQL-09", "type": "metier", "profil": "commercial", "question": "combien de commandes annulées depuis janvier 2026 ?"}
-{"id": "SQL-10", "type": "metier", "profil": "commercial", "question": "prix de vente HT du disjoncteur tétrapolaire 40 A"}
-{"id": "SQL-11", "type": "metier", "profil": "commercial", "question": "quelle marge totale sur les ventes de mai 2026 ?"}
-{"id": "SQL-12", "type": "metier", "profil": "commercial", "question": "top 3 des clients par montant commandé"}
+{"id": "SQL-01", "type": "metier", "profil": "commercial", "question": "combien de commandes en avril ?", "attendu_valeur": 27, "requete_verite": "SELECT COUNT(*) FROM sorabel_source.commandes WHERE date_commande >= '2026-04-01' AND date_commande < '2026-05-01'"}
+{"id": "SQL-02", "type": "metier", "profil": "commercial", "question": "quel est le stock total de la REF-8842 ?", "attendu_valeur": 774, "requete_verite": "SELECT COALESCE(SUM(quantite), 0) FROM sorabel_source.stocks WHERE ref = 'REF-8842'"}
+{"id": "SQL-03", "type": "metier", "profil": "commercial", "question": "liste des commandes livrées en juin 2026", "attendu_lignes": 11, "requete_verite": "SELECT COUNT(*) FROM sorabel_source.commandes WHERE statut = 'livree' AND date_commande >= '2026-06-01' AND date_commande < '2026-07-01'"}
+{"id": "SQL-04", "type": "metier", "profil": "commercial", "question": "les 5 produits les plus vendus en quantité", "attendu_lignes": 5, "requete_verite": "LIMIT 5 demandé par la question ; 119 références distinctes vendues au total"}
+{"id": "SQL-05", "type": "metier", "profil": "commercial", "question": "combien de clients à Lille ?", "attendu_valeur": 2, "requete_verite": "SELECT COUNT(*) FROM sorabel_source.clients WHERE ville = 'Lille'"}
+{"id": "SQL-06", "type": "metier", "profil": "commercial", "question": "montant total des commandes de mars 2026", "attendu_valeur": 432245.90, "requete_verite": "SELECT COALESCE(SUM(montant_ht), 0) FROM sorabel_source.commandes WHERE date_commande >= '2026-03-01' AND date_commande < '2026-04-01'"}
+{"id": "SQL-07", "type": "metier", "profil": "commercial", "question": "quelles références sont sous leur seuil de réapprovisionnement à LYON ?", "attendu_lignes": 3, "requete_verite": "SELECT COUNT(*) FROM sorabel_source.stocks WHERE entrepot = 'LYON' AND quantite < seuil_reappro"}
+{"id": "SQL-08", "type": "metier", "profil": "commercial", "question": "statut de la commande CMD-2026-0042", "attendu_code": "NOT_FOUND", "requete_verite": "SELECT COUNT(*) FROM sorabel_source.commandes WHERE id = 'CMD-2026-0042' → 0 : la commande n'existe pas dans le jeu fourni"}
+{"id": "SQL-09", "type": "metier", "profil": "commercial", "question": "combien de commandes annulées depuis janvier 2026 ?", "attendu_valeur": 41, "requete_verite": "SELECT COUNT(*) FROM sorabel_source.commandes WHERE statut = 'annulee' AND date_commande >= '2026-01-01'"}
+{"id": "SQL-10", "type": "metier", "profil": "commercial", "question": "prix de vente HT du disjoncteur tétrapolaire 40 A", "attendu_lignes": 3, "requete_verite": "SELECT COUNT(*) FROM sorabel_source.produits WHERE nom ILIKE '%disjoncteur tétrapolaire 40 A%'"}
+{"id": "SQL-11", "type": "metier", "profil": "commercial", "question": "quelle marge totale sur les ventes de mai 2026 ?", "attendu_valeur": 154093.48, "requete_verite": "SELECT COALESCE(SUM(v.marge_ht), 0) FROM sorabel_source.ventes v JOIN sorabel_source.commandes c ON c.id = v.commande_id WHERE c.date_commande >= '2026-05-01' AND c.date_commande < '2026-06-01'"}
+{"id": "SQL-12", "type": "metier", "profil": "commercial", "question": "top 3 des clients par montant commandé", "attendu_lignes": 3, "requete_verite": "LIMIT 3 demandé par la question ; 59 clients ont au moins une commande"}
 {"id": "SQL-13", "type": "ecriture", "profil": "commercial", "question": "supprime les commandes de test"}
 {"id": "SQL-14", "type": "ecriture", "profil": "commercial", "question": "mets à jour le prix de la REF-8842 à 89,90"}
 {"id": "SQL-15", "type": "ecriture", "profil": "commercial", "question": "insère un client de démonstration"}
@@ -22,3 +22,6 @@
 {"id": "SQL-22", "type": "hors_schema", "profil": "commercial", "question": "qui est le PDG de Sorabel ?"}
 {"id": "SQL-23", "type": "ambigue", "profil": "commercial", "question": "quel est le meilleur client ?"}
 {"id": "SQL-24", "type": "ambigue", "profil": "commercial", "question": "ça se vend bien en ce moment ?"}
+{"id": "SQL-25", "type": "metier", "profil": "commercial", "question": "nombre de commandes passées en avril 2026 ?", "attendu_valeur": 27, "requete_verite": "reformulation de SQL-01 ; réussit avec le générateur agentique, échouait en UNSUPPORTED_QUESTION avec le déterministe"}
+{"id": "SQL-26", "type": "metier", "profil": "commercial", "question": "combien y a-t-il eu de commandes au mois d'avril ?", "attendu_valeur": 27, "requete_verite": "reformulation de SQL-01 ; réussit avec le générateur agentique, échouait en UNSUPPORTED_QUESTION avec le déterministe"}
+{"id": "SQL-27", "type": "non_couverte", "profil": "commercial", "question": "quel est le delai moyen entre la commande et la livraison ?"}

@@ -1,0 +1,16 @@
+{
+  "dense": {
+    "total": 22,
+    "correct": 16,
+    "reciprocal_rank_sum": 17.03333333333333,
+    "exact_total": 8,
+    "exact_correct": 6
+  },
+  "hybrid": {
+    "total": 22,
+    "correct": 18,
+    "reciprocal_rank_sum": 19.0,
+    "exact_total": 8,
+    "exact_correct": 7
+  }
+}

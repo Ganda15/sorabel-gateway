@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sorabel Data Assistant</title>
+    <meta name="description" content="Interface locale RAG et Text-to-SQL de Sorabel">
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#question">Aller à la question</a>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Accueil Sorabel Data Assistant">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>
+          <strong>Sorabel</strong>
+          <small>Data Assistant</small>
+        </span>
+      </a>
+      <span class="environment"><i aria-hidden="true"></i> Démonstration locale</span>
+    </header>
+
+    <main class="layout">
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">RAG AVANCÉ · TEXT-TO-SQL · ACCÈS AUTORISÉ</p>
+        <h1 id="page-title">Interrogez les connaissances Sorabel en langage naturel.</h1>
+        <p class="lede">
+          Une seule interface route la demande vers les documents ou vers les données
+          structurées. Chaque réponse reste vérifiable, filtrée par profil et en lecture seule.
+        </p>
+
+        <ol id="governed-flow" class="governed-flow" aria-label="Parcours gouverné">
+          <li><span>1</span><strong>Profil</strong><small>détermine le périmètre</small></li>
+          <li><span>2</span><strong>Outil</strong><small>RAG ou SQL</small></li>
+          <li><span>3</span><strong>Contrôle</strong><small>preuves et droits</small></li>
+          <li><span>4</span><strong>Résultat</strong><small>vérifiable ou refusé</small></li>
+        </ol>
+      </section>
+
+      <section class="workspace" aria-labelledby="workspace-title">
+        <div class="workspace-heading">
+          <div>
+            <p id="workspace-eyebrow" class="eyebrow">QUESTION DOCUMENTAIRE</p>
+            <h2 id="workspace-title">Poser une question</h2>
+          </div>
+          <div class="selectors">
+            <label class="profile-field" for="mode">
+              <span>Source</span>
+              <select id="mode" name="mode" form="question-form">
+                <option value="rag">Documents · RAG</option>
+                <option value="sql">Données · SQL</option>
+              </select>
+            </label>
+            <label class="profile-field" for="profile">
+              <span>Profil</span>
+              <select id="profile" name="profile" form="question-form">
+                <option value="support">Support</option>
+                <option value="commercial">Commercial</option>
+                <option value="developer">Developer · IDE</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <aside id="active-context" class="active-context" aria-live="polite">
+          <div>
+            <span class="context-label">Outil appelé</span>
+            <strong id="tool-name">answer_question</strong>
+          </div>
+          <p id="scope-description">Documents autorisés avec réponse citée ou refus hors corpus.</p>
+        </aside>
+
+        <form id="question-form">
+          <label id="query-label" for="question">Votre question</label>
+          <textarea
+            id="question"
+            name="question"
+            rows="4"
+            maxlength="2000"
+            placeholder="Ex. Quelle est la tension assignée du produit REF-8842 ?"
+            required
+          ></textarea>
+          <div class="form-actions">
+            <span id="scope-note" class="scope-note">Le profil filtre les collections documentaires visibles.</span>
+            <button id="submit-button" type="submit">
+              <span id="submit-label">Interroger le corpus</span><b aria-hidden="true">→</b>
+            </button>
+          </div>
+        </form>
+
+        <div id="loading" class="loading" hidden role="status">
+          <span aria-hidden="true"></span> Recherche et vérification des preuves…
+        </div>
+        <section id="result" class="result" aria-live="polite" aria-label="Résultat"></section>
+      </section>
+    </main>
+
+    <div class="mcp-zone">
+  <section class="workspace mcp-panneau" aria-labelledby="mcp-title">
+      <div class="workspace-heading">
+        <div>
+          <p class="eyebrow">CHANTIER 3 · SERVEUR MCP ET MATRICE D’ACCÈS</p>
+          <h2 id="mcp-title">Le catalogue, vu par un hôte MCP</h2>
+        </div>
+        <div class="selectors">
+          <label class="profile-field" for="mcp-profile">
+            <span>Profil de la session</span>
+            <select id="mcp-profile">
+              <option value="support">Support</option>
+              <option value="commercial">Commercial</option>
+              <option value="developer">Developer · IDE</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <p class="mcp-avertissement">
+        Chaque bouton lance <strong>réellement</strong> <code>python -m mcp_server.server</code>
+        avec ce profil et dialogue en <code>stdio</code>. Rien n’est simulé — c’est pourquoi un
+        appel prend environ une seconde.
+      </p>
+
+      <div class="mcp-barre">
+        <button id="mcp-catalogue-button" type="button">Voir le catalogue</button>
+        <span class="scope-note">Appel <code>tools/list</code> — le profil filtre ce qui est annoncé.</span>
+      </div>
+      <div id="mcp-catalogue" class="mcp-catalogue" aria-live="polite"></div>
+
+      <div class="mcp-barre mcp-appel">
+        <label class="profile-field" for="mcp-tool">
+          <span>Tool</span>
+          <select id="mcp-tool">
+            <option value="get_schema">get_schema</option>
+            <option value="check_stock">check_stock</option>
+            <option value="order_status">order_status</option>
+            <option value="ask_database">ask_database</option>
+            <option value="answer_question">answer_question</option>
+            <option value="search_docs">search_docs</option>
+            <option value="list_sources">list_sources</option>
+            <option value="get_document">get_document</option>
+          </select>
+        </label>
+        <label class="profile-field mcp-argument-field">
+          <span id="mcp-argument-label">argument</span>
+          <input id="mcp-argument" type="text" maxlength="2000">
+        </label>
+        <button id="mcp-call-button" type="button">Appeler · tools/call</button>
+      </div>
+      <div id="mcp-call-result" class="mcp-resultat" aria-live="polite"></div>
+
+      <div class="mcp-barre">
+        <button id="mcp-journal-button" type="button" class="secondaire">Rafraîchir le journal</button>
+        <span class="scope-note">
+          Journal partagé : le canal <code>web</code> et le canal <code>mcp</code> écrivent
+          dans le même fichier, succès comme refus.
+        </span>
+      </div>
+      <ul id="mcp-journal" class="mcp-journal" aria-live="polite"></ul>
+    </section>
+    </div>
+
+    <footer>
+      <span>Web / IDE</span><b>→</b><span>Application Gateway</span><b>→</b><span>RAG ou Text-to-SQL</span>
+    </footer>
+    <script src="/static/app.js?v=profile-scope-v2" defer></script>
+    <script src="/static/mcp.js?v=mcp-v1" defer></script>
+  </body>
+</html>

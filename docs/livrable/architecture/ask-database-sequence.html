@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sorabel — ask_database sequence · EN | FR</title>
+<style>
+:root {
+  --bg:#07111f; --ink:#e8eef7; --muted:#9db0c9; --line:#1e3350;
+  --azure:#3b9eff; --azure2:#7dd3fc; --card:#10233b; --warn:#fbbf24;
+  --good:#34d399; --fr:#102b22; --frb:#1d5c45; --en:#102033; --enb:#2a4d77;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Segoe UI",Inter,system-ui,sans-serif; }
+body.lang-en .fr { display:none !important; }
+body.lang-fr .en { display:none !important; }
+header {
+  position:sticky; top:0; z-index:10; display:flex; gap:10px; align-items:center;
+  padding:10px 16px; background:#081526; border-bottom:1px solid var(--line); flex-wrap:wrap;
+}
+.brand { font-weight:800; }
+.brand small { color:var(--azure2); margin-left:8px; }
+.btns { margin-left:auto; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+header button, a.chip {
+  background:var(--card); color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:7px 11px; cursor:pointer; font-size:13px; text-decoration:none;
+}
+header button.on { background:var(--azure); color:#041018; font-weight:800; border-color:var(--azure); }
+.wrap { display:grid; grid-template-columns:240px 1fr; }
+nav {
+  position:sticky; top:54px; height:calc(100vh - 54px); overflow:auto;
+  border-right:1px solid var(--line); padding:14px 10px; background:#081526;
+}
+nav a { display:block; color:var(--muted); text-decoration:none; padding:6px 8px; border-radius:8px; font-size:12px; }
+nav a:hover, nav a.on { background:#163154; color:#fff; }
+article { padding:24px 32px 80px; max-width:980px; }
+h1 { font-size:28px; margin:0 0 8px; }
+h2 { font-size:20px; margin:28px 0 10px; }
+h3 { font-size:16px; margin:14px 0 8px; }
+p, li { color:var(--muted); line-height:1.55; }
+.lead { font-size:17px; color:#c9d8ea; max-width:70ch; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin:12px 0; }
+.grid { display:grid; gap:10px; }
+.cols-2 { grid-template-columns:1fr 1fr; }
+.cols-3 { grid-template-columns:repeat(3,1fr); }
+@media (max-width:960px){
+  .wrap{grid-template-columns:1fr} nav{display:none}
+  .cols-2,.cols-3{grid-template-columns:1fr} article{padding:16px}
+}
+a.link, a.vscode {
+  display:inline-flex; align-items:center; gap:6px;
+  background:#163154; color:var(--azure2); border:1px solid #2a4d77;
+  border-radius:999px; padding:6px 10px; font-size:12px; font-weight:700; text-decoration:none;
+}
+a.vscode { background:#2a230d; border-color:#6b5420; color:#fde68a; }
+a.vscode:hover { background:#6b5420; color:#fff; }
+a.link:hover { background:#1d4473; color:#fff; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0; }
+code { background:#1a2f4a; padding:1px 6px; border-radius:5px; color:#dbeafe; }
+pre {
+  background:#0a1628; border:1px solid var(--line); border-radius:10px;
+  padding:12px; overflow:auto; color:#dbeafe; font-size:13px; line-height:1.4;
+}
+.flow {
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0;
+}
+.flow .p {
+  background:#163154; border:1px solid #2a4d77; border-radius:12px;
+  padding:10px 12px; font-size:13px; font-weight:700; cursor:pointer;
+}
+.flow .p.on { outline:2px solid var(--azure); background:#1d4473; }
+.flow em { color:var(--warn); font-style:normal; font-weight:800; }
+.alt {
+  display:grid; gap:10px; margin:12px 0;
+  border:1px dashed #3b9eff; border-radius:14px; padding:12px; background:#0a1830;
+}
+.alt .path { background:#0d2138; border:1px solid var(--line); border-radius:12px; padding:12px; cursor:pointer; }
+.alt .path.on { border-color:var(--good); }
+.alt .path h4 { margin:0 0 6px; color:var(--azure2); }
+.say {
+  background:var(--fr); border:1px solid var(--frb); color:#d1fae5;
+  border-radius:12px; padding:12px; white-space:pre-wrap;
+}
+body.lang-en .say { background:var(--en); border-color:var(--enb); color:#dbeafe; }
+.k { color:var(--azure2); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.call { background:#2a230d; border:1px solid #6b5420; color:#fde68a; border-radius:12px; padding:12px; }
+.step-num {
+  display:inline-flex; width:28px; height:28px; align-items:center; justify-content:center;
+  background:var(--azure); color:#041018; font-weight:800; border-radius:50%; margin-right:8px;
+}
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+th { background:#0d2138; color:var(--azure2); }
+.legend span { display:inline-block; margin-right:14px; font-size:13px; color:var(--muted); }
+.arrow { color:var(--warn); font-weight:800; }
+</style>
+</head>
+<body class="lang-en">
+<header>
+  <div class="brand">Sorabel <small>ask_database sequence</small></div>
+  <div class="btns">
+    <button id="lang-en" class="on">EN</button>
+    <button id="lang-fr">FR</button>
+    <a class="chip vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/">Open folder in VS Code</a>
+  </div>
+</header>
+<div class="wrap">
+<nav>
+  <a href="#start"><span class="en">1. How to read</span><span class="fr">1. Comment lire</span></a>
+  <a href="#participants"><span class="en">2. Nine participants</span><span class="fr">2. Neuf participants</span></a>
+  <a href="#flow"><span class="en">3. Interactive flow</span><span class="fr">3. Flux interactif</span></a>
+  <a href="#detail"><span class="en">4. Detailed steps 1–11</span><span class="fr">4. Étapes 1–11</span></a>
+  <a href="#alt"><span class="en">5. Alt block A / B / C</span><span class="fr">5. Bloc alt A / B / C</span></a>
+  <a href="#examples"><span class="en">6. Success & refusal</span><span class="fr">6. Succès & refus</span></a>
+  <a href="#developer"><span class="en">7. Developer case</span><span class="fr">7. Cas Developer</span></a>
+  <a href="#oral"><span class="en">8. Short oral</span><span class="fr">8. Oral court</span></a>
+  <a href="#sources"><span class="en">9. Diagram sources</span><span class="fr">9. Sources schéma</span></a>
+</nav>
+<article>
+
+<section id="start">
+  <div class="k">UML sequence · one ask_database request</div>
+  <h1 class="en">Exact chronological path of one <code>ask_database</code> request</h1>
+  <h1 class="fr">Chemin chronologique exact d’une requête <code>ask_database</code></h1>
+  <p class="lead en">This is a UML sequence diagram explained as an interactive guide. Yellow buttons open the real file in VS Code at the right line.</p>
+  <p class="lead fr">Ceci explique un diagramme de séquence UML comme un guide interactif. Les boutons jaunes ouvrent le vrai fichier dans VS Code à la bonne ligne.</p>
+  <div class="chips">
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/">Open sorabel-gateway in VS Code</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/docs/livrable/architecture/TEXT-TO-SQL-POSTGRESQL-ARCHITECTURE.md:25">Architecture doc · L25</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/docs/livrable/architecture/diagrams/10-chemin-exact-ask-database.mmd">Editable .mmd diagram</a>
+  </div>
+  <div class="card">
+    <h3 class="en">How to read the diagram</h3>
+    <h3 class="fr">Comment lire le schéma</h3>
+    <ul>
+      <li class="en"><b>Left → right</b> to identify the components</li>
+      <li class="fr"><b>Gauche → droite</b> pour identifier les composants</li>
+      <li class="en"><b>Top → bottom</b> to follow time</li>
+      <li class="fr"><b>Haut → bas</b> pour suivre le temps</li>
+      <li class="en">Follow each <b>horizontal arrow</b></li>
+      <li class="fr">Suivre chaque <b>flèche horizontale</b></li>
+    </ul>
+    <p class="en">Vertical blue lines are <b>lifelines</b>: each component exists for the whole request. Boxes repeated at the bottom are not new components — they repeat names because the diagram is long.</p>
+    <p class="fr">Les lignes bleues verticales sont des <b>lignes de vie</b> : chaque composant existe pendant toute la requête. Les boîtes répétées en bas ne sont pas de nouveaux composants — elles répètent les noms car le schéma est long.</p>
+    <p class="legend">
+      <span><span class="arrow">→</span> <span class="en">solid = request / call</span><span class="fr">plein = requête / appel</span></span>
+      <span><span class="arrow">⇢</span> <span class="en">dotted = returned result</span><span class="fr">pointillé = résultat retourné</span></span>
+      <span><span class="arrow">↺</span> <span class="en">curved = internal op</span><span class="fr">courbe = opération interne</span></span>
+      <span><span class="arrow">⬚</span> <span class="en">alt frame = exclusive paths</span><span class="fr">cadre alt = chemins exclusifs</span></span>
+    </p>
+  </div>
+</section>
+
+<section id="participants">
+  <h2 class="en">2. The nine participants</h2>
+  <h2 class="fr">2. Les neuf participants</h2>
+  <table>
+    <thead><tr>
+      <th class="en">Participant</th><th class="fr">Participant</th>
+      <th class="en">Responsibility</th><th class="fr">Responsabilité</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Utilisateur</td><td class="en">Asks the business question</td><td class="fr">Pose la question métier</td></tr>
+      <tr><td>Interface Web / client MCP</td><td class="en">Transports the question and identity context</td><td class="fr">Transport de la question et du contexte d’identité</td></tr>
+      <tr><td>Gateway</td><td class="en">Authorizes the tool according to the profile</td><td class="fr">Autorise l’outil selon le profil</td></tr>
+      <tr><td>SqlService</td><td class="en">Coordinates the complete SQL workflow</td><td class="fr">Coordonne tout le workflow SQL</td></tr>
+      <tr><td>SemanticCatalog</td><td class="en">Supplies the authorized schema and business definitions</td><td class="fr">Fournit le schéma et les définitions métier autorisés</td></tr>
+      <tr><td>QuestionAnalyzer</td><td class="en">Classifies the request before generation</td><td class="fr">Classe la demande avant génération</td></tr>
+      <tr><td>Generator</td><td class="en">Proposes parameterized SQL</td><td class="fr">Propose du SQL paramétré</td></tr>
+      <tr><td>SqlValidator</td><td class="en">Validates the SQL AST and allowlists</td><td class="fr">Valide l’AST SQL et les allowlists</td></tr>
+      <tr><td>PostgreSQL</td><td class="en">Executes the validated query in read-only mode</td><td class="fr">Exécute la requête validée en lecture seule</td></tr>
+    </tbody>
+  </table>
+  <p class="call en"><b>Important distinction.</b> The Generator writes a <i>proposal</i>. The Validator decides whether that proposal is structurally acceptable. PostgreSQL decides whether the account can actually execute it.</p>
+  <p class="call fr"><b>Distinction importante.</b> Le Generator écrit une <i>proposition</i>. Le Validator décide si elle est structurellement acceptable. PostgreSQL décide si le compte peut vraiment l’exécuter.</p>
+</section>
+
+<section id="flow">
+  <h2 class="en">3. Interactive flow — click a box</h2>
+  <h2 class="fr">3. Flux interactif — clique une boîte</h2>
+  <div class="flow" id="flowboxes"></div>
+  <div class="card" id="flowexplain">
+    <span class="en">Click a step above to see what happens.</span>
+    <span class="fr">Clique une étape ci-dessus pour voir ce qui se passe.</span>
+  </div>
+</section>
+
+<section id="detail">
+  <h2 class="en">4. Detailed flow (steps 1–11)</h2>
+  <h2 class="fr">4. Flux détaillé (étapes 1–11)</h2>
+
+  <div class="card" id="s1">
+    <h3><span class="step-num">1</span><span class="en">The user submits a question</span><span class="fr">L’utilisateur pose une question</span></h3>
+    <p><code>Utilisateur → Interface Web / client MCP</code> · Question + profil</p>
+    <pre>Question: Combien de commandes en avril ?
+Profile: commercial</pre>
+    <p class="en">In the final architecture, the profile should come from the authenticated token. In the local demonstration, the interface selector simulates that profile.</p>
+    <p class="fr">Dans l’architecture finale, le profil doit venir du jeton authentifié. En démo locale, le sélecteur d’interface simule ce profil.</p>
+  </div>
+
+  <div class="card" id="s2">
+    <h3><span class="step-num">2</span><span class="en">The client calls ask_database</span><span class="fr">Le client appelle ask_database</span></h3>
+    <p><code>Interface → Gateway</code> · <code>ask_database(question, profile)</code></p>
+    <p class="en">The client does <b>not</b> send SQL and does <b>not</b> connect to PostgreSQL. It only sends:</p>
+    <p class="fr">Le client <b>n’envoie pas</b> de SQL et <b>ne se connecte pas</b> à PostgreSQL. Il envoie seulement :</p>
+    <pre>{
+  "question": "Combien de commandes en avril ?",
+  "profile": "commercial"
+}</pre>
+  </div>
+
+  <div class="card" id="s3">
+    <h3><span class="step-num">3</span><span class="en">The Gateway authorizes the tool</span><span class="fr">La Gateway autorise l’outil</span></h3>
+    <p><code>Gateway → Gateway</code> · <span class="en">authorize tool × profile (curved = internal)</span><span class="fr">autoriser tool × profil (courbe = interne)</span></p>
+    <p class="en">Is the Commercial profile allowed to call <code>ask_database</code>?</p>
+    <p class="fr">Le profil Commercial a-t-il le droit d’appeler <code>ask_database</code> ?</p>
+    <ul>
+      <li>Commercial + ask_database → <b>authorized</b> / <span class="fr">autorisé</span></li>
+      <li>Support + ask_database → <b>authorized</b> / <span class="fr">autorisé</span></li>
+      <li>Developer + ask_database → <b>refused</b> / <span class="fr">refusé</span></li>
+    </ul>
+    <p class="en">Developer may call <code>get_schema</code>, but not <code>ask_database</code>.</p>
+    <p class="fr">Developer peut appeler <code>get_schema</code>, mais pas <code>ask_database</code>.</p>
+    <div class="chips">
+      <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/application/gateway.py:66">VS Code · Gateway authorization · L66</a>
+    </div>
+  </div>
+
+  <div class="card" id="s4">
+    <h3><span class="step-num">4</span><span class="en">The Gateway delegates to SqlService</span><span class="fr">La Gateway délègue à SqlService</span></h3>
+    <p><code>Gateway → SqlService</code> · <code>ask_database(...)</code></p>
+    <p class="en">The Gateway does not generate or execute SQL. It delegates business processing to the SQL service.</p>
+    <p class="fr">La Gateway ne génère ni n’exécute de SQL. Elle délègue le traitement métier au service SQL.</p>
+    <div class="chips">
+      <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/service.py:139">VS Code · SqlService.ask_database · L139</a>
+    </div>
+  </div>
+
+  <div class="card" id="s5">
+    <h3><span class="step-num">5</span><span class="en">Authorized semantic context</span><span class="fr">Contexte sémantique autorisé</span></h3>
+    <p><code>SqlService → SemanticCatalog</code> · <code>for_profile(profile)</code></p>
+    <p class="en">The catalogue filters the complete business schema according to the profile. It returns: authorized views, columns, relationships, KPIs, approved examples, dataset and policy versions.</p>
+    <p class="fr">Le catalogue filtre le schéma métier complet selon le profil. Il renvoie : vues, colonnes, relations, KPI, exemples approuvés, versions dataset et policy.</p>
+    <ul>
+      <li class="en">Support → removes margin and purchase-price resources</li>
+      <li class="fr">Support → retire marge et prix d’achat</li>
+      <li class="en">Commercial → includes authorized sales and margin resources</li>
+      <li class="fr">Commercial → inclut ventes et marge autorisées</li>
+    </ul>
+    <p><code>SemanticCatalog ⇢ SqlService</code> · filtered views, columns, KPIs and versions</p>
+    <div class="chips">
+      <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/catalog.py:22">VS Code · Semantic catalogue filtering · L22</a>
+    </div>
+  </div>
+
+  <div class="card" id="s6">
+    <h3><span class="step-num">6</span><span class="en">The question is analyzed</span><span class="fr">La question est analysée</span></h3>
+    <p><code>SqlService → QuestionAnalyzer</code> · <code>analyze(question, context)</code></p>
+    <p class="en">Before generating SQL it asks:</p>
+    <p class="fr">Avant de générer du SQL, il demande :</p>
+    <ul>
+      <li class="en">Is this an attempted write?</li><li class="fr">Tentative d’écriture ?</li>
+      <li class="en">Is sensitive data requested?</li><li class="fr">Donnée sensible demandée ?</li>
+      <li class="en">Is the question outside the visible schema?</li><li class="fr">Hors schéma visible ?</li>
+      <li class="en">Is the question ambiguous?</li><li class="fr">Ambiguë ?</li>
+      <li class="en">Stable stock request? Order-status request? Variable analytical question?</li>
+      <li class="fr">Stock figé ? Statut commande ? Analyse variable ?</li>
+    </ul>
+    <div class="chips">
+      <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/analyzer.py:76">VS Code · Question analysis · L76</a>
+    </div>
+    <p class="call en">See section 5 for the <b>alt</b> block (A refuse · B fixed tool · C variable analysis).</p>
+    <p class="call fr">Voir la section 5 pour le bloc <b>alt</b> (A refus · B outil figé · C analyse variable).</p>
+  </div>
+
+  <div class="card" id="s7">
+    <h3><span class="step-num">7</span><span class="en">AST and allowlist validation</span><span class="fr">Validation AST et allowlists</span></h3>
+    <p class="en">After the alt block, fixed or generated queries share the same security controls.</p>
+    <p class="fr">Après le bloc alt, requêtes figées ou générées passent les mêmes contrôles de sécurité.</p>
+    <p><code>SqlService → SqlValidator</code> · <code>validate(proposal, context)</code></p>
+    <ul>
+      <li class="en">one statement only · read operation only</li>
+      <li class="fr">une seule instruction · lecture seule</li>
+      <li>no DELETE, UPDATE, INSERT, DROP, CREATE</li>
+      <li class="en">authorized views / columns / functions only</li>
+      <li class="fr">vues / colonnes / fonctions autorisées seulement</li>
+      <li class="en">valid parameters · no dangerous SELECT * · controlled LIMIT</li>
+      <li class="fr">paramètres valides · pas de SELECT * dangereux · LIMIT contrôlé</li>
+    </ul>
+    <p><code>SqlValidator ⇢ SqlService</code> · resolved SQL + views + columns + LIMIT</p>
+    <p class="en"><b>Resolved</b> means aliases and CTEs were analyzed to identify real source objects. Example: <code>SELECT marge_ht AS revenue</code> is still recognized as reading <code>marge_ht</code>.</p>
+    <p class="fr"><b>Resolved</b> signifie que les alias et CTE ont été analysés pour identifier les vrais objets sources. Exemple : <code>SELECT marge_ht AS revenue</code> est toujours reconnu comme lecture de <code>marge_ht</code>.</p>
+    <div class="chips">
+      <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/validator.py:165">VS Code · AST validator · L165</a>
+    </div>
+  </div>
+
+  <div class="card" id="s8">
+    <h3><span class="step-num">8</span><span class="en">PostgreSQL execution</span><span class="fr">Exécution PostgreSQL</span></h3>
+    <p><code>SqlService → PostgreSQL</code> · profile account + READ ONLY + timeouts</p>
+    <ul>
+      <li>Support → Support database account</li>
+      <li>Commercial → Commercial database account</li>
+      <li class="en">Developer → no business-data executor</li>
+      <li class="fr">Developer → pas d’exécuteur de données métier</li>
+    </ul>
+    <p><code>SET TRANSACTION READ ONLY</code></p>
+    <p class="en">PostgreSQL also applies: GRANT SELECT on authorized views · statement timeout · lock timeout · result-size limits.</p>
+    <p class="fr">PostgreSQL applique aussi : GRANT SELECT sur les vues autorisées · timeouts · limites de taille de résultat.</p>
+    <p class="call en">Even if the generator or validator makes a mistake, PostgreSQL is another independent security boundary.</p>
+    <p class="call fr">Même si le générateur ou le validateur se trompe, PostgreSQL reste une frontière de sécurité indépendante.</p>
+    <div class="chips">
+      <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/executors.py:45">VS Code · PostgreSQL executor · L45</a>
+    </div>
+  </div>
+
+  <div class="card" id="s9">
+    <h3><span class="step-num">9</span><span class="en">PostgreSQL returns structured data</span><span class="fr">PostgreSQL renvoie des données structurées</span></h3>
+    <p><code>PostgreSQL ⇢ SqlService</code> · columns + rows</p>
+    <pre>Columns: nombre_commandes
+Rows:    [[27]]</pre>
+    <p class="en">PostgreSQL returns data, not a natural-language explanation.</p>
+    <p class="fr">PostgreSQL renvoie des données, pas une explication en langage naturel.</p>
+  </div>
+
+  <div class="card" id="s10">
+    <h3><span class="step-num">10</span><span class="en">Final output control</span><span class="fr">Contrôle de sortie final</span></h3>
+    <p><code>SqlService → SqlService</code> · output filter (curved = internal)</p>
+    <ul>
+      <li class="en">returned columns were expected</li><li class="fr">colonnes renvoyées attendues</li>
+      <li class="en">row count is bounded</li><li class="fr">nombre de lignes borné</li>
+      <li class="en">no sensitive Support column escaped</li><li class="fr">aucune colonne sensible Support n’a fuité</li>
+      <li class="en">response respects its contract</li><li class="fr">la réponse respecte son contrat</li>
+    </ul>
+    <div class="chips">
+      <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/service.py:56">VS Code · Output control · L56</a>
+    </div>
+  </div>
+
+  <div class="card" id="s11">
+    <h3><span class="step-num">11</span><span class="en">Complete response returns to the client</span><span class="fr">La réponse complète revient au client</span></h3>
+    <p><code>SqlService ⇢ Interface</code> · result + SQL + parameters + versions</p>
+    <p class="en">Final response contains: business rows · validated SQL · parameters · backend · dataset_version · data_as_of · semantic_schema_version · policy_version.</p>
+    <p class="fr">La réponse finale contient : lignes métier · SQL validé · paramètres · backend · dataset_version · data_as_of · semantic_schema_version · policy_version.</p>
+    <p class="en">The interface only displays this backend response. It does not invent the number.</p>
+    <p class="fr">L’interface affiche seulement cette réponse backend. Elle n’invente pas le chiffre.</p>
+  </div>
+</section>
+
+<section id="alt">
+  <h2 class="en">5. Understanding the alt block</h2>
+  <h2 class="fr">5. Comprendre le bloc alt</h2>
+  <p class="en">The dotted blue frame contains three mutually exclusive possibilities. Click one path:</p>
+  <p class="fr">Le cadre bleu pointillé contient trois possibilités mutuellement exclusives. Clique un chemin :</p>
+  <div class="alt" id="altpaths">
+    <div class="path" data-alt="a">
+      <h4>A — <span class="en">refusal or clarification</span><span class="fr">refus ou clarification</span></h4>
+      <p class="en">[write / sensitive / outside schema / ambiguous]</p>
+      <p class="fr">[écriture / sensible / hors schéma / ambigu]</p>
+      <ul>
+        <li>“Delete the test orders” → <code>UNSAFE_SQL</code></li>
+        <li>“What is the margin of REF-8842?” + Support → <code>NOT_AUTHORIZED</code></li>
+        <li>“What will the weather be tomorrow?” → <code>OUT_OF_SCHEMA</code></li>
+        <li>“Who is the best customer?” → <code>AMBIGUOUS_QUESTION</code></li>
+      </ul>
+      <p><code>QuestionAnalyzer ⇢ SqlService</code> typed error</p>
+      <p><code>SqlService ⇢ Interface</code> refusal or clarification, <b>no rows</b></p>
+      <p class="call en">Generator, Validator and PostgreSQL are <b>never</b> called. A refused question produces no SQL execution and no business result.</p>
+      <p class="call fr">Generator, Validator et PostgreSQL ne sont <b>jamais</b> appelés. Une question refusée ne produit aucune exécution SQL ni résultat métier.</p>
+    </div>
+    <div class="path" data-alt="b">
+      <h4>B — <span class="en">fixed tool</span><span class="fr">outil figé</span></h4>
+      <p class="en">[recognized stock or order status]</p>
+      <p class="fr">[stock ou statut commande reconnu]</p>
+      <ul>
+        <li>“What is the stock of REF-8842?” → <code>check_stock</code></li>
+        <li>“What is the status of CMD-2026-0042?” → <code>order_status</code></li>
+      </ul>
+      <p><code>QuestionAnalyzer ⇢ SqlService</code> fixed tool route + parameters</p>
+      <p class="en">The service uses tested, parameterized SQL. Preferable for stable needs: simpler and more predictable than variable generation.</p>
+      <p class="fr">Le service utilise du SQL testé et paramétré. Préférable pour les besoins stables : plus simple et plus prévisible que la génération variable.</p>
+    </div>
+    <div class="path" data-alt="c">
+      <h4>C — <span class="en">variable analysis</span><span class="fr">analyse variable</span></h4>
+      <p>Exemple / Example: <code>Combien de commandes en avril ?</code></p>
+      <p><code>route = ask_database</code></p>
+      <p><code>SqlService → Generator</code> · <code>generate(question, context)</code></p>
+      <p><code>Generator ⇢ SqlService</code> · SQL + parameters</p>
+      <pre>SELECT COUNT(*) AS nombre_commandes
+FROM sorabel_semantic.commandes_commercial
+WHERE date_commande >= %(date_debut)s
+  AND date_commande < %(date_fin)s
+
+Parameters:
+{ "date_debut": "2026-04-01", "date_fin": "2026-05-01" }</pre>
+      <p class="en">Values stay separate from SQL to prevent unsafe string concatenation.</p>
+      <p class="fr">Les valeurs restent séparées du SQL pour éviter une concaténation dangereuse.</p>
+      <div class="chips">
+        <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/generator.py:70">VS Code · SQL generator · L70</a>
+      </div>
+    </div>
+  </div>
+  <p class="en">For a fixed or generated query, processing continues through the same security controls (steps 7–11).</p>
+  <p class="fr">Pour une requête figée ou générée, le traitement continue par les mêmes contrôles de sécurité (étapes 7–11).</p>
+</section>
+
+<section id="examples">
+  <h2 class="en">6. Complete examples</h2>
+  <h2 class="fr">6. Exemples complets</h2>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3 class="en">Successful path</h3>
+      <h3 class="fr">Chemin réussi</h3>
+      <pre>Combien de commandes en avril ?
+Profile: Commercial</pre>
+      <ol>
+        <li class="en">Gateway authorizes ask_database</li><li class="fr">Gateway autorise ask_database</li>
+        <li class="en">Catalogue exposes commandes_commercial</li><li class="fr">Catalogue expose commandes_commercial</li>
+        <li class="en">Analyzer selects variable analysis</li><li class="fr">Analyseur choisit l’analyse variable</li>
+        <li class="en">Generator proposes parameterized SQL</li><li class="fr">Générateur propose du SQL paramétré</li>
+        <li class="en">Validator approves AST and allowed view</li><li class="fr">Validateur approuve AST et vue autorisée</li>
+        <li class="en">Commercial PostgreSQL account executes READ ONLY</li><li class="fr">Compte PostgreSQL Commercial exécute READ ONLY</li>
+        <li class="en">PostgreSQL returns 27</li><li class="fr">PostgreSQL renvoie 27</li>
+        <li class="en">Output is checked</li><li class="fr">Sortie contrôlée</li>
+        <li class="en">Result, SQL, parameters and versions returned</li><li class="fr">Résultat, SQL, paramètres et versions renvoyés</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3 class="en">Refusal path</h3>
+      <h3 class="fr">Chemin de refus</h3>
+      <pre>Quelle est la marge sur REF-8842 ?
+Profile: Support</pre>
+      <ol>
+        <li class="en">Gateway authorizes Support to call ask_database</li><li class="fr">Gateway autorise Support pour ask_database</li>
+        <li class="en">Catalogue loads the Support scope</li><li class="fr">Catalogue charge le périmètre Support</li>
+        <li class="en">Analyzer detects sensitive margin request</li><li class="fr">Analyseur détecte une demande de marge sensible</li>
+        <li>→ <code>NOT_AUTHORIZED</code></li>
+        <li class="en">No SQL generated · Validator not called · PostgreSQL not called · No business row</li>
+        <li class="fr">Pas de SQL · Validateur non appelé · PostgreSQL non appelé · Aucune ligne métier</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="developer">
+  <h2 class="en">7. Important Developer case</h2>
+  <h2 class="fr">7. Cas Developer important</h2>
+  <p class="en">Developer does <b>not</b> follow this complete <code>ask_database</code> sequence.</p>
+  <p class="fr">Developer ne suit <b>pas</b> cette séquence complète <code>ask_database</code>.</p>
+  <pre>Developer + SQL mode
+  → ask_database forbidden
+  → get_schema selected
+  → catalogue definitions returned
+  → no SQL execution
+  → no business rows</pre>
+  <div class="chips">
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/application/gateway.py:66">VS Code · authorization · L66</a>
+  </div>
+</section>
+
+<section id="oral">
+  <h2 class="en">8. Short oral explanation</h2>
+  <h2 class="fr">8. Explication orale courte</h2>
+  <div class="say en">This sequence begins with a question and a profile. The Gateway first checks whether that profile may call ask_database. The SQL service then loads only the semantic catalogue authorized for that profile. The analyzer may refuse the request, request clarification, select a fixed tool, or route a variable question to the generator. The generated SQL is only a proposal. It must pass AST validation and allowlists before PostgreSQL executes it with a profile-specific account, a read-only transaction and timeouts. Finally, the result is checked and returned with its SQL, parameters and versions. If the request is unsafe or unauthorized, the process stops before the database.</div>
+  <div class="say fr">Cette séquence commence par une question et un profil. La Gateway vérifie d’abord si ce profil a le droit d’appeler ask_database. Le service SQL charge ensuite uniquement le catalogue sémantique autorisé pour ce profil. L’analyseur peut refuser, demander une clarification, choisir un outil figé, ou envoyer une question variable au générateur. Le SQL généré n’est qu’une proposition. Il doit passer la validation AST et les allowlists avant que PostgreSQL l’exécute avec un compte lié au profil, une transaction en lecture seule et des timeouts. Enfin, le résultat est contrôlé et renvoyé avec son SQL, ses paramètres et ses versions. Si la demande est dangereuse ou non autorisée, le processus s’arrête avant la base.</div>
+</section>
+
+<section id="sources">
+  <h2 class="en">9. Diagram sources</h2>
+  <h2 class="fr">9. Sources du schéma</h2>
+  <div class="chips">
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/docs/livrable/architecture/diagrams/10-chemin-exact-ask-database.mmd">Editable sequence diagram · .mmd</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/docs/livrable/architecture/TEXT-TO-SQL-POSTGRESQL-ARCHITECTURE.md:25">Complete architecture explanation · L25</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/application/gateway.py:66">gateway.py · L66</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/service.py:139">service.py · L139</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/catalog.py:22">catalog.py · L22</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/analyzer.py:76">analyzer.py · L76</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/generator.py:70">generator.py · L70</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/validator.py:165">validator.py · L165</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/executors.py:45">executors.py · L45</a>
+    <a class="vscode" href="vscode://file/C:/Users/kanda/Documents/ChatGPT/Sorabel - l'agent augmenté par la donnée, exposé via MCP/02-IMPLEMENTATION/sorabel-gateway/sql/service.py:56">service.py · L56 output</a>
+  </div>
+  <p class="en">Folder already opened once with <code>code</code>. If a yellow link does nothing, allow the browser to open VS Code, or use the chip “Open folder in VS Code”.</p>
+  <p class="fr">Le dossier a déjà été ouvert une fois avec <code>code</code>. Si un lien jaune ne fait rien, autorise le navigateur à ouvrir VS Code, ou utilise le bouton « Open folder in VS Code ».</p>
+</section>
+
+</article>
+</div>
+<script>
+const FLOW = {
+  en: [
+    ["1. User","Submits Question + profile to the web / MCP interface."],
+    ["2. Interface","Calls ask_database(question, profile). No SQL. No DB connection."],
+    ["3. Gateway","Internal authorize: tool × profile. Developer cannot ask_database."],
+    ["4. SqlService","Gateway delegates. Service owns the SQL workflow."],
+    ["5. Catalog","for_profile → filtered views, columns, KPIs, versions."],
+    ["6. Analyzer","Refuse / clarify / fixed tool / variable analysis (alt A·B·C)."],
+    ["7. Validator","AST + allowlists. Proposal becomes resolved SQL."],
+    ["8. PostgreSQL","Profile account, READ ONLY, timeouts, grants."],
+    ["9–11. Out","Rows → output filter → result + SQL + params + versions."]
+  ],
+  fr: [
+    ["1. Utilisateur","Envoie Question + profil à l’interface web / MCP."],
+    ["2. Interface","Appelle ask_database(question, profile). Pas de SQL. Pas de DB."],
+    ["3. Gateway","Autorisation interne : tool × profil. Developer interdit sur ask_database."],
+    ["4. SqlService","La Gateway délègue. Le service porte le workflow SQL."],
+    ["5. Catalogue","for_profile → vues, colonnes, KPI, versions filtrés."],
+    ["6. Analyseur","Refus / clarification / outil figé / analyse variable (alt A·B·C)."],
+    ["7. Validateur","AST + allowlists. La proposition devient SQL résolu."],
+    ["8. PostgreSQL","Compte du profil, READ ONLY, timeouts, grants."],
+    ["9–11. Sortie","Lignes → filtre de sortie → résultat + SQL + params + versions."]
+  ]
+};
+function lang(){ return document.body.classList.contains('lang-fr') ? 'fr' : 'en'; }
+function paintFlow(){
+  const box = document.getElementById('flowboxes');
+  const ex = document.getElementById('flowexplain');
+  box.innerHTML = '';
+  FLOW[lang()].forEach((row, i) => {
+    if (i) { const e=document.createElement('em'); e.textContent='→'; box.appendChild(e); }
+    const b = document.createElement('div');
+    b.className = 'p';
+    b.textContent = row[0];
+    b.onclick = () => {
+      [...box.querySelectorAll('.p')].forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      ex.innerHTML = '<b>'+row[0]+'</b><br>'+row[1];
+    };
+    box.appendChild(b);
+  });
+  box.querySelector('.p')?.click();
+}
+document.getElementById('lang-en').onclick = () => {
+  document.body.classList.add('lang-en'); document.body.classList.remove('lang-fr');
+  document.getElementById('lang-en').classList.add('on');
+  document.getElementById('lang-fr').classList.remove('on');
+  paintFlow();
+};
+document.getElementById('lang-fr').onclick = () => {
+  document.body.classList.add('lang-fr'); document.body.classList.remove('lang-en');
+  document.getElementById('lang-fr').classList.add('on');
+  document.getElementById('lang-en').classList.remove('on');
+  paintFlow();
+};
+document.querySelectorAll('#altpaths .path').forEach(p => {
+  p.onclick = () => {
+    document.querySelectorAll('#altpaths .path').forEach(x => x.classList.remove('on'));
+    p.classList.add('on');
+  };
+});
+paintFlow();
+</script>
+</body>
+</html>

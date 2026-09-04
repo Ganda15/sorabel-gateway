@@ -1,0 +1,91 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Segoe UI, Arial, sans-serif",
+    "primaryColor": "#e7f6f2",
+    "primaryTextColor": "#17383f",
+    "primaryBorderColor": "#008f83",
+    "lineColor": "#31565d",
+    "secondaryColor": "#fff7df",
+    "tertiaryColor": "#fff0e8",
+    "clusterBkg": "#f7fbfa",
+    "clusterBorder": "#9ec9c2"
+  },
+  "flowchart": {"useMaxWidth": true, "curve": "basis", "nodeSpacing": 34, "rankSpacing": 44}
+}}%%
+flowchart TB
+
+  subgraph CLIENTS["Clients — hors du service"]
+    direction LR
+    NAV["Navigateur<br/>127.0.0.1:8780"]
+    IDE["Hôte MCP — IDE, script<br/>scripts/mcp_client.py"]
+  end
+
+  subgraph ADAPT["Adaptateurs d'entrée — même matrice, mêmes services"]
+    direction LR
+    FAPI["web_app/server.py<br/>FastAPI · uvicorn<br/>POST /api/answer · /api/search<br/>/api/database · /api/schema"]
+    FMCP["mcp_server/server.py<br/>FastMCP · transport stdio<br/>8 fonctions @mcp.tool()<br/>SORABEL_PROFILE"]
+  end
+
+  GW["application/gateway.py<br/>ApplicationGateway<br/>TOOLS_BY_PROFILE — 3 profils × 8 tools<br/>_authorize() avant tout appel"]
+
+  AUD["application/audit.py<br/>logs/journal.jsonl — une ligne JSON par appel<br/>request_id · channel · profil · tool · question<br/>SQL · row_count · duration_ms · 4 versions<br/>jamais de mot de passe, de DSN ni de clé"]
+
+  subgraph RAGB["Branche documentaire"]
+    direction TB
+    RAG["retrieval/service.py<br/>dense + BM25 + fusion RRF + rerank<br/>data/index/ — index local reproductible"]
+    CHR[("Chroma 0.5.23<br/>port 8002 — adaptateur optionnel")]
+  end
+
+  subgraph SQLB["Branche Text-to-SQL — sql/"]
+    direction TB
+    SVC["sql/service.py — SqlService<br/>ask_database · get_schema<br/>check_stock · order_status"]
+    CAT["sql/catalog.py + semantic_catalog.json<br/>for_profile() — vues, colonnes, KPI du profil<br/>le schéma brut n'est jamais exposé"]
+    ANA["sql/analyzer.py — QuestionAnalyzer<br/>écriture · sensible · hors schéma · ambigu<br/>agrégation : « total » ne va pas au tool figé"]
+    GEN["sql/generator.py<br/>Generateur agentique — gpt-5.4, ACTIF<br/>schema filtre en contexte, aucun champ tools<br/>DeterministicSqlGenerator — repli hors ligne<br/>bascule par SORABEL_SQL_GENERATOR"]
+    VAL["sql/validator.py — sqlglot AST<br/>1 seule instruction · pas de nœud d'écriture<br/>pas de SELECT * · 10 fonctions autorisées<br/>LIMIT ajouté si absent — max_rows 100"]
+    EXE["sql/executors.py<br/>PostgresExecutor — psycopg_pool min 0 max 4<br/>SET TRANSACTION READ ONLY<br/>statement_timeout 3000 ms · lock_timeout 1000 ms"]
+  end
+
+  subgraph PG["PostgreSQL 18-alpine — conteneur sorabel-gateway-postgres-1 · port 55432"]
+    direction TB
+    SRC[("sorabel_source<br/>5 tables importées et réconciliées<br/>migration 001")]
+    SEM[("sorabel_semantic<br/>vues _support et _commercial<br/>security_barrier — migration 002")]
+    ROL["Rôles — migration 003<br/>sorabel_support_login · sorabel_commercial_login<br/>SELECT uniquement sur leurs vues<br/>default_transaction_read_only = on"]
+  end
+
+  NAV --> FAPI
+  IDE --> FMCP
+  FAPI --> GW
+  FMCP --> GW
+  GW -. "succès ET refus" .-> AUD
+  FMCP -. "channel mcp" .-> AUD
+  GW --> RAG
+  RAG -.-> CHR
+  GW --> SVC
+  SVC --> CAT
+  SVC --> ANA
+  ANA -- "route variable" --> GEN
+  ANA -- "route figée" --> VAL
+  GEN --> VAL
+  VAL --> EXE
+  EXE --> ROL
+  ROL --> SEM
+  SEM --> SRC
+
+  subgraph LEG["Légende"]
+    direction LR
+    L1["Entrée et accès<br/>adaptateurs, matrice de droits"]
+    L2["Cœur applicatif<br/>gateway, services, catalogue"]
+    L3["Contrôles<br/>analyse, génération, validation, audit"]
+    L4["Données<br/>PostgreSQL, rôles, index"]
+  end
+
+  classDef entree fill:#fff7df,stroke:#d9a21b,color:#17383f
+  classDef coeur fill:#e7f6f2,stroke:#008f83,color:#17383f
+  classDef controle fill:#fff0e8,stroke:#ef8354,color:#17383f
+  classDef base fill:#eef2fb,stroke:#5b7bc4,color:#17383f
+  class NAV,IDE,FAPI,FMCP,L1 entree
+  class GW,SVC,CAT,RAG,L2 coeur
+  class ANA,GEN,VAL,EXE,AUD,L3 controle
+  class SRC,SEM,ROL,CHR,L4 base

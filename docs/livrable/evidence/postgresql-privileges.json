@@ -1,0 +1,656 @@
+{
+  "generated_at": "2026-09-02T19:34:08.419031+00:00",
+  "target": "PostgreSQL:sorabel_semantic",
+  "policy_version": "policy-v1",
+  "checks": [
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_semantic.produits_support",
+      "privilege": "SELECT",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_semantic.stocks_support",
+      "privilege": "SELECT",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_semantic.commandes_support",
+      "privilege": "SELECT",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_semantic.ventes_commercial",
+      "privilege": "SELECT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.produits",
+      "privilege": "SELECT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_semantic.ventes_commercial",
+      "privilege": "SELECT",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.ventes",
+      "privilege": "SELECT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_semantic.clients_commercial",
+      "privilege": "SELECT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.clients",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.clients",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.clients",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.clients",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.commandes",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.commandes",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.commandes",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.commandes",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.produits",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.produits",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.produits",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.produits",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.stocks",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.stocks",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.stocks",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.stocks",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.ventes",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.ventes",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.ventes",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.ventes",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.clients",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.clients",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.clients",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.clients",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.commandes",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.commandes",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.commandes",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.commandes",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.produits",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.produits",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.produits",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.produits",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.stocks",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.stocks",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.stocks",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.stocks",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.ventes",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.ventes",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.ventes",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_commercial",
+      "object": "sorabel_source.ventes",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.clients",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.clients",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.clients",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.clients",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.commandes",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.commandes",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.commandes",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.commandes",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.produits",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.produits",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.produits",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.produits",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.stocks",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.stocks",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.stocks",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.stocks",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.ventes",
+      "privilege": "INSERT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.ventes",
+      "privilege": "UPDATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.ventes",
+      "privilege": "DELETE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "table_privilege",
+      "role": "sorabel_schema_reader",
+      "object": "sorabel_source.ventes",
+      "privilege": "TRUNCATE",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "column_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_semantic.produits_support.prix_vente_ht",
+      "privilege": "SELECT",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "kind": "column_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.produits.prix_achat_ht",
+      "privilege": "SELECT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "column_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.produits.marge_pct",
+      "privilege": "SELECT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "kind": "column_privilege",
+      "role": "sorabel_support",
+      "object": "sorabel_source.ventes.marge_ht",
+      "privilege": "SELECT",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

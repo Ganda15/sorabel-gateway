@@ -1,0 +1,91 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Segoe UI, Arial, sans-serif",
+    "primaryColor": "#e7f6f2",
+    "primaryTextColor": "#17383f",
+    "primaryBorderColor": "#008f83",
+    "lineColor": "#31565d",
+    "secondaryColor": "#fff7df",
+    "tertiaryColor": "#fff0e8",
+    "clusterBkg": "#f7fbfa",
+    "clusterBorder": "#9ec9c2"
+  },
+  "flowchart": {"useMaxWidth": true, "curve": "basis", "nodeSpacing": 34, "rankSpacing": 46}
+}}%%
+flowchart TB
+
+  subgraph HOTE["Hôte MCP — le client, hors du service"]
+    direction LR
+    CLI["scripts/mcp_client.py<br/>--profile support | commercial | developer<br/>--tool · --args JSON"]
+    DEMO["scripts/demo_mcp.py<br/>rejoue les 4 critères d'acceptance<br/>10 contrôles, 2 profils"]
+    AGT["Agent tiers — IDE, bot<br/>lit tools/list et choisit<br/>sur la seule description"]
+  end
+
+  subgraph PROC["Processus serveur — un processus = un profil = une session"]
+    direction TB
+    BOOT["mcp_server/server.py:67<br/>ProfiledMCP('Sorabel Data Gateway')<br/>transport stdio · log_level ERROR<br/>PROFILE = SORABEL_PROFILE"]
+    B1["BARRIÈRE 1 — le catalogue annoncé<br/>ProfiledMCP.list_tools() — ligne 62<br/>support 7 tools · commercial 8 · developer 4<br/>get_schema absent pour le support"]
+    B2["BARRIÈRE 2 — l'appel<br/>governed() — ligne 108<br/>matrice réappliquée à chaque tools/call<br/>NOT_AUTHORIZED + journal, jamais<br/>une erreur de protocole"]
+    DESC["8 fonctions @mcp.tool(description=...)<br/>description lue dans la politique<br/>jamais écrite dans ce fichier"]
+  end
+
+  POL[/"application/access_policy.json<br/>SOURCE UNIQUE — policy-v1<br/>8 tools × 3 profils · 4 collections<br/>descriptions Utiliser / Ne pas utiliser"/]
+
+  LOAD["application/policy.py<br/>load_policy() valide au démarrage<br/>tools_by_profile() · collections_by_profile()<br/>describe(tool)<br/>une politique incohérente arrête le service"]
+
+  subgraph DERIVE["Tout en dérive — rien n'est recopié"]
+    direction LR
+    GW["application/gateway.py:42<br/>TOOLS_BY_PROFILE"]
+    RS["retrieval/service.py:20<br/>COLLECTIONS_BY_PROFILE<br/>axe collection"]
+    GEN["scripts/generer_docs_matrice.py<br/>régénère 3 documents livrés"]
+  end
+
+  AUD["application/audit.py<br/>logs/journal.jsonl — 1 ligne JSON par appel<br/>request_id · channel=mcp · profil · tool<br/>statut · error_code · durée · 4 versions<br/>autorisés ET refusés — jamais un secret"]
+
+  subgraph SERV["Services — chacun réapplique son périmètre"]
+    direction TB
+    RAG["retrieval/service.py<br/>collections filtrées AVANT le classement<br/>notes_internes invisibles au support"]
+    SQL["sql/service.py + sql/catalog.py<br/>vues _support / _commercial<br/>marge_ht absente du profil support"]
+  end
+
+  PG[("PostgreSQL 18-alpine<br/>sorabel-gateway-postgres-1 · port 55432<br/>rôles _login · SELECT seul · READ ONLY")]
+  IDX[("data/index/ — index documentaire local")]
+
+  CLI --> BOOT
+  DEMO --> BOOT
+  AGT --> BOOT
+  BOOT --> B1
+  B1 -- "tools/list" --> AGT
+  BOOT --> B2
+  DESC --> B1
+  POL --> LOAD
+  LOAD --> DESC
+  LOAD --> GW
+  LOAD --> RS
+  LOAD --> GEN
+  GW --> B1
+  GW --> B2
+  B2 -. "refus ET succès" .-> AUD
+  B2 --> RAG
+  B2 --> SQL
+  RS --> RAG
+  RAG --> IDX
+  SQL --> PG
+
+  subgraph LEG["Légende"]
+    direction LR
+    L1["Entrée et accès<br/>hôte, catalogue, matrice"]
+    L2["Cœur applicatif<br/>chargement, services"]
+    L3["Contrôles<br/>barrières, audit"]
+    L4["Données et source<br/>politique, base, index"]
+  end
+
+  classDef entree fill:#fff7df,stroke:#d9a21b,color:#17383f
+  classDef coeur fill:#e7f6f2,stroke:#008f83,color:#17383f
+  classDef controle fill:#fff0e8,stroke:#ef8354,color:#17383f
+  classDef base fill:#eef2fb,stroke:#5b7bc4,color:#17383f
+  class CLI,DEMO,AGT,BOOT,DESC,L1 entree
+  class LOAD,GW,RS,GEN,RAG,SQL,L2 coeur
+  class B1,B2,AUD,L3 controle
+  class POL,PG,IDX,L4 base

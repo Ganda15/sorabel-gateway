@@ -1,0 +1,151 @@
+{
+  "versions": {
+    "dataset_version": "sorabel-seed-2026-v1",
+    "data_as_of": "2026-07-31",
+    "semantic_schema_version": "semantic-postgres-v1",
+    "policy_version": "policy-v1"
+  },
+  "profiles": ["support", "commercial", "developer"],
+  "views": [
+    {
+      "name": "produits_support",
+      "description": "Catalogue produit sans prix d'achat ni marge.",
+      "profiles": ["support"],
+      "columns": {
+        "ref": {"data_type": "text", "description": "Référence produit REF-NNNN.", "source_columns": ["produits.ref"]},
+        "nom": {"data_type": "text", "description": "Libellé commercial du produit.", "source_columns": ["produits.nom"]},
+        "categorie": {"data_type": "text", "description": "Famille commerciale.", "source_columns": ["produits.categorie"]},
+        "fabricant": {"data_type": "text", "description": "Marque fournisseur.", "source_columns": ["produits.fabricant"]},
+        "unite": {"data_type": "text", "description": "Unité de vente.", "source_columns": ["produits.unite"]},
+        "prix_vente_ht": {"data_type": "numeric", "description": "Prix public hors taxes en euros.", "source_columns": ["produits.prix_vente_ht"]},
+        "actif": {"data_type": "boolean", "description": "Produit actuellement au catalogue.", "source_columns": ["produits.actif"]}
+      }
+    },
+    {
+      "name": "stocks_support",
+      "description": "Quantités et seuils de stock par entrepôt.",
+      "profiles": ["support"],
+      "columns": {
+        "id": {"data_type": "bigint", "description": "Identifiant technique de stock.", "source_columns": ["stocks.id"]},
+        "ref": {"data_type": "text", "description": "Référence produit.", "source_columns": ["stocks.ref"]},
+        "entrepot": {"data_type": "text", "description": "Entrepôt LILLE, LYON ou NANTES.", "source_columns": ["stocks.entrepot"]},
+        "quantite": {"data_type": "integer", "description": "Quantité disponible.", "source_columns": ["stocks.quantite"]},
+        "seuil_reappro": {"data_type": "integer", "description": "Seuil de réapprovisionnement.", "source_columns": ["stocks.seuil_reappro"]}
+      }
+    },
+    {
+      "name": "commandes_support",
+      "description": "Commandes et statuts visibles par le support.",
+      "profiles": ["support"],
+      "columns": {
+        "id": {"data_type": "text", "description": "Identifiant CMD-AAAA-NNNN.", "source_columns": ["commandes.id"]},
+        "client_id": {"data_type": "text", "description": "Identifiant du client.", "source_columns": ["commandes.client_id"]},
+        "date_commande": {"data_type": "date", "description": "Date de commande.", "source_columns": ["commandes.date_commande"]},
+        "statut": {"data_type": "text", "description": "Statut de traitement de la commande.", "source_columns": ["commandes.statut"]},
+        "montant_ht": {"data_type": "numeric", "description": "Montant total hors taxes.", "source_columns": ["commandes.montant_ht"]}
+      }
+    },
+    {
+      "name": "clients_support",
+      "description": "Comptes professionnels utiles au support.",
+      "profiles": ["support"],
+      "columns": {
+        "id": {"data_type": "text", "description": "Identifiant CLI-NNNN.", "source_columns": ["clients.id"]},
+        "raison_sociale": {"data_type": "text", "description": "Nom de l'entreprise.", "source_columns": ["clients.raison_sociale"]},
+        "segment": {"data_type": "text", "description": "Segment professionnel.", "source_columns": ["clients.segment"]},
+        "ville": {"data_type": "text", "description": "Ville du compte client.", "source_columns": ["clients.ville"]},
+        "email": {"data_type": "text", "description": "Contact interne autorisé.", "source_columns": ["clients.email"]}
+      }
+    },
+    {
+      "name": "produits_commercial",
+      "description": "Catalogue produit complet autorisé pour Commercial.",
+      "profiles": ["commercial", "developer"],
+      "columns": {
+        "ref": {"data_type": "text", "description": "Référence produit REF-NNNN.", "source_columns": ["produits.ref"]},
+        "nom": {"data_type": "text", "description": "Libellé commercial du produit.", "source_columns": ["produits.nom"]},
+        "categorie": {"data_type": "text", "description": "Famille commerciale.", "source_columns": ["produits.categorie"]},
+        "fabricant": {"data_type": "text", "description": "Marque fournisseur.", "source_columns": ["produits.fabricant"]},
+        "unite": {"data_type": "text", "description": "Unité de vente.", "source_columns": ["produits.unite"]},
+        "prix_vente_ht": {"data_type": "numeric", "description": "Prix public hors taxes en euros.", "source_columns": ["produits.prix_vente_ht"]},
+        "prix_achat_ht": {"data_type": "numeric", "description": "Prix d'achat fournisseur confidentiel.", "source_columns": ["produits.prix_achat_ht"]},
+        "marge_pct": {"data_type": "numeric", "description": "Taux de marge produit en pourcentage.", "source_columns": ["produits.marge_pct"]},
+        "actif": {"data_type": "boolean", "description": "Produit actuellement au catalogue.", "source_columns": ["produits.actif"]}
+      }
+    },
+    {
+      "name": "stocks_commercial",
+      "description": "Quantités et seuils de stock par entrepôt.",
+      "profiles": ["commercial", "developer"],
+      "columns": {
+        "id": {"data_type": "bigint", "description": "Identifiant technique de stock.", "source_columns": ["stocks.id"]},
+        "ref": {"data_type": "text", "description": "Référence produit.", "source_columns": ["stocks.ref"]},
+        "entrepot": {"data_type": "text", "description": "Entrepôt LILLE, LYON ou NANTES.", "source_columns": ["stocks.entrepot"]},
+        "quantite": {"data_type": "integer", "description": "Quantité disponible.", "source_columns": ["stocks.quantite"]},
+        "seuil_reappro": {"data_type": "integer", "description": "Seuil de réapprovisionnement.", "source_columns": ["stocks.seuil_reappro"]}
+      }
+    },
+    {
+      "name": "commandes_commercial",
+      "description": "Commandes utilisables pour les analyses commerciales.",
+      "profiles": ["commercial", "developer"],
+      "columns": {
+        "id": {"data_type": "text", "description": "Identifiant CMD-AAAA-NNNN.", "source_columns": ["commandes.id"]},
+        "client_id": {"data_type": "text", "description": "Identifiant du client.", "source_columns": ["commandes.client_id"]},
+        "date_commande": {"data_type": "date", "description": "Date de commande.", "source_columns": ["commandes.date_commande"]},
+        "statut": {"data_type": "text", "description": "Statut de traitement de la commande.", "source_columns": ["commandes.statut"]},
+        "montant_ht": {"data_type": "numeric", "description": "Montant total hors taxes.", "source_columns": ["commandes.montant_ht"]}
+      }
+    },
+    {
+      "name": "clients_commercial",
+      "description": "Comptes professionnels utilisables pour les analyses commerciales.",
+      "profiles": ["commercial", "developer"],
+      "columns": {
+        "id": {"data_type": "text", "description": "Identifiant CLI-NNNN.", "source_columns": ["clients.id"]},
+        "raison_sociale": {"data_type": "text", "description": "Nom de l'entreprise.", "source_columns": ["clients.raison_sociale"]},
+        "segment": {"data_type": "text", "description": "Segment professionnel.", "source_columns": ["clients.segment"]},
+        "ville": {"data_type": "text", "description": "Ville du compte client.", "source_columns": ["clients.ville"]},
+        "email": {"data_type": "text", "description": "Contact interne autorisé.", "source_columns": ["clients.email"]}
+      }
+    },
+    {
+      "name": "ventes_commercial",
+      "description": "Lignes de vente et marges réservées au profil Commercial.",
+      "profiles": ["commercial", "developer"],
+      "columns": {
+        "id": {"data_type": "bigint", "description": "Identifiant technique de la ligne.", "source_columns": ["ventes.id"]},
+        "commande_id": {"data_type": "text", "description": "Commande associée.", "source_columns": ["ventes.commande_id"]},
+        "ref": {"data_type": "text", "description": "Référence vendue.", "source_columns": ["ventes.ref"]},
+        "quantite": {"data_type": "integer", "description": "Quantité vendue.", "source_columns": ["ventes.quantite"]},
+        "prix_unitaire_ht": {"data_type": "numeric", "description": "Prix unitaire facturé après remise.", "source_columns": ["ventes.prix_unitaire_ht"]},
+        "remise_pct": {"data_type": "numeric", "description": "Remise accordée en pourcentage.", "source_columns": ["ventes.remise_pct"]},
+        "marge_ht": {"data_type": "numeric", "description": "Marge réalisée sur la ligne en euros HT.", "source_columns": ["ventes.marge_ht"]}
+      }
+    }
+  ],
+  "relations": [
+    {"left_view": "clients_support", "right_view": "commandes_support", "condition": "clients_support.id = commandes_support.client_id", "description": "Un client possède plusieurs commandes.", "profiles": ["support"]},
+    {"left_view": "produits_support", "right_view": "stocks_support", "condition": "produits_support.ref = stocks_support.ref", "description": "Un produit possède un stock par entrepôt.", "profiles": ["support"]},
+    {"left_view": "clients_commercial", "right_view": "commandes_commercial", "condition": "clients_commercial.id = commandes_commercial.client_id", "description": "Un client possède plusieurs commandes.", "profiles": ["commercial", "developer"]},
+    {"left_view": "commandes_commercial", "right_view": "ventes_commercial", "condition": "commandes_commercial.id = ventes_commercial.commande_id", "description": "Une commande possède plusieurs lignes de vente.", "profiles": ["commercial", "developer"]},
+    {"left_view": "produits_commercial", "right_view": "stocks_commercial", "condition": "produits_commercial.ref = stocks_commercial.ref", "description": "Un produit possède un stock par entrepôt.", "profiles": ["commercial", "developer"]},
+    {"left_view": "produits_commercial", "right_view": "ventes_commercial", "condition": "produits_commercial.ref = ventes_commercial.ref", "description": "Un produit apparaît dans les lignes de vente.", "profiles": ["commercial", "developer"]}
+  ],
+  "kpis": [
+    {"name": "nombre_commandes", "definition": "Nombre de lignes dans la vue commandes sur la période demandée.", "profiles": ["support", "commercial", "developer"]},
+    {"name": "montant_commandes_ht", "definition": "Somme de commandes.montant_ht sur la période demandée, hors taxes.", "profiles": ["support", "commercial", "developer"]},
+    {"name": "stock_total", "definition": "Somme des quantités disponibles de la référence sur tous les entrepôts sélectionnés.", "profiles": ["support", "commercial", "developer"]},
+    {"name": "marge_totale_ht", "definition": "Somme de ventes.marge_ht sur les lignes rattachées aux commandes de la période demandée.", "profiles": ["commercial", "developer"]}
+  ],
+  "ambiguities": {
+    "meilleur client": "Préciser le critère : montant commandé, nombre de commandes ou autre KPI.",
+    "ça se vend bien": "Préciser la mesure, le produit et la période à comparer.",
+    "chiffre d'affaires": "Préciser si le KPI attendu est le montant des commandes ou les ventes facturées."
+  },
+  "examples": [
+    {"question": "combien de commandes en avril ?", "sql": "SELECT COUNT(*) AS nombre_commandes FROM sorabel_semantic.commandes_commercial WHERE date_commande >= %(date_debut)s AND date_commande < %(date_fin)s", "parameters": {"date_debut": "2026-04-01", "date_fin": "2026-05-01"}, "profiles": ["commercial"]},
+    {"question": "combien de clients à Lille ?", "sql": "SELECT COUNT(*) AS nombre_clients FROM sorabel_semantic.clients_commercial WHERE ville = %(ville)s", "parameters": {"ville": "Lille"}, "profiles": ["commercial"]},
+    {"question": "quel est le stock total de la REF-8842 ?", "sql": "SELECT SUM(quantite) AS stock_total FROM sorabel_semantic.stocks_support WHERE ref = %(reference)s", "parameters": {"reference": "REF-8842"}, "profiles": ["support"]}
+  ]
+}

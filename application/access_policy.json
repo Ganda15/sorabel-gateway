@@ -1,0 +1,182 @@
+{
+  "policy_version": "policy-v1",
+  "revision_representation": "2026-09-04 — les droits sont inchangés (prouvé par tests/unit/test_access_policy.py). Seule leur REPRÉSENTATION change : ils étaient écrits à la main à quatre endroits, ils sont désormais déclarés ici une seule fois. policy_version reste donc policy-v1, comme dans sql/semantic_catalog.json et dans le journal d'audit : toutes les frontières annoncent la même version.",
+  "commentaire": "Source unique de la matrice d'accès. Le code la lit (application/policy.py), la documentation en est régénérée (scripts/generer_docs_matrice.py) et un test échoue si les deux divergent. Ne jamais recopier ces droits ailleurs à la main.",
+  "axe_colonnes_sql": {
+    "porte_par": "sql/semantic_catalog.json",
+    "mecanisme": "Chaque vue du catalogue sémantique déclare le champ 'profiles'. sql/catalog.py:for_profile() ne remet au générateur que les vues et colonnes du profil demandé. Les droits colonne ne sont donc pas dupliqués ici."
+  },
+  "profils": {
+    "support": {
+      "libelle": "Support client",
+      "usage": "Répond aux clients : documentation produit, stock, statut de commande. N'a accès ni aux marges, ni aux prix d'achat, ni aux notes internes.",
+      "role_postgres": "sorabel_support_login"
+    },
+    "commercial": {
+      "libelle": "Commercial",
+      "usage": "Périmètre métier complet, marges et prix d'achat compris, plus les notes internes.",
+      "role_postgres": "sorabel_commercial_login"
+    },
+    "developer": {
+      "libelle": "Développeur / IDE",
+      "usage": "Inspecte le corpus et le schéma pour intégrer la gateway. N'obtient aucune réponse finale et n'exécute aucune requête de données.",
+      "role_postgres": null
+    }
+  },
+  "collections": {
+    "fiches_techniques": {
+      "libelle": "Fiches techniques produit",
+      "profils": [
+        "support",
+        "commercial",
+        "developer"
+      ]
+    },
+    "notices": {
+      "libelle": "Notices d'utilisation",
+      "profils": [
+        "support",
+        "commercial",
+        "developer"
+      ]
+    },
+    "procedures_sav": {
+      "libelle": "Procédures SAV",
+      "profils": [
+        "support",
+        "commercial",
+        "developer"
+      ]
+    },
+    "notes_internes": {
+      "libelle": "Notes internes — commerciales et tarifaires",
+      "profils": [
+        "commercial",
+        "developer"
+      ]
+    }
+  },
+  "tools": [
+    {
+      "nom": "answer_question",
+      "famille": "rag",
+      "profils": [
+        "support",
+        "commercial"
+      ],
+      "titre": "Réponse sourcée à une question documentaire",
+      "description": "Répond à une question portant sur la documentation Sorabel — fiches techniques, notices, procédures SAV — et cite les documents utilisés.\nUtiliser quand l'utilisateur attend une réponse rédigée. Ne pas utiliser pour inspecter les passages bruts : search_docs est fait pour cela.\nRenvoie status=ok avec la réponse et ses sources, ou status=hors_corpus si aucun document autorisé ne permet de répondre : ce tool n'invente jamais de réponse. Seules les collections du profil sont interrogées.",
+      "entree": {
+        "question": "La question de l'utilisateur, en français."
+      },
+      "sortie": "réponse rédigée + liste des documents cités",
+      "garantie": "citation obligatoire, sinon hors_corpus"
+    },
+    {
+      "nom": "search_docs",
+      "famille": "rag",
+      "profils": [
+        "support",
+        "commercial",
+        "developer"
+      ],
+      "titre": "Recherche de passages, sans génération",
+      "description": "Recherche les passages documentaires les plus pertinents pour une requête, par recherche hybride — dense et BM25 fusionnés.\nUtiliser pour inspecter la matière brute, vérifier ce que le corpus contient, ou enchaîner ensuite sur get_document. Ne pas utiliser quand une réponse rédigée est attendue.\nRenvoie les passages classés avec leur doc_id, leur collection et leur score. Les collections interdites au profil sont filtrées avant le classement, jamais après.",
+      "entree": {
+        "query": "Les termes recherchés.",
+        "limit": "Nombre de passages renvoyés, 5 par défaut."
+      },
+      "sortie": "passages classés avec doc_id, collection, score",
+      "garantie": "recherche sans génération ; collections filtrées en amont"
+    },
+    {
+      "nom": "get_document",
+      "famille": "rag",
+      "profils": [
+        "support",
+        "commercial",
+        "developer"
+      ],
+      "titre": "Lecture d'un document complet",
+      "description": "Renvoie le texte intégral d'un document et ses métadonnées : référence, version, date, type.\nUtiliser après search_docs, avec le doc_id qu'il a renvoyé, quand le passage ne suffit pas. Ne pas utiliser pour chercher : ce tool exige un identifiant connu.\nUn document appartenant à une collection interdite au profil est refusé, même si son doc_id est connu.",
+      "entree": {
+        "doc_id": "Identifiant renvoyé par search_docs.",
+        "version": "Version précise, optionnelle."
+      },
+      "sortie": "texte intégral + métadonnées",
+      "garantie": "document autorisé au profil seulement"
+    },
+    {
+      "nom": "list_sources",
+      "famille": "rag",
+      "profils": [
+        "support",
+        "commercial",
+        "developer"
+      ],
+      "titre": "Inventaire des documents visibles",
+      "description": "Liste les documents que le profil a le droit de consulter : titre, référence, version, date, type.\nUtiliser pour savoir ce que le corpus contient avant de chercher, ou pour vérifier la couverture documentaire. Ne pas utiliser pour lire un contenu : get_document est fait pour cela.\nLa liste est déjà filtrée par profil : ce qui n'y figure pas n'est pas accessible.",
+      "entree": {},
+      "sortie": "inventaire des documents du profil",
+      "garantie": "catalogue filtré par profil"
+    },
+    {
+      "nom": "ask_database",
+      "famille": "sql",
+      "profils": [
+        "support",
+        "commercial"
+      ],
+      "titre": "Question métier libre sur la base de données",
+      "description": "Traduit une question en français en requête SQL de lecture, l'exécute, et renvoie le résultat AVEC la requête produite et ses paramètres.\nUtiliser pour toute analyse variable : comptages, totaux, moyennes, classements, filtres par période. Ne pas utiliser pour le stock d'une référence précise — check_stock — ni pour une commande précise — order_status : ces deux-là sont plus rapides et plus prévisibles.\nAucune écriture ne passe : la requête est validée par arbre syntaxique puis exécutée en transaction READ ONLY. Une demande d'écriture renvoie UNSAFE_SQL, une colonne interdite au profil NOT_AUTHORIZED, une donnée absente du schéma OUT_OF_SCHEMA, une question imprécise AMBIGUOUS_QUESTION.",
+      "entree": {
+        "question": "La question métier, en français."
+      },
+      "sortie": "SQL + paramètres + colonnes + lignes + versions",
+      "garantie": "lecture seule, requête validée, requête rendue vérifiable"
+    },
+    {
+      "nom": "get_schema",
+      "famille": "sql",
+      "profils": [
+        "commercial",
+        "developer"
+      ],
+      "titre": "Schéma sémantique visible par le profil",
+      "description": "Renvoie les vues, colonnes, relations et indicateurs que le profil a le droit d'interroger, avec leur description métier.\nUtiliser pour construire une question juste avant d'appeler ask_database, ou pour intégrer la gateway dans un outil. Ne pas utiliser pour obtenir des données : ce tool ne renvoie que le schéma.\nN'exécute aucune requête. Le schéma physique brut n'est jamais exposé : seul le catalogue sémantique du profil l'est.",
+      "entree": {},
+      "sortie": "vues, colonnes, relations, KPI du profil",
+      "garantie": "aucune donnée métier ; schéma physique jamais exposé"
+    },
+    {
+      "nom": "check_stock",
+      "famille": "sql",
+      "profils": [
+        "support",
+        "commercial"
+      ],
+      "titre": "Stock d'une référence produit",
+      "description": "Renvoie le stock d'une référence produit, entrepôt par entrepôt, par une requête écrite d'avance et paramétrée.\nUtiliser pour une référence précise au format REF-NNNN. Ne pas utiliser pour un total, un cumul ou une comparaison entre produits : ce tool renvoie le détail, pas une somme — passer par ask_database.\nLa requête est figée : seul le paramètre de référence varie, sa surface d'erreur est nulle.",
+      "entree": {
+        "reference": "Référence produit au format REF-NNNN."
+      },
+      "sortie": "SQL figée + lignes de stock par entrepôt",
+      "garantie": "requête figée et paramétrée"
+    },
+    {
+      "nom": "order_status",
+      "famille": "sql",
+      "profils": [
+        "support",
+        "commercial"
+      ],
+      "titre": "Statut d'une commande",
+      "description": "Renvoie le statut et les éléments d'une commande identifiée, par une requête écrite d'avance et paramétrée.\nUtiliser avec un identifiant au format CMD-AAAA-NNNN, dont le format est vérifié avant exécution. Ne pas utiliser pour chercher des commandes selon un critère : passer par ask_database.\nRenvoie NOT_FOUND si la commande n'existe pas — ce qui est un résultat, pas une erreur.",
+      "entree": {
+        "order_id": "Identifiant au format CMD-AAAA-NNNN."
+      },
+      "sortie": "SQL figée + statut de la commande",
+      "garantie": "format vérifié ; requête figée et paramétrée"
+    }
+  ]
+}

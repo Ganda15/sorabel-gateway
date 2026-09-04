@@ -23,6 +23,12 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 
+def tool_description_summary(description: str | None) -> str:
+    """Return a display-safe first line for an optional MCP description."""
+    lines = [line.strip() for line in (description or "").splitlines() if line.strip()]
+    return lines[0] if lines else "(no description)"
+
+
 async def run(profile: str, tool: str | None, args: dict) -> None:
     params = StdioServerParameters(
         command=sys.executable,
@@ -36,7 +42,7 @@ async def run(profile: str, tool: str | None, args: dict) -> None:
             listed = await session.list_tools()
             print(f"— Catalogue ({profile}) —")
             for t in listed.tools:
-                print(f"  {t.name}: {(t.description or '').strip().splitlines()[0]}")
+                print(f"  {t.name}: {tool_description_summary(t.description)}")
 
             if tool:
                 print(f"\n— Appel {tool} {json.dumps(args, ensure_ascii=False)} —")
@@ -52,7 +58,12 @@ async def run(profile: str, tool: str | None, args: dict) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Client de test de la Sorabel Data Gateway")
-    parser.add_argument("--profile", default="support", choices=["support", "commercial"])
+    parser.add_argument(
+        "--profile",
+        default="support",
+        choices=["support", "commercial", "developer"],
+        help="Profil attaché au processus serveur ; il détermine le catalogue annoncé.",
+    )
     parser.add_argument("--tool", default=None, help="Nom du tool à appeler")
     parser.add_argument("--args", default="{}", help="Arguments du tool (JSON)")
     ns = parser.parse_args()

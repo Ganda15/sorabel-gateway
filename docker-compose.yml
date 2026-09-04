@@ -1,4 +1,20 @@
 services:
+  postgres:
+    image: postgres:18-alpine
+    ports:
+      - "${SORABEL_POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - ./.docker-data/postgres:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: ${SORABEL_POSTGRES_DB:-sorabel}
+      POSTGRES_USER: ${SORABEL_POSTGRES_USER:-sorabel_admin}
+      POSTGRES_PASSWORD: ${SORABEL_POSTGRES_PASSWORD:?Set SORABEL_POSTGRES_PASSWORD in .env}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
   chroma:
     image: chromadb/chroma:0.5.23
     ports:

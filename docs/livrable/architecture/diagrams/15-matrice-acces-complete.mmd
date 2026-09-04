@@ -1,0 +1,89 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Segoe UI, Arial, sans-serif",
+    "primaryColor": "#e7f6f2",
+    "primaryTextColor": "#17383f",
+    "primaryBorderColor": "#008f83",
+    "lineColor": "#31565d",
+    "secondaryColor": "#fff7df",
+    "tertiaryColor": "#fff0e8",
+    "clusterBkg": "#f7fbfa",
+    "clusterBorder": "#9ec9c2"
+  },
+  "flowchart": {"useMaxWidth": true, "curve": "basis", "nodeSpacing": 26, "rankSpacing": 48}
+}}%%
+flowchart TB
+
+  ID["IDENTITÉ — le profil de la session<br/>SORABEL_PROFILE, un processus = un profil<br/>support · commercial · developer<br/>⚠️ ne vient jamais de la question posée"]
+
+  %% Ordre de declaration inverse : Mermaid empile les sous-graphes
+  %% a l'envers, donc declarer A3, A2, A1 les affiche 1, 2, 3.
+  subgraph AXES["LA MATRICE — trois axes indépendants, tous les trois déclarés"]
+    direction LR
+
+    subgraph A3["AXE 3 · profil × TABLE et COLONNE — semantic_catalog.json"]
+      direction TB
+      S1["<b>support — 4 vues sur 9</b><br/>produits_support (7 col.)<br/>stocks_support · commandes_support<br/>clients_support<br/>—————<br/>DENY : les 5 vues _commercial<br/>dont ventes_commercial en entier"]
+      S2["<b>commercial — 9 vues sur 9</b><br/>produits_commercial (9 col.)<br/>+ prix_achat_ht + marge_pct<br/>ventes_commercial<br/>+ marge_ht + remise_pct + prix_unitaire_ht"]
+      S3["<b>developer — 9 vues, schéma seul</b><br/>get_schema autorisé<br/>ask_database DENY par l'axe 1<br/>donc aucune ligne lue"]
+    end
+
+    subgraph A2["AXE 2 · profil × COLLECTION — access_policy.json"]
+      direction TB
+      C1["<b>support — 3 / 4</b><br/>fiches_techniques · notices<br/>procedures_sav<br/>—————<br/>DENY : notes_internes<br/>mesuré : 0 note interne sur 255 documents"]
+      C2["<b>commercial — 4 / 4</b><br/>+ notes_internes<br/>mesuré : 60 notes internes sur 315"]
+      C3["<b>developer — 4 / 4</b><br/>inspection du corpus<br/>sans réponse rédigée"]
+    end
+
+    subgraph A1["AXE 1 · profil × TOOL — access_policy.json"]
+      direction TB
+      T1["<b>support — 7 / 8</b><br/>answer_question · search_docs<br/>get_document · list_sources<br/>ask_database · check_stock · order_status<br/>—————<br/>DENY : get_schema"]
+      T2["<b>commercial — 8 / 8</b><br/>les 8 tools du catalogue<br/>—————<br/>DENY : aucun"]
+      T3["<b>developer — 4 / 8</b><br/>search_docs · get_document<br/>list_sources · get_schema<br/>—————<br/>DENY : answer_question · ask_database<br/>check_stock · order_status"]
+    end
+  end
+
+  INTER{{"PÉRIMÈTRE EFFECTIF = intersection des trois axes<br/><b>UNE seule interdiction suffit à refuser</b><br/>on n'additionne pas des droits, on les intersecte"}}
+
+  subgraph FRONT["OÙ C'EST APPLIQUÉ — cinq frontières indépendantes"]
+    direction TB
+    F1["1 · catalogue annoncé<br/>mcp_server/server.py:62<br/>ProfiledMCP.list_tools()<br/>le tool interdit n'est pas annoncé"]
+    F2["2 · appel<br/>mcp_server/server.py:108 · governed()<br/>application/gateway.py:57 · _authorize()<br/>NOT_AUTHORIZED, même si non annoncé"]
+    F3["3 · avant le service<br/>retrieval/service.py:20 — collections filtrées<br/>AVANT le classement, pas après<br/>sql/catalog.py:22 — for_profile()"]
+    F4["4 · structure de la requête<br/>sql/analyzer.py:96 — mot sensible refusé<br/>sql/validator.py:166 — AST, table et colonne<br/>contrôlées contre le contexte du profil"]
+    F5["5 · la base elle-même<br/>rôles sorabel_support_login / _commercial_login<br/>GRANT SELECT sur leurs seules vues<br/>default_transaction_read_only = on<br/><b>ne dépend pas de mon code</b>"]
+  end
+
+  REFUS["REFUS — NOT_AUTHORIZED<br/>message neutre, la ressource n'est pas révélée<br/>3 à 6 ms : aucun modèle appelé"]
+  OK["AUTORISÉ — la requête s'exécute<br/>en transaction READ ONLY<br/>SQL, paramètres et versions rendus avec la réponse"]
+  AUDIT["JOURNAL — application/audit.py<br/>les DEUX issues, canal web et canal mcp<br/>request_id · profil · tool · statut · error_code<br/>durée · 4 versions dont policy_version"]
+
+  ID --> AXES
+  AXES --> INTER
+  INTER --> FRONT
+  FRONT -->|"une interdiction"| REFUS
+  FRONT -->|"tous les axes disent oui"| OK
+  REFUS --> AUDIT
+  OK --> AUDIT
+
+  subgraph LEG["Légende"]
+    direction LR
+    L1["Identité et axes<br/>ce qui est déclaré"]
+    L2["Calcul<br/>l'intersection"]
+    L3["Frontières<br/>où c'est appliqué"]
+    L4["Issues<br/>refus, succès, journal"]
+  end
+
+  classDef ident fill:#fff7df,stroke:#d9a21b,color:#17383f
+  classDef axe fill:#e7f6f2,stroke:#008f83,color:#17383f
+  classDef calc fill:#eef2fb,stroke:#5b7bc4,color:#17383f
+  classDef front fill:#fff0e8,stroke:#ef8354,color:#17383f
+  classDef refus fill:#fbe9e7,stroke:#c62828,color:#5d1f1f
+  classDef okc fill:#e7f6f2,stroke:#008f83,color:#17383f
+  class ID,L1 ident
+  class T1,T2,T3,C1,C2,C3,S1,S2,S3 axe
+  class INTER,L2 calc
+  class F1,F2,F3,F4,F5,L3 front
+  class REFUS refus
+  class OK,AUDIT,L4 okc

@@ -1,0 +1,181 @@
+{
+  "generated_at": "2026-09-02T19:34:08.389997+00:00",
+  "source": "data/sorabel.db",
+  "target": "PostgreSQL:sorabel_source",
+  "counts": {
+    "produits": {
+      "source": 120,
+      "target": 120,
+      "passed": true
+    },
+    "clients": {
+      "source": 60,
+      "target": 60,
+      "passed": true
+    },
+    "commandes": {
+      "source": 340,
+      "target": 340,
+      "passed": true
+    },
+    "stocks": {
+      "source": 312,
+      "target": 312,
+      "passed": true
+    },
+    "ventes": {
+      "source": 993,
+      "target": 993,
+      "passed": true
+    }
+  },
+  "checks": [
+    {
+      "name": "all_table_counts",
+      "passed": true
+    },
+    {
+      "name": "produits.required_values",
+      "invalid_rows": 0,
+      "passed": true
+    },
+    {
+      "name": "produits.primary_key",
+      "duplicates": 0,
+      "passed": true
+    },
+    {
+      "name": "clients.required_values",
+      "invalid_rows": 0,
+      "passed": true
+    },
+    {
+      "name": "clients.primary_key",
+      "duplicates": 0,
+      "passed": true
+    },
+    {
+      "name": "commandes.required_values",
+      "invalid_rows": 0,
+      "passed": true
+    },
+    {
+      "name": "commandes.primary_key",
+      "duplicates": 0,
+      "passed": true
+    },
+    {
+      "name": "stocks.required_values",
+      "invalid_rows": 0,
+      "passed": true
+    },
+    {
+      "name": "stocks.primary_key",
+      "duplicates": 0,
+      "passed": true
+    },
+    {
+      "name": "ventes.required_values",
+      "invalid_rows": 0,
+      "passed": true
+    },
+    {
+      "name": "ventes.primary_key",
+      "duplicates": 0,
+      "passed": true
+    },
+    {
+      "name": "stocks.product_reference",
+      "orphans": 0,
+      "passed": true
+    },
+    {
+      "name": "commandes.client_reference",
+      "orphans": 0,
+      "passed": true
+    },
+    {
+      "name": "ventes.order_reference",
+      "orphans": 0,
+      "passed": true
+    },
+    {
+      "name": "ventes.product_reference",
+      "orphans": 0,
+      "passed": true
+    },
+    {
+      "name": "produits.ref.type",
+      "expected": "text",
+      "actual": "text",
+      "passed": true
+    },
+    {
+      "name": "produits.prix_vente_ht.type",
+      "expected": "numeric",
+      "actual": "numeric",
+      "passed": true
+    },
+    {
+      "name": "produits.actif.type",
+      "expected": "boolean",
+      "actual": "boolean",
+      "passed": true
+    },
+    {
+      "name": "clients.id.type",
+      "expected": "text",
+      "actual": "text",
+      "passed": true
+    },
+    {
+      "name": "clients.email.type",
+      "expected": "text",
+      "actual": "text",
+      "passed": true
+    },
+    {
+      "name": "commandes.id.type",
+      "expected": "text",
+      "actual": "text",
+      "passed": true
+    },
+    {
+      "name": "commandes.date_commande.type",
+      "expected": "date",
+      "actual": "date",
+      "passed": true
+    },
+    {
+      "name": "commandes.montant_ht.type",
+      "expected": "numeric",
+      "actual": "numeric",
+      "passed": true
+    },
+    {
+      "name": "stocks.id.type",
+      "expected": "bigint",
+      "actual": "bigint",
+      "passed": true
+    },
+    {
+      "name": "stocks.quantite.type",
+      "expected": "integer",
+      "actual": "integer",
+      "passed": true
+    },
+    {
+      "name": "ventes.id.type",
+      "expected": "bigint",
+      "actual": "bigint",
+      "passed": true
+    },
+    {
+      "name": "ventes.marge_ht.type",
+      "expected": "numeric",
+      "actual": "numeric",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

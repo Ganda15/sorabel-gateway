@@ -1,0 +1,78 @@
+flowchart TB
+  subgraph CLIENTS["1 · Clients et transports"]
+    USERS["Utilisateurs<br/>Support · Commercial · Developer"]
+    WEB["Sorabel Assistant<br/>navigateur"]
+    API["Adaptateur Web<br/>FastAPI · /api/*"]
+    HOST["Host / client MCP<br/>script · IDE"]
+    MCP["Adaptateur MCP<br/>FastMCP · stdio"]
+    HTTP["Transport HTTP /mcp<br/>option future"]
+    USERS --> WEB --> API
+    USERS --> HOST --> MCP
+    HOST -. futur .-> HTTP
+  end
+
+  subgraph GOVERNANCE["2 · Gouvernance aux frontières"]
+    MATRIX["Matrice partagée<br/>profil × tool × ressource"]
+    WEBG["ApplicationGateway<br/>validation · autorisation · routage"]
+    MCPG["governed()<br/>autorisation · request_id · audit"]
+    API --> WEBG
+    MCP --> MCPG
+    HTTP -. futur .-> MCPG
+    MATRIX --> WEBG
+    MATRIX --> MCPG
+  end
+
+  subgraph CATALOGUE["3 · Catalogue de huit tools"]
+    RTOOLS["RAG<br/>answer_question · search_docs<br/>get_document · list_sources"]
+    STOOLS["SQL<br/>ask_database · get_schema<br/>check_stock · order_status"]
+    WEBG --> RTOOLS
+    WEBG --> STOOLS
+    MCPG --> RTOOLS
+    MCPG --> STOOLS
+  end
+
+  subgraph SERVICES["4 · Services métier et données"]
+    subgraph RAG["RAG avancé"]
+      CORPUS["Corpus PDF · HTML · Markdown"] --> INGEST["Normalisation · versions · chunks"]
+      INGEST --> LINDEX["Index local démontré"]
+      INGEST -. adaptateur validé .-> CHROMA["Chroma optionnel"]
+      LINDEX --> RET["Dense local + BM25 + RRF<br/>IdentityReranker"]
+      RET --> EVIDENCE["Preuve suffisante ?<br/>citations ou hors_corpus"]
+    end
+
+    subgraph SQL["Text-to-SQL PostgreSQL"]
+      SQLITE["sorabel.db · 5 tables"] --> IMPORT["Import + réconciliation"]
+      MIG["Migrations SQL versionnées"] --> PG["PostgreSQL privé<br/>sorabel_source"]
+      IMPORT --> PG
+      PG --> VIEWS["Vues Support / Commercial<br/>GRANT SELECT"]
+      SCAT["Catalogue sémantique versionné"] --> CTX["Contexte filtré par profil"]
+      VIEWS --> CTX
+      CTX --> ANALYSE["Analyse + routage"]
+      ANALYSE --> GEN["Générateur déterministe actif"]
+      ANALYSE -. option évaluée avant activation .-> LLM["Adaptateur LLM compatible OpenAI"]
+      GEN --> VALID["AST + allowlists + LIMIT"]
+      LLM -. proposition seulement .-> VALID
+      VALID --> EXEC["Compte du profil<br/>READ ONLY + timeouts"]
+      EXEC --> FILTER["Contrôle des colonnes de sortie"]
+    end
+
+    RTOOLS --> EVIDENCE
+    STOOLS --> CTX
+  end
+
+  EVIDENCE --> OUT["Contrat typé<br/>status · payload · message · sources"]
+  FILTER --> OUTSQL["Contrat typé<br/>résultat · SQL · paramètres · versions"]
+  OUT --> CLIENTRETURN["Réponse au client"]
+  OUTSQL --> CLIENTRETURN
+
+  classDef dark fill:#163840,stroke:#163840,color:#ffffff;
+  classDef teal fill:#e6f5f2,stroke:#008f83,color:#163840;
+  classDef gold fill:#fff5d9,stroke:#d79a00,color:#163840;
+  classDef future fill:#f5f6f6,stroke:#71858a,color:#52666b,stroke-dasharray:5 5;
+  classDef output fill:#008f83,stroke:#008f83,color:#ffffff;
+  class USERS,MATRIX dark;
+  class WEB,API,HOST,MCP,WEBG,MCPG,RTOOLS,EVIDENCE,CORPUS,INGEST,LINDEX,RET teal;
+  class STOOLS,SQLITE,IMPORT,MIG,PG,VIEWS,SCAT,CTX,ANALYSE,GEN,VALID,EXEC,FILTER gold;
+  class LLM,CHROMA,HTTP future;
+  class OUT,OUTSQL,CLIENTRETURN output;
+

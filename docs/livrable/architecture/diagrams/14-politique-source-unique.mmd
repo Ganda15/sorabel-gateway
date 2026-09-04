@@ -1,0 +1,81 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Segoe UI, Arial, sans-serif",
+    "primaryColor": "#e7f6f2",
+    "primaryTextColor": "#17383f",
+    "primaryBorderColor": "#008f83",
+    "lineColor": "#31565d",
+    "secondaryColor": "#fff7df",
+    "tertiaryColor": "#fff0e8",
+    "clusterBkg": "#f7fbfa",
+    "clusterBorder": "#9ec9c2"
+  },
+  "flowchart": {"useMaxWidth": true, "curve": "basis", "nodeSpacing": 30, "rankSpacing": 50}
+}}%%
+flowchart LR
+
+  subgraph AVANT["AVANT — la matrice écrite 4 fois"]
+    direction TB
+    A1["application/gateway.py<br/>TOOLS_BY_PROFILE — sets Python"]
+    A2["retrieval/service.py<br/>COLLECTIONS_BY_PROFILE<br/>sets Python"]
+    A3["conception/05-matrice-acces.md<br/>tableaux tapés à la main"]
+    A4["docs/brief/03-mcp-matrice-acces.md<br/>les mêmes tableaux, une 2e fois"]
+    ARQ{{"Rien ne garantit<br/>qu'ils disent la même chose"}}
+    A1 -.-> ARQ
+    A2 -.-> ARQ
+    A3 -.-> ARQ
+    A4 -.-> ARQ
+  end
+
+  SRC[/"APRÈS — application/access_policy.json<br/>SOURCE UNIQUE · policy-v1<br/>8 tools × 3 profils<br/>4 collections × 3 profils<br/>1 description par tool"/]
+
+  LOAD["application/policy.py<br/>charge, valide, expose<br/>profil inconnu ou description vide<br/>= le service ne démarre pas"]
+
+  subgraph CODE["Le code lit"]
+    direction TB
+    C1["application/gateway.py:42<br/>TOOLS_BY_PROFILE = policy.tools_by_profile()"]
+    C2["retrieval/service.py:20<br/>COLLECTIONS_BY_PROFILE<br/>= policy.collections_by_profile()"]
+    C3["mcp_server/server.py<br/>list_tools filtré + description= par tool"]
+  end
+
+  subgraph DOCS["La documentation est générée"]
+    direction TB
+    D1["conception/05-matrice-acces.md"]
+    D2["conception/03-catalogue-tools-mcp.md"]
+    D3["livrable/CATALOGUE-TOOLS-MCP.md<br/>y compris le texte exact de tools/list"]
+  end
+
+  GENE["scripts/generer_docs_matrice.py<br/>réécrit entre balises<br/>--verifier ne fait que contrôler"]
+
+  subgraph TESTS["Les tests interdisent la dérive"]
+    direction TB
+    T1["test_la_documentation_livree_ne_derive_pas_de_la_politique<br/>échoue si un document a divergé"]
+    T2["test_extraire_la_politique_n_a_change_aucun_droit<br/>droits recopiés à la main dans le test —<br/>un test qui lirait la même source<br/>ne prouverait rien"]
+    T3["test_le_catalogue_annonce_exactement_les_tools_du_profil<br/>serveur réel, 3 profils"]
+  end
+
+  SRC --> LOAD
+  LOAD --> C1
+  LOAD --> C2
+  LOAD --> C3
+  LOAD --> GENE
+  GENE --> D1
+  GENE --> D2
+  GENE --> D3
+  T1 -. "contrôle" .-> D1
+  T1 -. "contrôle" .-> D2
+  T1 -. "contrôle" .-> D3
+  T2 -. "contrôle" .-> C1
+  T2 -. "contrôle" .-> C2
+  T3 -. "contrôle" .-> C3
+  ARQ ==> SRC
+
+  classDef defaut fill:#fbe9e7,stroke:#c62828,color:#5d1f1f
+  classDef source fill:#fff7df,stroke:#d9a21b,color:#17383f
+  classDef coeur fill:#e7f6f2,stroke:#008f83,color:#17383f
+  classDef controle fill:#fff0e8,stroke:#ef8354,color:#17383f
+  class A1,A2,A3,A4,ARQ defaut
+  class SRC,LOAD source
+  class C1,C2,C3,GENE,D1,D2,D3 coeur
+  class T1,T2,T3 controle

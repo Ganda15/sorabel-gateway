@@ -1,0 +1,86 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Segoe UI, Arial, sans-serif",
+    "primaryColor": "#e7f6f2",
+    "primaryTextColor": "#17383f",
+    "primaryBorderColor": "#008f83",
+    "lineColor": "#31565d",
+    "secondaryColor": "#fff7df",
+    "tertiaryColor": "#fff0e8",
+    "actorBkg": "#e7f6f2",
+    "actorBorder": "#008f83",
+    "actorTextColor": "#17383f",
+    "signalColor": "#31565d",
+    "signalTextColor": "#17383f",
+    "labelBoxBkgColor": "#fff0e8",
+    "labelBoxBorderColor": "#ef8354",
+    "labelTextColor": "#17383f",
+    "noteBkgColor": "#fff7df",
+    "noteBorderColor": "#d9a21b",
+    "noteTextColor": "#17383f"
+  },
+  "sequence": {"useMaxWidth": true, "wrap": true, "diagramMarginX": 24, "actorMargin": 32, "messageMargin": 26}
+}}%%
+sequenceDiagram
+  autonumber
+  actor U as Utilisateur
+  participant C as Interface Sorabel
+  participant G as Gateway
+  participant S as SqlService
+  participant K as Catalogue + Analyzer
+  participant GEN as Generator
+  participant V as SqlValidator
+  participant P as PostgreSQL
+  participant J as Journal d’audit
+
+  Note over U,J: Légende — trait plein : appel · trait pointillé : retour · encadré jaune : règle ou décision · bloc « alt » : chemins alternatifs
+
+  U->>C: Question + profil authentifié
+  C->>G: ask_database(question, profil)
+  G->>G: Vérifier l’accès au tool SQL
+  G->>S: ask_database(...)
+  S->>K: Charger le catalogue filtré du profil
+  K-->>S: Vues, colonnes, KPI et versions autorisés
+  S->>K: Analyser la question dans ce contexte
+  Note over S,K: Le profil vient du contexte authentifié, jamais du prompt
+
+  alt Refus avant génération
+    K-->>S: UNSAFE_SQL · NOT_AUTHORIZED · OUT_OF_SCHEMA · AMBIGUOUS_QUESTION
+    Note over K,S: Écriture, donnée sensible, donnée absente ou critère manquant
+    S-->>G: Aucune requête n’a été produite
+    G->>J: profil · tool · question · code · durée
+    G-->>C: Refus ou clarification, aucune ligne
+    C-->>U: Motif explicite, sans résultat inventé
+
+  else Refus à la génération
+    K-->>S: Route ask_database
+    S->>GEN: Générer depuis le contexte filtré
+    GEN-->>S: UNSUPPORTED_QUESTION
+    Note over S,GEN: La donnée existe dans le schéma. C’est la règle de traduction qui manque — donc jamais OUT_OF_SCHEMA
+    S-->>G: Refus explicite, aucune requête exécutée
+    G->>J: profil · tool · question · code · durée
+    C-->>U: Invitation à reformuler
+
+  else Demande autorisée
+    alt Intention stock ou statut reconnue, hors agrégation
+      K-->>S: Tool figé + paramètres
+      Note over K,S: « stock total » demande une somme : la question repart vers le générateur
+    else Analyse variable autorisée
+      K-->>S: Route ask_database
+      S->>GEN: Générer depuis le contexte filtré
+      GEN-->>S: SQL + paramètres
+      Note over S,GEN: Le générateur propose, il n’autorise jamais
+    end
+    S->>V: Valider proposition + contexte
+    V-->>S: Une seule lecture + objets autorisés + LIMIT
+    S->>P: Compte du profil + READ ONLY + timeouts
+    P-->>S: Colonnes + lignes
+    S->>S: Contrôler les colonnes de sortie
+    S-->>G: Résultat + SQL + paramètres + versions
+    G->>J: profil · tool · question · SQL · lignes · durée · versions
+    G-->>C: Contrat typé + request_id
+    C-->>U: Résultat métier + requête vérifiable
+  end
+
+  Note over G,J: Le journal est écrit sur les deux adaptateurs, MCP et Web, en succès comme en refus

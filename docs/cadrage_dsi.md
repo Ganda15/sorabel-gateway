@@ -21,12 +21,13 @@ des commerciaux) consommeront.
 
 ## Matrice d'accès initiale
 
-Deux profils clients au lancement. Toute évolution de la matrice passe par la DSI.
+Trois profils clients au lancement. Toute évolution de la matrice passe par la DSI.
 
 | Profil | Tools autorisés | Collections documentaires | Tables SQL | Colonnes interdites |
 |---|---|---|---|---|
 | `support` | answer_question, search_docs, get_document, list_sources, ask_database, check_stock, order_status | fiches_techniques, notices, procedures_sav | produits, stocks, commandes, clients | produits.prix_achat_ht, produits.marge_pct, ventes.* (table non accessible) |
 | `commercial` | answer_question, search_docs, get_document, list_sources, ask_database, get_schema, check_stock, order_status | fiches_techniques, notices, procedures_sav, notes_internes | produits, stocks, commandes, clients, ventes | — |
+| `developer` | search_docs, get_document, list_sources, get_schema | fiches_techniques, notices, procedures_sav, notes_internes | schéma uniquement, aucune requête de données | toutes les données SQL |
 
 Notes :
 
@@ -34,6 +35,8 @@ Notes :
   réservées au profil `commercial`.
 - Le profil `support` ne voit **jamais** un prix d'achat ni une marge, quelle
   que soit la formulation de la demande (E5).
+- Le profil `developer`, utilisé notamment depuis un IDE, peut inspecter les
+  passages et le schéma sans générer de réponse documentaire ni de SQL.
 - Un appel refusé renvoie un **message clair et un code de refus**, et figure
   au journal au même titre qu'un appel autorisé (E5).
 
@@ -53,7 +56,7 @@ suivant. L'implémentation interne est libre ; ce contrat, lui, est imposé.
 
 - Serveur MCP en transport **stdio**, lancé par : `python -m mcp_server.server`
 - Le **profil client** du processus est lu dans la variable d'environnement
-  `SORABEL_PROFILE` (`support` ou `commercial`, défaut `support`) — un
+  `SORABEL_PROFILE` (`support`, `commercial` ou `developer`, défaut `support`) — un
   processus serveur par client interne.
 - Le **chemin du journal** est lu dans `GATEWAY_JOURNAL`
   (défaut `logs/journal.jsonl`).

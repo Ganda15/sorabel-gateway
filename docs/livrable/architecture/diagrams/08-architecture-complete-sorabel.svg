@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Architecture complète Sorabel réellement démontrée</title>
+  <desc id="desc">Clients Web et MCP, gouvernance, huit tools, services RAG et Text-to-SQL, données et contrats de sortie.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#557076"/></marker>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#008f83"/></marker>
+    <style>
+      .title{font:700 34px 'Segoe UI',Arial,sans-serif;fill:#163840}.sub{font:500 17px 'Segoe UI',Arial,sans-serif;fill:#5b7176}.band-title{font:700 18px 'Segoe UI',Arial,sans-serif;letter-spacing:1.6px}.box-title{font:700 18px 'Segoe UI',Arial,sans-serif;fill:#163840}.box-text{font:500 14px 'Segoe UI',Arial,sans-serif;fill:#536b70}.tiny{font:600 12px 'Segoe UI',Arial,sans-serif;fill:#536b70}.white{fill:#fff}.line{fill:none;stroke:#557076;stroke-width:2.2;marker-end:url(#arrow)}.teal-line{fill:none;stroke:#008f83;stroke-width:2.5;marker-end:url(#arrowTeal)}.dash{stroke-dasharray:8 7}.panel{stroke-width:1.5}.teal{fill:#eaf7f5;stroke:#8fc9c2}.gold{fill:#fff8e8;stroke:#e3bd63}.neutral{fill:#f7f9f9;stroke:#b7c6c9}.future{fill:#f7f8f8;stroke:#829599;stroke-width:1.5;stroke-dasharray:7 6}.dark{fill:#163840;stroke:#163840}.tool-rag{fill:#e5f4f1;stroke:#008f83}.tool-sql{fill:#fff4d8;stroke:#d89a00}.output{fill:#008f83;stroke:#008f83}.divider{stroke:#d8e1e2;stroke-width:1}.badge{font:700 12px 'Segoe UI',Arial,sans-serif;letter-spacing:.7px}.section-note{font:600 13px 'Segoe UI',Arial,sans-serif;fill:#6b7d81}
+    </style>
+  </defs>
+
+  <rect width="1920" height="1080" fill="#ffffff"/>
+  <text x="70" y="58" class="title">Sorabel — architecture complète réellement démontrée</text>
+  <text x="70" y="88" class="sub">Lire de gauche à droite dans chaque bande, puis descendre. Les pointillés indiquent une option ou une évolution future.</text>
+  <rect x="1640" y="40" width="210" height="34" rx="17" fill="#e5f4f1" stroke="#008f83"/><text x="1745" y="62" text-anchor="middle" class="badge" fill="#008f83">ÉTAT DU CODE</text>
+
+  <!-- Band 1 -->
+  <rect x="60" y="115" width="1800" height="160" rx="16" class="panel neutral"/>
+  <text x="85" y="145" class="band-title" fill="#008f83">1 · CLIENTS ET TRANSPORTS</text>
+  <rect x="90" y="170" width="240" height="76" rx="10" class="dark"/><text x="210" y="198" text-anchor="middle" class="box-title white">Utilisateurs</text><text x="210" y="224" text-anchor="middle" class="box-text white">Support · Commercial · Developer</text>
+  <rect x="410" y="170" width="240" height="76" rx="10" class="teal"/><text x="530" y="198" text-anchor="middle" class="box-title">Sorabel Assistant</text><text x="530" y="224" text-anchor="middle" class="box-text">navigateur</text>
+  <rect x="730" y="170" width="240" height="76" rx="10" class="teal"/><text x="850" y="198" text-anchor="middle" class="box-title">Adaptateur Web</text><text x="850" y="224" text-anchor="middle" class="box-text">FastAPI · /api/*</text>
+  <rect x="1060" y="170" width="240" height="76" rx="10" class="teal"/><text x="1180" y="198" text-anchor="middle" class="box-title">Host / client MCP</text><text x="1180" y="224" text-anchor="middle" class="box-text">script · IDE</text>
+  <rect x="1380" y="170" width="240" height="76" rx="10" class="teal"/><text x="1500" y="198" text-anchor="middle" class="box-title">Adaptateur MCP</text><text x="1500" y="224" text-anchor="middle" class="box-text">FastMCP · stdio</text>
+  <rect x="1660" y="170" width="165" height="76" rx="10" class="future"/><text x="1742" y="198" text-anchor="middle" class="box-title">HTTP /mcp</text><text x="1742" y="224" text-anchor="middle" class="tiny">option future</text>
+  <path d="M330 208 H400" class="line"/><path d="M650 208 H720" class="line"/><path d="M330 228 C560 270 900 265 1050 208" class="line"/><path d="M1300 208 H1370" class="line"/><path d="M1620 208 H1650" class="line dash"/>
+
+  <!-- Band 2 -->
+  <rect x="60" y="295" width="1800" height="150" rx="16" class="panel teal"/>
+  <text x="85" y="325" class="band-title" fill="#008f83">2 · GOUVERNANCE AUX FRONTIÈRES</text>
+  <rect x="105" y="350" width="350" height="68" rx="10" class="dark"/><text x="280" y="378" text-anchor="middle" class="box-title white">Matrice partagée</text><text x="280" y="402" text-anchor="middle" class="box-text white">profil × tool × collection × table × colonne</text>
+  <rect x="640" y="350" width="430" height="68" rx="10" fill="#fff" stroke="#008f83" stroke-width="1.5"/><text x="855" y="378" text-anchor="middle" class="box-title">ApplicationGateway · Web</text><text x="855" y="402" text-anchor="middle" class="box-text">validation · autorisation · routage</text>
+  <rect x="1290" y="350" width="430" height="68" rx="10" fill="#fff" stroke="#008f83" stroke-width="1.5"/><text x="1505" y="378" text-anchor="middle" class="box-title">governed() · MCP</text><text x="1505" y="402" text-anchor="middle" class="box-text">autorisation · request_id · audit JSONL</text>
+  <path d="M850 246 V340" class="line"/><path d="M1500 246 V340" class="line"/><path d="M455 374 H630" class="teal-line"/><path d="M455 395 C700 460 1110 460 1280 395" class="teal-line"/>
+
+  <!-- Band 3 -->
+  <rect x="60" y="465" width="1800" height="150" rx="16" class="panel neutral"/>
+  <text x="85" y="495" class="band-title" fill="#008f83">3 · CATALOGUE DE HUIT TOOLS</text>
+  <rect x="150" y="520" width="730" height="68" rx="10" class="tool-rag"/><text x="515" y="548" text-anchor="middle" class="box-title">Documents · RAG</text><text x="515" y="574" text-anchor="middle" class="box-text">answer_question · search_docs · get_document · list_sources</text>
+  <rect x="1040" y="520" width="730" height="68" rx="10" class="tool-sql"/><text x="1405" y="548" text-anchor="middle" class="box-title">Données · Text-to-SQL</text><text x="1405" y="574" text-anchor="middle" class="box-text">ask_database · get_schema · check_stock · order_status</text>
+  <path d="M855 418 C855 470 515 470 515 510" class="line"/><path d="M855 418 C855 470 1405 470 1405 510" class="line"/><path d="M1505 418 C1505 470 515 470 515 510" class="line"/><path d="M1505 418 V510" class="line"/>
+
+  <!-- Band 4 / services -->
+  <rect x="60" y="635" width="860" height="350" rx="16" class="panel teal"/>
+  <text x="85" y="668" class="band-title" fill="#008f83">4A · SERVICE RAG AVANCÉ</text>
+  <rect x="95" y="695" width="215" height="62" rx="9" fill="#fff" stroke="#008f83"/><text x="202" y="721" text-anchor="middle" class="box-title">Corpus</text><text x="202" y="744" text-anchor="middle" class="box-text">PDF · HTML · Markdown</text>
+  <rect x="365" y="695" width="215" height="62" rx="9" fill="#fff" stroke="#008f83"/><text x="472" y="721" text-anchor="middle" class="box-title">Ingestion</text><text x="472" y="744" text-anchor="middle" class="box-text">versions · chunks · métadonnées</text>
+  <rect x="635" y="695" width="240" height="62" rx="9" fill="#fff" stroke="#008f83"/><text x="755" y="721" text-anchor="middle" class="box-title">Index local démontré</text><text x="755" y="744" text-anchor="middle" class="box-text">chunks.json · vecteurs hashés</text>
+  <path d="M310 726 H355" class="line"/><path d="M580 726 H625" class="line"/>
+  <rect x="95" y="795" width="310" height="74" rx="9" fill="#fff" stroke="#008f83"/><text x="250" y="823" text-anchor="middle" class="box-title">Retrieval hybride</text><text x="250" y="848" text-anchor="middle" class="box-text">Dense local + BM25 + RRF + IdentityReranker</text>
+  <rect x="500" y="795" width="330" height="74" rx="9" fill="#fff" stroke="#008f83"/><text x="665" y="823" text-anchor="middle" class="box-title">Contrôle de preuve</text><text x="665" y="848" text-anchor="middle" class="box-text">citations ou refus hors_corpus</text>
+  <rect x="635" y="900" width="240" height="54" rx="9" class="future"/><text x="755" y="923" text-anchor="middle" class="box-title">Chroma</text><text x="755" y="944" text-anchor="middle" class="tiny">adaptateur validé · non actif UI</text>
+  <path d="M755 757 C755 780 250 770 250 785" class="line"/><path d="M405 832 H490" class="line"/><path d="M755 757 V890" class="line dash"/>
+  <path d="M515 588 V625" class="teal-line"/>
+
+  <rect x="950" y="635" width="910" height="350" rx="16" class="panel gold"/>
+  <text x="975" y="668" class="band-title" fill="#b27400">4B · SERVICE TEXT-TO-SQL POSTGRESQL</text>
+  <rect x="980" y="695" width="165" height="62" rx="9" fill="#fff" stroke="#d89a00"/><text x="1062" y="720" text-anchor="middle" class="box-title">sorabel.db</text><text x="1062" y="744" text-anchor="middle" class="box-text">5 tables reçues</text>
+  <rect x="1190" y="695" width="170" height="62" rx="9" fill="#fff" stroke="#d89a00"/><text x="1275" y="720" text-anchor="middle" class="box-title">Import</text><text x="1275" y="744" text-anchor="middle" class="box-text">réconciliation</text>
+  <rect x="1405" y="695" width="180" height="62" rx="9" fill="#fff" stroke="#d89a00"/><text x="1495" y="720" text-anchor="middle" class="box-title">PostgreSQL privé</text><text x="1495" y="744" text-anchor="middle" class="box-text">sorabel_source</text>
+  <rect x="1630" y="695" width="200" height="62" rx="9" fill="#fff" stroke="#d89a00"/><text x="1730" y="720" text-anchor="middle" class="box-title">Vues par profil</text><text x="1730" y="744" text-anchor="middle" class="box-text">GRANT SELECT</text>
+  <path d="M1145 726 H1180" class="line"/><path d="M1360 726 H1395" class="line"/><path d="M1585 726 H1620" class="line"/>
+  <rect x="980" y="795" width="180" height="70" rx="9" fill="#fff" stroke="#d89a00"/><text x="1070" y="820" text-anchor="middle" class="box-title">Catalogue</text><text x="1070" y="844" text-anchor="middle" class="box-text">filtré par profil</text>
+  <rect x="1195" y="795" width="145" height="70" rx="9" fill="#fff" stroke="#d89a00"/><text x="1267" y="820" text-anchor="middle" class="box-title">Analyse</text><text x="1267" y="844" text-anchor="middle" class="box-text">refus · route</text>
+  <rect x="1375" y="795" width="175" height="70" rx="9" fill="#fff" stroke="#d89a00"/><text x="1462" y="820" text-anchor="middle" class="box-title">Génération</text><text x="1462" y="844" text-anchor="middle" class="box-text">déterministe active</text>
+  <rect x="1585" y="795" width="210" height="70" rx="9" fill="#fff" stroke="#d89a00"/><text x="1690" y="820" text-anchor="middle" class="box-title">Validation</text><text x="1690" y="844" text-anchor="middle" class="box-text">AST · allowlists · LIMIT</text>
+  <path d="M1730 757 C1730 780 1070 775 1070 785" class="line"/><path d="M1160 830 H1185" class="line"/><path d="M1340 830 H1365" class="line"/><path d="M1550 830 H1575" class="line"/>
+  <rect x="980" y="900" width="250" height="54" rx="9" fill="#fff" stroke="#d89a00"/><text x="1105" y="923" text-anchor="middle" class="box-title">Exécution protégée</text><text x="1105" y="944" text-anchor="middle" class="tiny">compte profil · READ ONLY · timeouts</text>
+  <rect x="1280" y="900" width="230" height="54" rx="9" fill="#fff" stroke="#d89a00"/><text x="1395" y="923" text-anchor="middle" class="box-title">Filtre de sortie</text><text x="1395" y="944" text-anchor="middle" class="tiny">colonnes sensibles bloquées</text>
+  <rect x="1560" y="900" width="235" height="54" rx="9" class="future"/><text x="1677" y="923" text-anchor="middle" class="box-title">Générateur LLM</text><text x="1677" y="944" text-anchor="middle" class="tiny">option à évaluer avant activation</text>
+  <path d="M1690 865 C1690 885 1105 880 1105 890" class="line"/><path d="M1230 927 H1270" class="line"/><path d="M1462 865 C1462 885 1677 875 1677 890" class="line dash"/>
+  <path d="M1405 588 V625" class="line"/>
+
+  <!-- Output -->
+  <rect x="350" y="1010" width="500" height="48" rx="12" class="output"/><text x="600" y="1031" text-anchor="middle" class="box-title white">Sortie RAG typée</text><text x="600" y="1050" text-anchor="middle" class="tiny white">status · réponse · sources · message</text>
+  <rect x="1070" y="1010" width="500" height="48" rx="12" class="output"/><text x="1320" y="1031" text-anchor="middle" class="box-title white">Sortie SQL typée</text><text x="1320" y="1050" text-anchor="middle" class="tiny white">résultat · SQL · paramètres · versions</text>
+  <path d="M665 869 V1000" class="teal-line"/><path d="M1395 954 V1000" class="teal-line"/>
+</svg>

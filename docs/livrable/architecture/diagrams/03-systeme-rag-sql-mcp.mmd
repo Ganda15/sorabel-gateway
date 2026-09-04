@@ -1,0 +1,7 @@
+flowchart LR
+  U[Support / Commercial / Developer] --> C[Client Web, IDE ou MCP]
+  C --> G[Application Gateway<br/>catalogue + matrice + audit]
+  G --> R[RAG avancé<br/>documents + citations]
+  G --> S[Text-to-SQL<br/>schéma + AST + read-only]
+  R --> O[Contrat de sortie typé]
+  S --> O

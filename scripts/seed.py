@@ -98,7 +98,8 @@ CREATE TABLE ventes (
 
 
 def gen_refs(n: int) -> list[str]:
-    seen, out = {"8842"}, []
+    seen: set[str] = {"8842"}
+    out: list[str] = []
     while len(out) < n:
         r = f"{rng.randint(1000, 9999)}"
         if r not in seen:

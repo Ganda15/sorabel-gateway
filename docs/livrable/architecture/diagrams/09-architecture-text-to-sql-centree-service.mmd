@@ -1,0 +1,84 @@
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Segoe UI, Arial, sans-serif",
+    "primaryColor": "#e7f6f2",
+    "primaryTextColor": "#17383f",
+    "primaryBorderColor": "#008f83",
+    "lineColor": "#31565d",
+    "secondaryColor": "#fff7df",
+    "tertiaryColor": "#fff0e8"
+  },
+  "mindmap": {"padding": 16, "maxNodeWidth": 210}
+}}%%
+mindmap
+  root((SqlService commun))
+    Entrée et accès
+      Interface Sorabel ou CLI
+      Profil authentifié
+      Gateway
+        Validation des arguments
+        Périmètre SQL du profil
+        Vérification du tool SQL
+    Quatre tools SQL
+      get_schema
+        Catalogue visible
+        Refusé au profil support
+      check_stock
+        SQL figé paramétré
+        Format REF-NNNN vérifié
+      order_status
+        SQL figé paramétré
+        Format CMD-AAAA-NNNN vérifié
+      ask_database
+        Analyse variable protégée
+        Generateur agentique actif
+        Deterministe en repli
+    Trois routes
+      Catalogue uniquement
+        Aucune donnée exécutée
+      Requête figée
+        Stock ou statut
+        Hors question d agrégation
+      Analyse variable
+        Analyzer puis Generator
+        Refus si formulation non couverte
+    Source sémantique
+      sorabel.db
+        Cinq tables réconciliées
+      PostgreSQL privé
+        Vues par profil
+        Droits SELECT
+      Catalogue versionné
+        Vues et colonnes
+        Relations et KPI
+    Défense en profondeur
+      Contexte filtré
+      Validation AST
+      Allowlists et LIMIT
+      Transaction READ ONLY
+      Timeouts
+      Filtre de sortie
+    Contrat de réponse
+      Résultat et SQL
+      Paramètres et versions
+      Erreurs typées
+        UNSAFE_SQL écriture
+        NOT_AUTHORIZED périmètre
+        OUT_OF_SCHEMA donnée absente
+        UNSUPPORTED_QUESTION formulation
+        AMBIGUOUS_QUESTION critère
+        NOT_FOUND zéro ligne
+    Journal d audit
+      Succès et refus
+      Question et SQL tracés
+      Durée et request_id
+      Quatre versions
+      Chemins MCP et Web
+      Jamais de secret
+    Mesure du chantier
+      27 cas sur 27
+      Exactitude 14 sur 14
+      Vérité terrain séparée
+      168 tests verts
+      Limites nommées
