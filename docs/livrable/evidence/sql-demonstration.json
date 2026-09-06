@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-04T19:19:16.513656+00:00",
+  "genere_le": "2026-09-06T19:28:32.919760+00:00",
   "journal": "logs/demonstration-sql.jsonl",
   "criteres": [
     {
@@ -12,7 +12,7 @@
       "sql_renvoye": true,
       "sql": "SELECT COUNT(commandes_commercial.id) AS nombre_commandes FROM sorabel_semantic.commandes_commercial WHERE commandes_commercial.date_commande >= %(date_debut)s AND commandes_commercial.date_commande < %(date_fin)s",
       "conforme": true,
-      "duree_ms": 3451,
+      "duree_ms": 2606,
       "montre": "E3 — la réponse porte sa preuve : on peut rejouer la requête."
     },
     {
@@ -26,7 +26,7 @@
       "base_inchangee": true,
       "journalise": true,
       "conforme": true,
-      "duree_ms": 1197,
+      "duree_ms": 976,
       "montre": "E3 + E5 — rien n'est écrit, et le refus laisse une trace."
     },
     {
@@ -37,7 +37,7 @@
       "error_code": "NOT_AUTHORIZED",
       "lignes_renvoyees": 0,
       "conforme": true,
-      "duree_ms": 1246,
+      "duree_ms": 1036,
       "montre": "E5 — la colonne est absente du schéma remis au modèle."
     },
     {
@@ -49,7 +49,7 @@
       "sql_produit": null,
       "lignes_renvoyees": 0,
       "conforme": true,
-      "duree_ms": 1228,
+      "duree_ms": 964,
       "montre": "E3 — le système dit qu'il ne sait pas plutôt que d'inventer une table."
     }
   ],
@@ -58,12 +58,12 @@
     "conformes": 4,
     "note_durees": "Les durées par critère sont des temps horloge, démarrage du serveur MCP compris (~1 s). Les durées côté serveur ci-dessous sont le coût réel de la décision.",
     "cote_serveur_refus_ms": [
-      4,
-      5,
-      4
+      3,
+      3,
+      3
     ],
     "cote_serveur_travail_ms": [
-      2245
+      1570
     ]
   }
 }

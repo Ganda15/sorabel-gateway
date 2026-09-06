@@ -126,15 +126,15 @@ uv run python scripts/demo_mcp.py
 | Profil | Appel | Ce que ça montre | Conforme | Durée |
 |---|---|---|:---:|---:|
 | `support` | `tools/list` | Critère 1 — le catalogue annoncé est celui de la matrice. | ✅ | — |
-| `support` | `tools/call` | Critère 2 — un tool hors matrice est refusé, proprement et par écrit. | ✅ | 10 ms |
-| `support` | `tools/call` | Critère 3 — chercher sans générer : la première brique du RAG, seule. | ✅ | 154 ms |
-| `support` | `tools/call` | Critère 3 — lire le document trouvé : la seconde brique, enchaînée à la main. | ✅ | 2 ms |
+| `support` | `tools/call` | Critère 2 — un tool hors matrice est refusé, proprement et par écrit. | ✅ | 8 ms |
+| `support` | `tools/call` | Critère 3 — chercher sans générer : la première brique du RAG, seule. | ✅ | 126 ms |
+| `support` | `tools/call` | Critère 3 — lire le document trouvé : la seconde brique, enchaînée à la main. | ✅ | 3 ms |
 | `support` | `tools/call` | E5 — aucune colonne sensible ne sort pour le support. | ✅ | 2 ms |
-| `support` | `tools/call` | E4 — aucune écriture ne passe, et le refus est daté au journal. | ✅ | 3 ms |
-| `support` | `tools/call` | Un tool figé : requête écrite d'avance, seul le paramètre varie. | ✅ | 114 ms |
+| `support` | `tools/call` | E4 — aucune écriture ne passe, et le refus est daté au journal. | ✅ | 2 ms |
+| `support` | `tools/call` | Un tool figé : requête écrite d'avance, seul le paramètre varie. | ✅ | 64 ms |
 | `commercial` | `tools/list` | Critère 1 — le catalogue annoncé est celui de la matrice. | ✅ | — |
-| `commercial` | `tools/call` | Le même tool, un autre profil : c'est la matrice qui décide, pas le code du tool. | ✅ | 9 ms |
-| `commercial` | `tools/call` | La même donnée, autorisée au commercial : le périmètre suit le profil. | ✅ | 1863 ms |
+| `commercial` | `tools/call` | Le même tool, un autre profil : c'est la matrice qui décide, pas le code du tool. | ✅ | 7 ms |
+| `commercial` | `tools/call` | La même donnée, autorisée au commercial : le périmètre suit le profil. | ✅ | 1344 ms |
 
 **8 `tools/call` pendant la démonstration → 8 lignes de journal.** Tous journalisés : oui. Politique appliquée : `policy-v1`.
 
