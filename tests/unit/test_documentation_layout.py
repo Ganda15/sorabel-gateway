@@ -37,11 +37,16 @@ def test_presentation_uses_current_paths_and_has_no_personal_absolute_path() -> 
     assert combined.count('<section class="slide') == 10
 
 
+#: Ce que docs/ a le droit de contenir. Une liste blanche plutot qu une liste
+#: noire : enumerer les dossiers interdits ne protege que de ceux qu on a pense
+#: a nommer, et laisse passer le suivant.
+CONTENU_ATTENDU_DE_DOCS = {"brief", "livrable", "cadrage_dsi.md", "schema.sql"}
+
+
 def test_private_preparation_is_not_inside_public_repository() -> None:
-    assert not (REPOSITORY_ROOT / "docs" / "study").exists()
-    assert not (REPOSITORY_ROOT / "docs" / "oral").exists()
-    assert not (REPOSITORY_ROOT / "docs" / "superpowers").exists()
-    assert not (REPOSITORY_ROOT / "docs" / "development").exists()
+    presents = {chemin.name for chemin in (REPOSITORY_ROOT / "docs").iterdir()}
+    intrus = presents - CONTENU_ATTENDU_DE_DOCS
+    assert not intrus, f"docs/ contient des elements non prevus : {sorted(intrus)}"
 
 
 def test_every_presentation_source_link_resolves_inside_repository() -> None:
