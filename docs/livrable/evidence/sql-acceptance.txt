@@ -1,28 +1,35 @@
-Sorabel Text-to-SQL PostgreSQL — verification evidence
-Date: 2026-09-02
+Chantier 2 — Text-to-SQL PostgreSQL : commandes relancées et sorties obtenues
+Date : 2026-09-07
 
-Full project suite
-Command:
-  uv run pytest -p no:cacheprovider --basetemp .uv-cache/full-suite -q
-Result:
-  137 passed, 14 warnings in 20.57s
+⚠️ Ce fichier est le SEUL de PREUVES/ écrit à la main. Les autres sont produits par
+   un script. Si un chiffre ici contredit un .json voisin, c'est le .json qui fait foi.
 
-Targeted Gateway + SQL + MCP suite
-Command:
-  uv run pytest -p no:cacheprovider --basetemp .uv-cache/pytest-temp tests/unit/test_application_gateway.py tests/acceptance/test_sql.py tests/acceptance/test_mcp.py -q
-Result:
-  16 passed in 12.64s
+Suite complète du projet
+  uv run pytest -q
+  → 230 passed, 14 warnings in 70.14s
 
-SQL evaluation catalogue
-Command:
+Suite ciblée Gateway + SQL + MCP
+  uv run pytest tests/unit/test_application_gateway.py tests/acceptance/test_sql.py tests/acceptance/test_mcp.py -q
+  → 16 passed in 15.29s
+
+Catalogue d'évaluation SQL
   uv run python scripts/evaluate_sql.py
-Result:
-  24/24 cases passed
+  → 27 cas sur 27 conformes
+    dont 14 questions métier dont la valeur est comparée à une vérité terrain : 14/14 exactes
+    et 13 refus attendus : UNSAFE_SQL ×4, NOT_AUTHORIZED ×4, OUT_OF_SCHEMA ×2,
+       AMBIGUOUS_QUESTION ×2, UNSUPPORTED_QUESTION ×1, NOT_FOUND ×1
+  Détail complet, cas par cas : eval/resultats_sql.json
 
-Real Web API smoke test
-Results:
-  Commercial April order count: status=ok, backend=postgres, rows=[[27]]
-  Support margin request: status=refused, error_code=NOT_AUTHORIZED
+Appels réels par l'API web
+  commercial, « combien de commandes en avril ? » → status=ok, backend=postgres, rows=[[27]]
+  support,    « quelle est la marge sur la REF-8842 ? » → status=refused, error_code=NOT_AUTHORIZED
 
-Warnings in the full suite are dependency deprecation warnings from Starlette/httpx and Chroma's
-Pydantic compatibility layer. They are not test failures.
+Note sur les avertissements
+  Les 14 warnings de la suite complète sont des dépréciations de dépendances
+  (Starlette, httpx, couche de compatibilité Pydantic de Chroma). Aucun n'est un échec.
+
+Note sur --basetemp
+  Une version antérieure de ce fichier fixait --basetemp .uv-cache/pytest-temp. Réutiliser
+  un même dossier fait échouer pytest au nettoyage sous Windows (PermissionError WinError 5,
+  observé le 07/09 : 3 erreurs de setup sur test_mcp.py). Sans cette option, pytest fait
+  tourner ses dossiers temporaires lui-même. Ne pas la remettre.
