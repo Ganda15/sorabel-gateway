@@ -25,8 +25,8 @@ flowchart TB
     subgraph A3["AXE 3 · profil × TABLE et COLONNE — semantic_catalog.json"]
       direction TB
       S1["<b>support — 4 vues sur 9</b><br/>produits_support (7 col.)<br/>stocks_support · commandes_support<br/>clients_support<br/>—————<br/>DENY : les 5 vues _commercial<br/>dont ventes_commercial en entier"]
-      S2["<b>commercial — 9 vues sur 9</b><br/>produits_commercial (9 col.)<br/>+ prix_achat_ht + marge_pct<br/>ventes_commercial<br/>+ marge_ht + remise_pct + prix_unitaire_ht"]
-      S3["<b>developer — 9 vues, schéma seul</b><br/>get_schema autorisé<br/>ask_database DENY par l'axe 1<br/>donc aucune ligne lue"]
+      S2["<b>commercial — 5 vues sur 9</b><br/>produits_commercial (9 col.)<br/>+ prix_achat_ht + marge_pct<br/>ventes_commercial<br/>+ marge_ht + remise_pct + prix_unitaire_ht"]
+      S3["<b>developer — 5 vues sur 9, schéma seul</b><br/>get_schema autorisé<br/>ask_database DENY par l'axe 1<br/>donc aucune ligne lue"]
     end
 
     subgraph A2["AXE 2 · profil × COLLECTION — access_policy.json"]
