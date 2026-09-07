@@ -1,10 +1,22 @@
 # Sorabel Data Gateway
 
+> ### ▶ Essayer l'interface, sans rien installer
+>
+> **<https://claude.ai/code/artifact/0b655cbb-e50a-4bfd-a878-602f4a016cce>**
+>
+> On choisit un profil — `support`, `commercial`, `developer` — puis une question,
+> et on lit la réponse que la gateway a réellement renvoyée, avec sa durée.
+> « quelle est la marge sur la REF-8842 ? » donne **trois réponses différentes**.
+>
+> La page n'héberge pas de serveur : elle rejoue des sorties enregistrées le
+> 7 septembre 2026. Le code qui les produit est ici, et se relance en local
+> (voir **Démarrage**).
+
 Point d'accès unique aux données de **Sorabel**, distributeur B2B de matériel électrique et d'outillage professionnel. La gateway expose, via un **serveur MCP**, le corpus documentaire (fiches techniques, notices, procédures SAV, notes internes) et la base SQL (produits, stocks, commandes, clients, ventes) à tous les outils internes — bot Slack du support, IDE des développeurs, poste des commerciaux — sous une gouvernance commune : matrice d'accès par profil, lecture seule stricte côté SQL, journal de tous les appels.
 
 ## Features
 
-- Ingestion de 400 documents PDF/HTML/Markdown avec métadonnées, versions, dédoublonnage et chunks traçables
+- Ingestion de 400 fichiers PDF/HTML/Markdown → **391 documents** après dédoublonnage, avec métadonnées, versions et chunks traçables
 - Recherche documentaire dense locale + BM25 + fusion RRF, réponses sourcées et refus explicite hors corpus
 - Adaptateur Chroma idempotent et embedder multilingue optionnel ; fallback local déterministe pour les tests hors ligne
 - Source sémantique PostgreSQL : cinq tables réconciliées, vues métier, catalogue versionné et rôles distincts
@@ -12,9 +24,9 @@ Point d'accès unique aux données de **Sorabel**, distributeur B2B de matériel
 - Quatre tools SQL sur un service commun : `ask_database`, `get_schema`, `check_stock`, `order_status`
 - Serveur MCP stdio exposant les huit tools, avec matrice `support`/`commercial`/`developer` et journalisation versionnée
 - Gain réellement mesuré : Recall@1 `0,727` dense → `0,864` hybride (`+13,6 points`), reranking lexical actif
-- Client MCP de test jouable avec les deux profils (`scripts/mcp_client.py`)
+- Client MCP de test jouable avec les trois profils (`scripts/mcp_client.py`), et vérification par le client officiel (`scripts/verifier_client_officiel.py`)
 - Interface Web unifiée : RAG et Text-to-SQL pour Support/Commercial, recherche et schéma pour Developer/IDE
-- Évaluation SQL automatisée : 24 cas métier, écriture, accès sensible, hors schéma et ambiguïté
+- Évaluation SQL automatisée : **27 cas** — métier, écriture, accès sensible, hors schéma, ambiguïté — dont 14 valeurs comparées à une vérité terrain
 
 ## Contrat d'intégration
 
@@ -29,7 +41,7 @@ elle est rouge tant que le serveur et ses tools ne tiennent pas ce contrat.
 ## Stack
 
 - Python 3.11 (géré avec `uv`)
-- Chroma pour l'index vectoriel (`docker compose`, port 8002)
+- Index vectoriel **local** par défaut ; Chroma disponible et mesuré (`docker compose`, port 8002) mais écarté — 4,5 points de Recall@1 en moins, voir `docs/livrable/VERIFICATION-CHANTIER-1-RAG.md`
 - PostgreSQL 18 dédié sur le port local `55432`, avec rôles et vues autorisées
 - SQLite comme source reçue, oracle d’acceptance et compatibilité reproductible en lecture seule
 - `sqlglot` pour la validation structurelle de l’AST SQL
@@ -48,11 +60,11 @@ uv sync --extra vector        # + sentence-transformers
 ```bash
 make install      # uv sync
 make seed         # génère data/sorabel.db (déterministe, aligné sur le corpus)
-make ingest       # normalise et découpe les 400 documents
+make ingest       # normalise et découpe le corpus (400 fichiers → 391 documents)
 make evaluate     # mesure dense vs hybride et régénère le rapport E6
 make up           # PostgreSQL sur 55432 + Chroma sur 8002
 make setup-postgres # migrations, import, réconciliation et contrôles RBAC
-make evaluate-sql # exécute les 24 cas Text-to-SQL
+make evaluate-sql # exécute les 27 cas Text-to-SQL
 make test         # tests unitaires, intégration et acceptance
 make serve        # serveur MCP stdio (profil via SORABEL_PROFILE)
 make client       # client de test (PROFILE=support|commercial)
