@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-06T19:28:37.335170+00:00",
+  "genere_le": "2026-09-07T08:27:05.930227+00:00",
   "policy_version": "policy-v1",
   "journal": "logs/demonstration-mcp.jsonl",
   "lignes": [
@@ -53,7 +53,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 126,
+      "duree_ms": 136,
       "montre": "Critère 3 — chercher sans générer : la première brique du RAG, seule."
     },
     {
@@ -113,7 +113,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 64,
+      "duree_ms": 77,
       "montre": "Un tool figé : requête écrite d'avance, seul le paramètre varie."
     },
     {
@@ -153,7 +153,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 7,
+      "duree_ms": 10,
       "montre": "Le même tool, un autre profil : c'est la matrice qui décide, pas le code du tool."
     },
     {
@@ -168,7 +168,7 @@
       "conforme": true,
       "error_code": null,
       "message": "",
-      "duree_ms": 1344,
+      "duree_ms": 1603,
       "montre": "La même donnée, autorisée au commercial : le périmètre suit le profil."
     }
   ],

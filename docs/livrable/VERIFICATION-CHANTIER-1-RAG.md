@@ -1,6 +1,6 @@
 # Vérification du chantier 1 — RAG avancé
 
-> Chaque ligne de ce document a été **exécutée le 2026-09-04**, pas recopiée d'un document
+> Chaque ligne de ce document a été **exécutée le 2026-09-07**, pas recopiée d'un document
 > antérieur. Les commandes sont données pour être rejouées.
 >
 > Ce qui n'est pas fait est marqué ⚠️ et expliqué.
@@ -31,11 +31,11 @@ uv run python scripts/demo_rag.py
 
 | # | Critère | Ce que ça montre | Mesuré | Conforme | Durée |
 |---|---|---|---|:---:|---:|
-| 1 | réponse sourcée | E1 — chaque source porte son titre, sa référence et sa date. | statut `ok` · sources **2** · titre reference date complets **oui** | ✅ | 161 ms |
-| 2 | hors corpus sans fabrication | E1 — le système dit qu'il ne sait pas plutôt que d'inventer. | statut `hors_corpus` · reponse fabriquee **non** | ✅ | 16 ms |
-| 3 | REF-8842 en tête | E2 — une référence exacte n'est pas noyée par la similarité. | statut `ok` · reference en tete `REF-8842` · type en tete `fiche_technique` | ✅ | 15 ms |
-| 4 | hybride > dense, mesuré | E6 — le gain est recalculé à chaque exécution, jamais recopié. | questions du fichier **30** · questions evaluees **22** · dense recall at 1 **0,7273** · hybride recall at 1 **0,8636** · gain absolu points **13,6** · dense mrr **0,7742** · hybride mrr **0,8864** | ✅ | 616 ms |
-| 5 | périmètre documentaire du support | La requête vise les notes internes : zéro pour le support, présentes pour le commercial. | mesure par `service direct — le contrat search_docs n'expose pas la collection` · support hits **6**, collections `fiches_techniques` · commercial hits **10**, collections `notes_internes` | ✅ | 141 ms |
+| 1 | réponse sourcée | E1 — chaque source porte son titre, sa référence et sa date. | statut `ok` · sources **2** · titre reference date complets **oui** | ✅ | 186 ms |
+| 2 | hors corpus sans fabrication | E1 — le système dit qu'il ne sait pas plutôt que d'inventer. | statut `hors_corpus` · reponse fabriquee **non** | ✅ | 17 ms |
+| 3 | REF-8842 en tête | E2 — une référence exacte n'est pas noyée par la similarité. | statut `ok` · reference en tete `REF-8842` · type en tete `fiche_technique` | ✅ | 16 ms |
+| 4 | hybride > dense, mesuré | E6 — le gain est recalculé à chaque exécution, jamais recopié. | questions du fichier **30** · questions evaluees **22** · dense recall at 1 **0,7273** · hybride recall at 1 **0,8636** · gain absolu points **13,6** · dense mrr **0,7742** · hybride mrr **0,8864** | ✅ | 1090 ms |
+| 5 | périmètre documentaire du support | La requête vise les notes internes : zéro pour le support, présentes pour le commercial. | mesure par `service direct — le contrat search_docs n'expose pas la collection` · support hits **6**, collections `fiches_techniques` · commercial hits **10**, collections `notes_internes` | ✅ | 293 ms |
 
 > Tableau **généré** par `scripts/generer_tableaux_criteres.py` depuis `docs/livrable/evidence/rag-demonstration.json` — valeurs, verdicts et durées repris du fichier de preuve sans réécriture. **Ne pas modifier à la main** : `--verifier` le signalerait. Après avoir rejoué la démonstration, relancer le générateur : les durées changent d'une exécution à l'autre, c'est normal et ce n'est pas une dérive.
 <!-- CRITERES-RAG:fin -->

@@ -22,7 +22,7 @@ exécution PostgreSQL et contrôle de sortie.
 | **Défense en profondeur** | contexte filtré, AST, allowlists, `READ ONLY`, timeouts, filtre de sortie |
 | **Contrat de réponse** | résultat, SQL, paramètres, versions, six erreurs typées |
 | **Journal d’audit** | succès et refus, question et SQL, durée, deux canaux |
-| **Mesure du chantier** | 27/27, exactitude 14/14, **209 tests** (suite complète du dépôt), limites nommées |
+| **Mesure du chantier** | 27/27, exactitude 14/14, **230 tests** (suite complète du dépôt), limites nommées |
 
 
 
@@ -225,7 +225,7 @@ Si le temps manque, ces trois lignes suffisent à raconter le chantier.
 - `docs/livrable/GUIDE-DEMONSTRATION.md` : le déroulé rejouable des 26 questions ;
 - `docs/livrable/evidence/demonstration-web.json` : les 26 cas passés par l’interface Web,
   avec statut, code d’erreur, backend et valeur renvoyée ;
-- suite complète mesurée le 2026-09-04, après le chantier 3 : **209 tests réussis** ;
+- suite complète mesurée le 2026-09-07 : **230 tests réussis** ;
 - générateur SQL actif : **agentique**, `gpt-5.4` via Azure AI Foundry. Le modèle reçoit le
   seul schéma autorisé au profil et n'a aucune capacité d'appel d'outil — la requête envoyée
   ne contient pas de champ `tools`. Le déterministe reste le repli hors ligne.

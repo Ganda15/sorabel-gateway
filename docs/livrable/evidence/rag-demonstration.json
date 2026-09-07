@@ -1,5 +1,5 @@
 {
-  "genere_le": "2026-09-06T19:28:26.557970+00:00",
+  "genere_le": "2026-09-07T08:26:51.989426+00:00",
   "journal": "logs/demonstration-rag.jsonl",
   "criteres": [
     {
@@ -10,7 +10,7 @@
       "sources": 2,
       "titre_reference_date_complets": true,
       "conforme": true,
-      "duree_ms": 161,
+      "duree_ms": 186,
       "montre": "E1 — chaque source porte son titre, sa référence et sa date."
     },
     {
@@ -20,7 +20,7 @@
       "attendu": "hors_corpus",
       "reponse_fabriquee": false,
       "conforme": true,
-      "duree_ms": 16,
+      "duree_ms": 17,
       "montre": "E1 — le système dit qu'il ne sait pas plutôt que d'inventer."
     },
     {
@@ -31,7 +31,7 @@
       "reference_en_tete": "REF-8842",
       "type_en_tete": "fiche_technique",
       "conforme": true,
-      "duree_ms": 15,
+      "duree_ms": 16,
       "montre": "E2 — une référence exacte n'est pas noyée par la similarité."
     },
     {
@@ -44,7 +44,7 @@
       "dense_mrr": 0.7742,
       "hybride_mrr": 0.8864,
       "conforme": true,
-      "duree_ms": 616,
+      "duree_ms": 1090,
       "montre": "E6 — le gain est recalculé à chaque exécution, jamais recopié."
     },
     {
@@ -64,7 +64,7 @@
         ]
       },
       "conforme": true,
-      "duree_ms": 141,
+      "duree_ms": 293,
       "montre": "La requête vise les notes internes : zéro pour le support, présentes pour le commercial."
     }
   ],
