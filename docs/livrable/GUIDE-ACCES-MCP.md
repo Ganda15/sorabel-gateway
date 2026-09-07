@@ -39,6 +39,28 @@ uv run python scripts/mcp_client.py --profile commercial --tool ask_database --a
 
 La matrice détaillée se trouve dans `docs/livrable/conception/05-matrice-acces.md`.
 
+## Vérifier le catalogue sans nous croire sur parole
+
+L'interface web affiche un catalogue filtré, mais l'interface est notre code. Pour voir ce que
+**le protocole** annonce, brancher le client de référence — le MCP Inspector — sur chaque profil :
+
+```powershell
+npx -y @modelcontextprotocol/inspector scripts\inspecteur\mcp-support.cmd
+```
+
+Onglet **Tools** pour le catalogue, panneau **Protocol** pour les échanges chronométrés.
+Détail dans `scripts/inspecteur/README.md`.
+
+Le même contrôle, automatisé et comparé à la matrice déclarée :
+
+```powershell
+uv run python scripts/verifier_client_officiel.py
+```
+
+Le script lit `application/policy.py:tools_by_profile()` d'un côté, interroge l'Inspector de
+l'autre, et sort en 1 si les deux divergent. Sa sortie est archivée dans
+`docs/livrable/evidence/client-officiel-mcp.json`.
+
 ## Contrat de réponse
 
 ```json
