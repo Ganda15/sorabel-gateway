@@ -1,0 +1,107 @@
+{
+  "genere_le": "2026-09-07T12:03:18.926095+00:00",
+  "client": "MCP Inspector (@modelcontextprotocol/inspector), transport stdio",
+  "source_du_declare": "application/policy.py:tools_by_profile()",
+  "catalogue": [
+    {
+      "profil": "commercial",
+      "declare_par_le_contrat": [
+        "answer_question",
+        "ask_database",
+        "check_stock",
+        "get_document",
+        "get_schema",
+        "list_sources",
+        "order_status",
+        "search_docs"
+      ],
+      "vu_par_le_client_officiel": [
+        "answer_question",
+        "ask_database",
+        "check_stock",
+        "get_document",
+        "get_schema",
+        "list_sources",
+        "order_status",
+        "search_docs"
+      ],
+      "nombre": 8,
+      "get_schema": true,
+      "concorde": true,
+      "en_trop": [],
+      "manquants": []
+    },
+    {
+      "profil": "developer",
+      "declare_par_le_contrat": [
+        "get_document",
+        "get_schema",
+        "list_sources",
+        "search_docs"
+      ],
+      "vu_par_le_client_officiel": [
+        "get_document",
+        "get_schema",
+        "list_sources",
+        "search_docs"
+      ],
+      "nombre": 4,
+      "get_schema": true,
+      "concorde": true,
+      "en_trop": [],
+      "manquants": []
+    },
+    {
+      "profil": "support",
+      "declare_par_le_contrat": [
+        "answer_question",
+        "ask_database",
+        "check_stock",
+        "get_document",
+        "list_sources",
+        "order_status",
+        "search_docs"
+      ],
+      "vu_par_le_client_officiel": [
+        "answer_question",
+        "ask_database",
+        "check_stock",
+        "get_document",
+        "list_sources",
+        "order_status",
+        "search_docs"
+      ],
+      "nombre": 7,
+      "get_schema": false,
+      "concorde": true,
+      "en_trop": [],
+      "manquants": []
+    }
+  ],
+  "paire_de_demonstration": [
+    {
+      "profil": "support",
+      "question": "quelle est la marge sur la REF-8842 ?",
+      "statut": "hors_corpus",
+      "statut_attendu": "hors_corpus",
+      "conforme": true,
+      "sources": []
+    },
+    {
+      "profil": "commercial",
+      "question": "quelle est la marge sur la REF-8842 ?",
+      "statut": "ok",
+      "statut_attendu": "ok",
+      "conforme": true,
+      "sources": [
+        "REF-8842"
+      ]
+    }
+  ],
+  "synthese": {
+    "profils_concordants": 3,
+    "profils_testes": 3,
+    "paire_conforme": true,
+    "tout_concorde": true
+  }
+}
