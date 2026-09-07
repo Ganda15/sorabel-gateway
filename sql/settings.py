@@ -2,9 +2,20 @@ from __future__ import annotations
 
 from enum import Enum
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+#: Le .env vit a la racine du depot, pas dans le dossier courant.
+#:
+#: Pourquoi c'est absolu : `env_file=".env"` est resolu depuis le CWD. Un
+#: serveur lance depuis un autre dossier ne trouvait donc pas le fichier,
+#: retombait sur backend AUTO sans DSN, donc sur SQLite, donc sur une base
+#: absente -- et repondait EXECUTION_ERROR << mode de compatibilite >>. Le
+#: code etait bon, la configuration introuvable. Constate le 2026-09-07.
+FICHIER_ENV = Path(__file__).resolve().parents[1] / ".env"
 
 
 class SqlBackend(str, Enum):
@@ -21,7 +32,7 @@ class SqlGeneratorMode(str, Enum):
 class SqlSettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="SORABEL_SQL_",
-        env_file=".env",
+        env_file=FICHIER_ENV,
         env_file_encoding="utf-8",
         extra="ignore",
     )
