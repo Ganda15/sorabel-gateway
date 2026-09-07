@@ -42,3 +42,6 @@ docs/study/
 docs/oral/
 docs/superpowers/
 docs/development/
+
+# Configuration d outil de developpement, hors livrable
+.claude/
