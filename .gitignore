@@ -40,6 +40,5 @@ docs/livrable/evidence/*.local.json
 # Documentation hors périmètre public
 docs/study/
 docs/oral/
-docs/superpowers/
 docs/development/
 
