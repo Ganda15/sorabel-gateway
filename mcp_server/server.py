@@ -25,6 +25,7 @@ import os
 import time
 from functools import lru_cache
 from pathlib import Path
+from collections.abc import Mapping
 from typing import Annotated, Any, Callable
 
 from mcp.server.fastmcp import FastMCP
@@ -40,6 +41,45 @@ from sql.service import build_sql_service
 
 ROOT = Path(__file__).resolve().parent.parent
 PROFILE = os.environ.get("SORABEL_PROFILE", "support")
+
+#: Transports acceptes : stdio (un hote local lance le processus et lui parle
+#: sur ses flux) ou streamable-http (joignable a distance, derriere un
+#: reverse-proxy qui porte l'authentification -- un profil par adresse).
+TRANSPORTS = ("stdio", "streamable-http")
+
+
+def transport_depuis_env(env: Mapping[str, str]) -> str:
+    """Le transport demande, `stdio` par defaut. Une valeur inconnue est une erreur."""
+    transport = env.get("SORABEL_MCP_TRANSPORT", "stdio")
+    if transport not in TRANSPORTS:
+        raise ValueError(
+            f"SORABEL_MCP_TRANSPORT={transport!r} : attendu {' ou '.join(TRANSPORTS)}"
+        )
+    return transport
+
+
+def parametres_reseau(env: Mapping[str, str]) -> dict[str, Any]:
+    """Les reglages reseau du serveur HTTP, seulement ceux que l'environnement fixe.
+
+    Rien de fixe -> dictionnaire vide, et la bibliotheque garde ses defauts. En
+    HTTP, le serveur est sans etat : chaque requete se suffit, un `curl` seul
+    peut appeler `tools/list` sans session prealable.
+    """
+    reglages: dict[str, Any] = {}
+    if "SORABEL_MCP_HOST" in env:
+        reglages["host"] = env["SORABEL_MCP_HOST"]
+    if "SORABEL_MCP_PORT" in env:
+        try:
+            reglages["port"] = int(env["SORABEL_MCP_PORT"])
+        except ValueError as exc:
+            raise ValueError(f"SORABEL_MCP_PORT={env['SORABEL_MCP_PORT']!r} n'est pas un nombre") from exc
+    if "SORABEL_MCP_PATH" in env:
+        reglages["streamable_http_path"] = env["SORABEL_MCP_PATH"]
+    if reglages:
+        reglages["stateless_http"] = True
+    return reglages
+
+
 #: Champs de version renvoyes dans le payload du service SQL.
 _VERSION_KEYS = frozenset(
     {"dataset_version", "data_as_of", "semantic_schema_version", "policy_version"}
@@ -64,7 +104,9 @@ class ProfiledMCP(FastMCP):
         return [tool for tool in await super().list_tools() if tool.name in autorises]
 
 
-mcp = ProfiledMCP("Sorabel Data Gateway", log_level="ERROR", profile=PROFILE)
+mcp = ProfiledMCP(
+    "Sorabel Data Gateway", log_level="ERROR", profile=PROFILE, **parametres_reseau(os.environ)
+)
 
 
 def envelope(
@@ -262,4 +304,4 @@ def order_status(
 
 
 if __name__ == "__main__":
-    mcp.run(transport="stdio")
+    mcp.run(transport=transport_depuis_env(os.environ))

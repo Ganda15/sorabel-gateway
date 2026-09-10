@@ -56,6 +56,90 @@ services:
     # expose le site au public, avec HTTPS et mot de passe (deploy/caddy-site.conf).
     ports:
       - "127.0.0.1:8780:8780"
+    # Sain = la page repond : les quatre etapes de demarrer.sh sont passees,
+    # migrations et import compris. Les serveurs MCP attendent ce signal.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8780/', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 30
+      start_period: 40s
+
+  # Trois serveurs MCP joignables a distance, un par profil, en streamable-http.
+  # Chacun n'ecoute que sur l'hote, en local : c'est le Caddy de l'hote qui les
+  # expose sous /mcp/<profil>, derriere un jeton propre a chaque profil -- le
+  # jeton devient l'identite. Meme image que l'app, meme base, meme index.
+  mcp-support:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    command: ["bash", "-c", "python scripts/ingest_corpus.py --output data/index && exec python -m mcp_server.server"]
+    environment: &env-mcp
+      SORABEL_PROFILE: support
+      SORABEL_MCP_TRANSPORT: streamable-http
+      SORABEL_MCP_HOST: 0.0.0.0
+      SORABEL_MCP_PORT: "8790"
+      SORABEL_MCP_PATH: /mcp/support
+      SORABEL_SQL_BACKEND: postgres
+      SORABEL_SQL_DATABASE: ${SORABEL_POSTGRES_DB:-sorabel}
+      SORABEL_SQL_ADMIN_DSN: "host=postgres port=5432 dbname=${SORABEL_POSTGRES_DB:-sorabel} user=${SORABEL_POSTGRES_USER:-sorabel_admin} password=${SORABEL_POSTGRES_PASSWORD}"
+      SORABEL_SQL_SUPPORT_DSN: "host=postgres port=5432 dbname=${SORABEL_POSTGRES_DB:-sorabel} user=sorabel_support_login password=${SORABEL_SUPPORT_PASSWORD}"
+      SORABEL_SQL_COMMERCIAL_DSN: "host=postgres port=5432 dbname=${SORABEL_POSTGRES_DB:-sorabel} user=sorabel_commercial_login password=${SORABEL_COMMERCIAL_PASSWORD}"
+      SORABEL_SQL_STATEMENT_TIMEOUT_MS: "3000"
+      SORABEL_SQL_LOCK_TIMEOUT_MS: "1000"
+      SORABEL_SQL_MAX_ROWS: "100"
+      SORABEL_SQL_GENERATOR: ${SORABEL_SQL_GENERATOR:-deterministic}
+      SORABEL_SQL_LLM_BASE_URL: ${SORABEL_SQL_LLM_BASE_URL:-}
+      SORABEL_SQL_LLM_MODEL: ${SORABEL_SQL_LLM_MODEL:-}
+      SORABEL_SQL_LLM_API_KEY: ${SORABEL_SQL_LLM_API_KEY:-}
+      SORABEL_SQL_LLM_TIMEOUT_SECONDS: ${SORABEL_SQL_LLM_TIMEOUT_SECONDS:-90}
+      SORABEL_DENSE_BACKEND: local
+      SORABEL_RERANKER: lexical
+      GATEWAY_JOURNAL: /app/logs/journal.jsonl
+    volumes:
+      - journal:/app/logs
+    ports:
+      - "127.0.0.1:8791:8790"
+
+  mcp-commercial:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    command: ["bash", "-c", "python scripts/ingest_corpus.py --output data/index && exec python -m mcp_server.server"]
+    environment:
+      <<: *env-mcp
+      SORABEL_PROFILE: commercial
+      SORABEL_MCP_PATH: /mcp/commercial
+    volumes:
+      - journal:/app/logs
+    ports:
+      - "127.0.0.1:8792:8790"
+
+  mcp-developer:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    command: ["bash", "-c", "python scripts/ingest_corpus.py --output data/index && exec python -m mcp_server.server"]
+    environment:
+      <<: *env-mcp
+      SORABEL_PROFILE: developer
+      SORABEL_MCP_PATH: /mcp/developer
+    volumes:
+      - journal:/app/logs
+    ports:
+      - "127.0.0.1:8793:8790"
 
   # Variante : Caddy dans un conteneur, pour un serveur qui n'en a pas deja un.
   # Inactif par defaut ; s'active avec  --profile caddy-conteneur
