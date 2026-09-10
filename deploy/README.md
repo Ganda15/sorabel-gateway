@@ -182,15 +182,36 @@ Les données PostgreSQL et le journal sont dans des volumes : ils survivent à l
 reconstruction. Le script de démarrage rejoue les migrations et l'import, tous deux
 rejouables sans dommage.
 
-## Arrêter
+## Couper l'accès quand le formateur a fini
+
+Le déploiement est fait pour être **temporaire**. Trois niveaux, du plus doux au plus
+radical — tous depuis le dossier du dépôt.
 
 🖧 **LE SERVEUR**
 
 ```
-docker compose --env-file deploy/.env.prod -f deploy/compose.prod.yml down
+cd /opt/sorabel
 ```
 
-Ajouter `-v` pour effacer aussi les volumes — base et journal compris.
+| Niveau | Commande | Effet |
+|---|---|---|
+| **1 · Fermer la porte** | `docker compose --env-file deploy/.env.prod -f deploy/compose.prod.yml stop caddy` | le site ne répond plus ; l'app et la base restent en place. `start caddy` rouvre en 2 s |
+| **2 · Tout éteindre** | `docker compose --env-file deploy/.env.prod -f deploy/compose.prod.yml down` | les trois conteneurs s'arrêtent ; les volumes (base, journal, certificat) sont conservés |
+| **3 · Tout effacer** | `docker compose --env-file deploy/.env.prod -f deploy/compose.prod.yml down -v` | plus rien ne reste, sauf le code cloné |
+
+Vérifier, depuis le PC, que la porte est bien fermée :
+
+💻 **TON PC**
+
+```
+curl -sS -o /dev/null -w "%{http_code}
+" --max-time 10 https://116-203-244-44.sslip.io/
+```
+
+Attendu après le niveau 1 : **000** (connexion refusée) — plus de 401, plus de 200.
+
+Après le niveau 3, penser aussi à **révoquer la clé Azure** dans le portail si elle avait
+été mise dans `deploy/.env.prod` : un secret qui a vécu sur un serveur se remplace.
 
 ## Ce que ce déploiement ne fait pas
 
