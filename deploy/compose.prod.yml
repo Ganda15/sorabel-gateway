@@ -52,11 +52,16 @@ services:
       SORABEL_PROFILE: support
     volumes:
       - journal:/app/logs
-    expose:
-      - "8780"
+    # Publie sur l'hote, mais seulement en local : c'est le Caddy de l'hote qui
+    # expose le site au public, avec HTTPS et mot de passe (deploy/caddy-site.conf).
+    ports:
+      - "127.0.0.1:8780:8780"
 
+  # Variante : Caddy dans un conteneur, pour un serveur qui n'en a pas deja un.
+  # Inactif par defaut ; s'active avec  --profile caddy-conteneur
   caddy:
     image: caddy:2-alpine
+    profiles: ["caddy-conteneur"]
     restart: unless-stopped
     depends_on:
       - app
