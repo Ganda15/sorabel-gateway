@@ -42,3 +42,6 @@ docs/study/
 docs/oral/
 docs/development/
 
+
+# Le modele de configuration de production est un document, pas un secret.
+!deploy/.env.prod.example

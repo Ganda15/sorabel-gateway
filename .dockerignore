@@ -1,0 +1,36 @@
+# Ce qui ne doit jamais entrer dans l'image.
+.git
+.gitignore
+.github
+.vscode
+.venv
+.uv-cache
+.test-tmp
+.test-*
+.docker-data
+.render-tmp
+.worktrees
+.pytest_cache
+.mypy_cache
+.ruff_cache
+__pycache__
+*.py[cod]
+
+# Secrets et etat local : l'image ne les porte pas, le serveur les fournit.
+.env
+.env.*
+!.env.example
+logs
+data/sorabel.db
+data/index
+chroma-data
+
+# Livrables et documentation volumineuse, inutiles a l'execution.
+docs/livrable/architecture
+docs/livrable/presentation
+docs/livrable/conception
+docs/livrable/*.md
+tests
+eval
+CHANGELOG.md
+START-*.bat

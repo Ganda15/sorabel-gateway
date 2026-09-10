@@ -1,0 +1,17 @@
+# Caddy devant l'app : HTTPS automatique (Let's Encrypt) et un mot de passe.
+#
+# SORABEL_HOTE vient de deploy/.env.prod (ex. 116-203-244-44.sslip.io).
+# La ligne basic_auth porte un hash bcrypt, jamais le mot de passe en clair.
+# Le produire sur le serveur :
+#   docker run --rm caddy:2-alpine caddy hash-password --plaintext 'LE_MOT_DE_PASSE'
+# puis remplacer HASH_A_REMPLACER ci-dessous par la sortie.
+
+{$SORABEL_HOTE} {
+    encode gzip
+
+    basic_auth {
+        formateur HASH_A_REMPLACER
+    }
+
+    reverse_proxy app:8780
+}

@@ -1,0 +1,77 @@
+# Pile de production : l'app, sa base PostgreSQL, et Caddy devant pour le HTTPS
+# et le mot de passe. A lancer depuis la racine du depot :
+#
+#   docker compose --env-file deploy/.env.prod -f deploy/compose.prod.yml up -d --build
+#
+# Les valeurs viennent de deploy/.env.prod (jamais commite). Le modele est
+# deploy/.env.prod.example.
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${SORABEL_POSTGRES_DB:-sorabel}
+      POSTGRES_USER: ${SORABEL_POSTGRES_USER:-sorabel_admin}
+      POSTGRES_PASSWORD: ${SORABEL_POSTGRES_PASSWORD:?SORABEL_POSTGRES_PASSWORD manquant dans deploy/.env.prod}
+    volumes:
+      - postgres-donnees:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Le backend est force : pas de repli silencieux sur SQLite en production.
+      SORABEL_SQL_BACKEND: postgres
+      SORABEL_SQL_DATABASE: ${SORABEL_POSTGRES_DB:-sorabel}
+      SORABEL_SQL_ADMIN_DSN: "host=postgres port=5432 dbname=${SORABEL_POSTGRES_DB:-sorabel} user=${SORABEL_POSTGRES_USER:-sorabel_admin} password=${SORABEL_POSTGRES_PASSWORD}"
+      SORABEL_SQL_SUPPORT_DSN: "host=postgres port=5432 dbname=${SORABEL_POSTGRES_DB:-sorabel} user=sorabel_support_login password=${SORABEL_SUPPORT_PASSWORD:?SORABEL_SUPPORT_PASSWORD manquant}"
+      SORABEL_SQL_COMMERCIAL_DSN: "host=postgres port=5432 dbname=${SORABEL_POSTGRES_DB:-sorabel} user=sorabel_commercial_login password=${SORABEL_COMMERCIAL_PASSWORD:?SORABEL_COMMERCIAL_PASSWORD manquant}"
+      SORABEL_SQL_STATEMENT_TIMEOUT_MS: "3000"
+      SORABEL_SQL_LOCK_TIMEOUT_MS: "1000"
+      SORABEL_SQL_MAX_ROWS: "100"
+      # Generation SQL : "openai_compatible" avec la cle, ou "deterministic" sans.
+      SORABEL_SQL_GENERATOR: ${SORABEL_SQL_GENERATOR:-deterministic}
+      SORABEL_SQL_LLM_BASE_URL: ${SORABEL_SQL_LLM_BASE_URL:-}
+      SORABEL_SQL_LLM_MODEL: ${SORABEL_SQL_LLM_MODEL:-}
+      SORABEL_SQL_LLM_API_KEY: ${SORABEL_SQL_LLM_API_KEY:-}
+      SORABEL_SQL_LLM_TIMEOUT_SECONDS: ${SORABEL_SQL_LLM_TIMEOUT_SECONDS:-90}
+      SORABEL_DENSE_BACKEND: local
+      SORABEL_RERANKER: lexical
+      GATEWAY_JOURNAL: /app/logs/journal.jsonl
+      SORABEL_PROFILE: support
+    volumes:
+      - journal:/app/logs
+    expose:
+      - "8780"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SORABEL_HOTE: ${SORABEL_HOTE:?SORABEL_HOTE manquant (ex. 116-203-244-44.sslip.io)}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-donnees:/data
+      - caddy-config:/config
+
+volumes:
+  postgres-donnees:
+  journal:
+  caddy-donnees:
+  caddy-config:
