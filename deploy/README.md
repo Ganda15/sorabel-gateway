@@ -204,8 +204,7 @@ Vérifier, depuis le PC, que la porte est bien fermée :
 💻 **TON PC**
 
 ```
-curl -sS -o /dev/null -w "%{http_code}
-" --max-time 10 https://116-203-244-44.sslip.io/
+curl -sS -o /dev/null -w "%{http_code}\n" --max-time 10 https://116-203-244-44.sslip.io/
 ```
 
 Attendu après le niveau 1 : **000** (connexion refusée) — plus de 401, plus de 200.
