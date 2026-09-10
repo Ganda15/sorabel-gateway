@@ -1,0 +1,5 @@
+# Les fichiers lus par un shell Linux dans le conteneur restent en LF, meme
+# extraits sur Windows : un script en CRLF echoue avec "bad interpreter".
+*.sh text eol=lf
+Dockerfile text eol=lf
+deploy/Caddyfile text eol=lf
